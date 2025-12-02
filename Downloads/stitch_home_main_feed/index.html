@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI News Portal - Stitch</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #222;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .hamburger-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0;
+        }
+
+        .hamburger-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .header-title {
+            flex: 1;
+            font-size: 20px;
+            font-weight: 600;
+            color: #4a9fff;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 65px;
+            padding: 20px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Sidebar/Drawer */
+        .drawer-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 40;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .drawer-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .sidebar-drawer {
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 50;
+            width: 350px;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            overflow-y: auto;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-drawer.open {
+            transform: translateX(0);
+        }
+
+        /* Sidebar Header */
+        .sidebar-header {
+            padding: 24px;
+            background: linear-gradient(135deg, rgba(37, 71, 244, 0.2) 0%, rgba(123, 45, 255, 0.2) 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
+        }
+
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(74, 159, 255, 0.3);
+        }
+
+        .profile-avatar .material-symbols-outlined {
+            font-size: 48px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .profile-avatar.logged-in {
+            background: rgba(37, 71, 244, 0.3);
+            border-color: #4a9fff;
+        }
+
+        .profile-info {
+            text-align: center;
+            display: none;
+        }
+
+        .profile-info.show {
+            display: block;
+        }
+
+        .profile-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .profile-email {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .auth-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .auth-buttons.logged-in {
+            display: none;
+        }
+
+        .btn-primary {
+            padding: 10px;
+            background: #2547f4;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #4a9fff;
+        }
+
+        .btn-secondary {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-logout {
+            grid-column: 1 / -1;
+            padding: 10px;
+            background: rgba(255, 67, 67, 0.2);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 67, 67, 0.3);
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255, 67, 67, 0.3);
+        }
+
+        /* Sidebar Content */
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+
+        .sidebar-section {
+            padding: 0 12px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-section-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #666;
+            letter-spacing: 1px;
+            padding: 0 12px 12px 12px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            color: #ccc;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            margin-bottom: 4px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .menu-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .menu-link.active {
+            background: rgba(37, 71, 244, 0.2);
+            color: #4a9fff;
+            border-left: 3px solid #4a9fff;
+            padding-left: 9px;
+        }
+
+        .menu-link .material-symbols-outlined {
+            font-size: 20px;
+        }
+
+        .menu-link.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Settings Toggle */
+        .settings-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: none;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            color: #ccc;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .settings-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .toggle-switch {
+            width: 44px;
+            height: 24px;
+            background: #2547f4;
+            border: none;
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.off {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: left 0.3s ease;
+        }
+
+        .toggle-switch.off::after {
+            left: 22px;
+        }
+
+        /* Sidebar Footer */
+        .sidebar-footer {
+            padding: 16px 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
+            color: #666;
+            font-size: 12px;
+        }
+
+        /* Content Sections */
+        .section {
+            background: #1a1a1a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+            border: 1px solid #333;
+        }
+
+        .section h2 {
+            color: #4a9fff;
+            margin-bottom: 15px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #333;
+        }
+
+        .tab-button {
+            background: transparent;
+            color: #888;
+            border: none;
+            padding: 10px 20px;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0;
+        }
+
+        .tab-button.active {
+            color: #4a9fff;
+            border-bottom-color: #4a9fff;
+        }
+
+        .tab-button:hover {
+            color: #4a9fff;
+        }
+
+        .news-item {
+            border: 1px solid #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            background: #0a0a0a;
+            transition: all 0.3s ease;
+        }
+
+        .news-item:hover {
+            border-color: #2547f4;
+            box-shadow: 0 4px 12px rgba(37, 71, 244, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .news-item h3 {
+            margin: 0 0 10px 0;
+            color: #ffffff;
+        }
+
+        .news-item a {
+            color: #4a9fff;
+            text-decoration: none;
+        }
+
+        .news-item a:hover {
+            text-decoration: underline;
+        }
+
+        .news-item p {
+            color: #cccccc;
+            font-size: 14px;
+        }
+
+        .news-meta {
+            color: #888;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #1a2b4f;
+            color: #4a9fff;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            margin: 2px;
+            border: 1px solid #2547f4;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .pagination button {
+            padding: 8px 12px;
+            min-width: 40px;
+            text-align: center;
+            background: #2547f4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pagination button.active {
+            background: #4a9fff;
+            font-weight: bold;
+        }
+
+        .pagination button:disabled {
+            background: #2a2a2a;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .page-number-buttons {
+            display: flex;
+            gap: 3px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .page-number-buttons button {
+            padding: 4px 8px;
+            min-width: 32px;
+            font-size: 13px;
+            background: transparent;
+            border: 1px solid #444;
+            color: #888;
+        }
+
+        .page-number-buttons button:hover {
+            background: transparent;
+            color: #4a9fff;
+            border-color: #4a9fff;
+        }
+
+        .page-number-buttons button.active {
+            background: #2547f4;
+            border-color: #2547f4;
+            color: white;
+        }
+
+        .pagination-info {
+            text-align: center;
+            color: #888;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .loading {
+            text-align: center;
+            color: #4a9fff;
+            padding: 20px;
+            font-size: 16px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #333;
+            border-top: 3px solid #4a9fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #output {
+            background: #0a0a0a;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            color: #00ff00;
+            border: 1px solid #333;
+            display: none;
+        }
+
+        input {
+            padding: 8px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background: #1a1a1a;
+            color: #ffffff;
+            font-family: inherit;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #2547f4;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar-drawer {
+                width: 75vw;
+                max-width: 300px;
+            }
+
+            .main-content {
+                margin-top: 65px;
+                padding: 15px;
+            }
+
+            .section {
+                padding: 15px;
+                margin: 15px 0;
+            }
+
+            .header-title {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header with Hamburger Menu -->
+    <header class="header">
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div class="header-title">🚀 AI News Portal</div>
+    </header>
+
+    <!-- Drawer Overlay -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+
+    <!-- Sidebar Drawer -->
+    <aside class="sidebar-drawer" id="sidebarDrawer">
+        <!-- Profile Section -->
+        <div class="sidebar-header">
+            <div class="profile-section">
+                <div class="profile-avatar" id="profileAvatar">
+                    <span class="material-symbols-outlined">person</span>
+                </div>
+                <div class="profile-info" id="profileInfo">
+                    <div class="profile-name" id="profileName">Guest User</div>
+                    <div class="profile-email" id="profileEmail">guest@example.com</div>
+                </div>
+                <div class="auth-buttons" id="authButtons">
+                    <button class="btn-primary" onclick="openLoginModal()">Login</button>
+                    <button class="btn-secondary" onclick="openSignupModal()">Sign Up</button>
+                </div>
+                <button class="btn-logout" id="logoutBtn" style="display: none;" onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <!-- Main Navigation -->
+        <div class="sidebar-content">
+            <div class="sidebar-section">
+                <a class="menu-link active" onclick="goToSection('home')">
+                    <span class="material-symbols-outlined">home</span>
+                    <span>Home</span>
+                </a>
+                <a class="menu-link" onclick="goToSection('latest')">
+                    <span class="material-symbols-outlined">newspaper</span>
+                    <span>Latest News</span>
+                </a>
+                <a class="menu-link" onclick="goToSection('trending')">
+                    <span class="material-symbols-outlined">trending_up</span>
+                    <span>Trends</span>
+                </a>
+                <a class="menu-link disabled">
+                    <span class="material-symbols-outlined">bookmark</span>
+                    <span>Saved (Coming Soon)</span>
+                </a>
+                <a class="menu-link" onclick="goToSection('search')">
+                    <span class="material-symbols-outlined">search</span>
+                    <span>Search</span>
+                </a>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Settings</div>
+                <a class="menu-link" onclick="toggleSettings('language')">
+                    <span class="material-symbols-outlined">translate</span>
+                    <span>Language</span>
+                </a>
+                <a class="menu-link" onclick="toggleSettings('priority')">
+                    <span class="material-symbols-outlined">tune</span>
+                    <span>Priority Settings</span>
+                </a>
+                <a class="menu-link" onclick="toggleSettings('notification')">
+                    <span class="material-symbols-outlined">notifications</span>
+                    <span>Notifications</span>
+                </a>
+                <div class="menu-link" style="padding: 0;">
+                    <button class="settings-toggle" style="width: 100%; padding: 12px;">
+                        <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                            <span class="material-symbols-outlined">dark_mode</span>
+                            <span>Dark Mode</span>
+                        </div>
+                        <button class="toggle-switch" id="darkModeToggle" onclick="toggleDarkMode()"></button>
+                    </button>
+                </div>
+                <a class="menu-link" onclick="toggleSettings('data')">
+                    <span class="material-symbols-outlined">storage</span>
+                    <span>Data Management</span>
+                </a>
+                <a class="menu-link" onclick="toggleSettings('support')">
+                    <span class="material-symbols-outlined">help</span>
+                    <span>Help & Support</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="sidebar-footer">
+            <div>Version v1.0.0</div>
+            <div style="margin-top: 8px; color: #555;">© 2025 Stitch AI News</div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- News Section -->
+        <div class="section" id="newsSection">
+            <h2>📰 Latest News</h2>
+            <div class="tabs">
+                <button class="tab-button active" onclick="switchTab('latest')">Latest</button>
+                <button class="tab-button" onclick="switchTab('trending')">Trending</button>
+            </div>
+            <div id="news-container"></div>
+            <div id="pagination-container"></div>
+        </div>
+
+        <!-- Search Section -->
+        <div class="section" id="searchSection" style="display: none;">
+            <h2>🔍 Search</h2>
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <input type="text" id="search-input" placeholder="Search keyword..." style="flex: 1;">
+                <button class="btn-primary" onclick="searchNews()" style="cursor: pointer;">Search</button>
+            </div>
+            <div id="search-results"></div>
+        </div>
+
+        <!-- Hot Topics Section -->
+        <div class="section" id="topicsSection">
+            <h2>🔥 Hot Topics</h2>
+            <div id="topics-container"></div>
+        </div>
+
+        <!-- Debug Output -->
+        <div class="section">
+            <h2>📊 Debug Output</h2>
+            <button class="btn-secondary" onclick="toggleDebug()" style="margin-bottom: 10px;">Toggle Debug Console</button>
+            <div id="output"></div>
+        </div>
+    </main>
+
+    <!-- Login Modal -->
+    <div id="loginModal" style="display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center;">
+        <div style="background: #1a1a1a; padding: 30px; border-radius: 12px; max-width: 400px; width: 90%; border: 1px solid #333;">
+            <h2 style="color: #4a9fff; margin-bottom: 20px;">Login</h2>
+            <input type="email" id="loginEmail" placeholder="Email" style="width: 100%; margin-bottom: 10px; padding: 10px;">
+            <input type="password" id="loginPassword" placeholder="Password" style="width: 100%; margin-bottom: 20px; padding: 10px;">
+            <button class="btn-primary" onclick="performLogin()" style="width: 100%; margin-bottom: 10px;">Login</button>
+            <button class="btn-secondary" onclick="closeLoginModal()" style="width: 100%;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" style="display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center;">
+        <div style="background: #1a1a1a; padding: 30px; border-radius: 12px; max-width: 400px; width: 90%; border: 1px solid #333;">
+            <h2 style="color: #4a9fff; margin-bottom: 20px;">Sign Up</h2>
+            <input type="email" id="signupEmail" placeholder="Email" style="width: 100%; margin-bottom: 10px; padding: 10px;">
+            <input type="text" id="signupName" placeholder="Full Name" style="width: 100%; margin-bottom: 10px; padding: 10px;">
+            <input type="password" id="signupPassword" placeholder="Password" style="width: 100%; margin-bottom: 20px; padding: 10px;">
+            <button class="btn-primary" onclick="performSignup()" style="width: 100%; margin-bottom: 10px;">Sign Up</button>
+            <button class="btn-secondary" onclick="closeSignupModal()" style="width: 100%;">Cancel</button>
+        </div>
+    </div>
+
+    <script src="api-client.js"></script>
+    <script>
+        // State
+        let currentTab = 'latest';
+        let allNews = [];
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let isLoggedIn = false;
+        let currentUser = null;
+        let debugMode = false;
+
+        // Hamburger Menu Toggle
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const drawerOverlay = document.getElementById('drawerOverlay');
+        const sidebarDrawer = document.getElementById('sidebarDrawer');
+
+        hamburgerBtn.addEventListener('click', () => {
+            sidebarDrawer.classList.toggle('open');
+            drawerOverlay.classList.toggle('open');
+        });
+
+        drawerOverlay.addEventListener('click', () => {
+            sidebarDrawer.classList.remove('open');
+            drawerOverlay.classList.remove('open');
+        });
+
+        // Close sidebar when clicking a menu link
+        document.querySelectorAll('.menu-link').forEach(link => {
+            link.addEventListener('click', () => {
+                setTimeout(() => {
+                    sidebarDrawer.classList.remove('open');
+                    drawerOverlay.classList.remove('open');
+                }, 300);
+            });
+        });
+
+        // Log function
+        function log(message) {
+            if (!debugMode) return;
+            const output = document.getElementById('output');
+            const time = new Date().toLocaleTimeString();
+            output.innerHTML += `[${time}] ${message}\n`;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        // Toggle debug mode
+        function toggleDebug() {
+            debugMode = !debugMode;
+            document.getElementById('output').style.display = debugMode ? 'block' : 'none';
+            if (debugMode) log('🔍 Debug mode enabled');
+        }
+
+        // Navigation
+        function goToSection(section) {
+            document.getElementById('newsSection').style.display = section === 'latest' || section === 'trending' ? 'block' : 'none';
+            document.getElementById('searchSection').style.display = section === 'search' ? 'block' : 'none';
+            document.getElementById('topicsSection').style.display = section !== 'search' ? 'block' : 'none';
+
+            if (section === 'latest' || section === 'trending') {
+                if (section === 'latest') switchTab('latest');
+                else switchTab('trending');
+            }
+        }
+
+        // Tab switching
+        async function switchTab(tab) {
+            currentTab = tab;
+
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (tab === 'latest') {
+                await loadLatestNews();
+            } else if (tab === 'trending') {
+                await loadTrendingNews();
+            }
+        }
+
+        // Load latest news
+        async function loadLatestNews() {
+            try {
+                const container = document.getElementById('news-container');
+                container.innerHTML = '<div class="loading"><div class="spinner"></div>Loading news...</div>';
+
+                log('Loading latest news...');
+                const data = await newsAPI.getLatestNews(1, 100);
+                allNews = data.news || [];
+                currentPage = 1;
+                displayPaginatedNews();
+                log(`✅ Loaded ${allNews.length} news items`);
+            } catch (error) {
+                log(`❌ Error: ${error.message}`);
+                document.getElementById('news-container').innerHTML = `<p style="color: #ff6b6b;">Cannot load news: ${error.message}</p>`;
+            }
+        }
+
+        // Load trending news
+        async function loadTrendingNews() {
+            try {
+                const container = document.getElementById('news-container');
+                container.innerHTML = '<div class="loading"><div class="spinner"></div>Loading trending news...</div>';
+
+                log('Loading trending news...');
+                const data = await newsAPI.getTrendingNews(1, 100);
+                allNews = data.news || [];
+                currentPage = 1;
+                displayPaginatedNews();
+                log(`✅ Loaded ${allNews.length} trending items`);
+            } catch (error) {
+                log(`❌ Error: ${error.message}`);
+                document.getElementById('news-container').innerHTML = `<p style="color: #ff6b6b;">Cannot load news: ${error.message}</p>`;
+            }
+        }
+
+        // Display paginated news
+        function displayPaginatedNews() {
+            const totalPages = Math.ceil(allNews.length / itemsPerPage);
+            const startIdx = (currentPage - 1) * itemsPerPage;
+            const endIdx = startIdx + itemsPerPage;
+            const paginatedNews = allNews.slice(startIdx, endIdx);
+
+            displayNews(paginatedNews, 'news-container');
+            displayPaginationControls(totalPages);
+        }
+
+        // Display pagination controls
+        function displayPaginationControls(totalPages) {
+            const container = document.getElementById('pagination-container');
+
+            if (totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = '<div class="pagination">';
+
+            const pagesPerGroup = 10;
+            const currentGroup = Math.floor((currentPage - 1) / pagesPerGroup);
+            const groupStartPage = currentGroup * pagesPerGroup + 1;
+            const groupEndPage = Math.min(groupStartPage + pagesPerGroup - 1, totalPages);
+            const totalGroups = Math.ceil(totalPages / pagesPerGroup);
+
+            const prevGroupStart = Math.max(1, groupStartPage - pagesPerGroup);
+            html += `<button onclick="goToPage(${prevGroupStart})" ${currentGroup === 0 ? 'disabled' : ''}>◀ Previous</button>`;
+
+            html += '<div class="page-number-buttons">';
+            for (let i = groupStartPage; i <= groupEndPage; i++) {
+                html += `<button onclick="goToPage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
+            }
+            html += '</div>';
+
+            const nextGroupStart = groupStartPage + pagesPerGroup;
+            html += `<button onclick="goToPage(${nextGroupStart})" ${currentGroup === totalGroups - 1 ? 'disabled' : ''}>Next ▶</button>`;
+
+            html += '</div>';
+            html += `<div class="pagination-info">Page ${currentPage} / ${totalPages} (Total ${allNews.length} items)</div>`;
+
+            container.innerHTML = html;
+        }
+
+        // Go to page
+        function goToPage(pageNum) {
+            const totalPages = Math.ceil(allNews.length / itemsPerPage);
+
+            if (pageNum < 1 || pageNum > totalPages) {
+                return;
+            }
+
+            currentPage = pageNum;
+            displayPaginatedNews();
+            document.getElementById('news-container').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Display news items
+        function displayNews(newsItems, containerId) {
+            const container = document.getElementById(containerId);
+            if (!newsItems || newsItems.length === 0) {
+                container.innerHTML = '<p style="color: #888;">No news available.</p>';
+                return;
+            }
+
+            container.innerHTML = newsItems.map(item => `
+                <div class="news-item" onclick="window.open('${item.url}', '_blank')" style="cursor: pointer;">
+                    <h3>
+                        <a href="${item.url}" target="_blank" onclick="event.stopPropagation();">
+                            ${item.title}
+                        </a>
+                    </h3>
+                    <p>${item.summary || 'No summary available.'}</p>
+                    <div class="news-meta">
+                        <strong>${item.source}</strong> · 
+                        ${newsAPI.formatTimestamp(item.timestamp)} ·
+                        👁 ${item.stats.views} views
+                    </div>
+                    <div>
+                        ${(item.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Search news
+        async function searchNews() {
+            const keyword = document.getElementById('search-input').value;
+            if (!keyword) return;
+
+            try {
+                const container = document.getElementById('search-results');
+                container.innerHTML = '<div class="loading"><div class="spinner"></div>Searching...</div>';
+
+                log(`Searching for "${keyword}"...`);
+                const data = await newsAPI.searchNews(keyword);
+                displayNews(data.news, 'search-results');
+                log(`✅ Found ${data.count} results`);
+            } catch (error) {
+                log(`❌ Error: ${error.message}`);
+                document.getElementById('search-results').innerHTML = `<p style="color: #ff6b6b;">Search error: ${error.message}</p>`;
+            }
+        }
+
+        // Load hot topics
+        async function loadHotTopics() {
+            try {
+                log('Loading hot topics...');
+                const data = await newsAPI.getHotTopics();
+                const container = document.getElementById('topics-container');
+                container.innerHTML = data.topics.map(topic =>
+                    `<span class="tag">#${topic.name} (${topic.weight})</span>`
+                ).join('');
+                log(`✅ Loaded ${data.topics.length} topics`);
+            } catch (error) {
+                log(`❌ Error: ${error.message}`);
+            }
+        }
+
+        // Authentication
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function openSignupModal() {
+            document.getElementById('signupModal').style.display = 'flex';
+        }
+
+        function closeSignupModal() {
+            document.getElementById('signupModal').style.display = 'none';
+        }
+
+        async function performLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) {
+                alert('Please enter email and password');
+                return;
+            }
+
+            try {
+                log('Logging in...');
+                const data = await newsAPI.login(email, password);
+                currentUser = data.user;
+                isLoggedIn = true;
+                updateProfileUI();
+                closeLoginModal();
+                log('✅ Login successful');
+            } catch (error) {
+                log(`❌ Login error: ${error.message}`);
+                alert(`Login failed: ${error.message}`);
+            }
+        }
+
+        async function performSignup() {
+            const email = document.getElementById('signupEmail').value;
+            const name = document.getElementById('signupName').value;
+            const password = document.getElementById('signupPassword').value;
+
+            if (!email || !name || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            try {
+                log('Signing up...');
+                const data = await newsAPI.register(email, password, ['AI', 'Technology']);
+                currentUser = data.user;
+                isLoggedIn = true;
+                updateProfileUI();
+                closeSignupModal();
+                log('✅ Signup successful');
+            } catch (error) {
+                log(`❌ Signup error: ${error.message}`);
+                alert(`Signup failed: ${error.message}`);
+            }
+        }
+
+        function logout() {
+            newsAPI.logout();
+            currentUser = null;
+            isLoggedIn = false;
+            updateProfileUI();
+            sidebarDrawer.classList.remove('open');
+            drawerOverlay.classList.remove('open');
+            log('✅ Logged out');
+        }
+
+        function updateProfileUI() {
+            const profileAvatar = document.getElementById('profileAvatar');
+            const profileInfo = document.getElementById('profileInfo');
+            const authButtons = document.getElementById('authButtons');
+            const logoutBtn = document.getElementById('logoutBtn');
+
+            if (isLoggedIn && currentUser) {
+                profileAvatar.classList.add('logged-in');
+                profileInfo.classList.add('show');
+                document.getElementById('profileName').textContent = currentUser.name || currentUser.email;
+                document.getElementById('profileEmail').textContent = currentUser.email;
+                authButtons.classList.add('logged-in');
+                logoutBtn.style.display = 'grid';
+            } else {
+                profileAvatar.classList.remove('logged-in');
+                profileInfo.classList.remove('show');
+                authButtons.classList.remove('logged-in');
+                logoutBtn.style.display = 'none';
+            }
+        }
+
+        // Settings
+        function toggleSettings(setting) {
+            alert(`${setting} settings - Coming soon!`);
+            log(`Toggled ${setting} settings`);
+        }
+
+        // Dark mode
+        function toggleDarkMode() {
+            const toggle = document.getElementById('darkModeToggle');
+            toggle.classList.toggle('off');
+            log('Dark mode toggled');
+        }
+
+        // Initialize
+        async function init() {
+            log('🚀 AI News Portal Initialized');
+            log('Backend URL: http://localhost:3001/api');
+
+            await loadLatestNews();
+            await loadHotTopics();
+
+            log('✅ Ready!');
+            updateProfileUI();
+        }
+
+        window.addEventListener('load', init);
+    </script>
+</body>
+
+</html>

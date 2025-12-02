@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI/IT News Search</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#2547f4",
+              "background-light": "#f5f6f8",
+              "background-dark": "#101322",
+            },
+            fontFamily: {
+              "display": ["Space Grotesk", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<div class="flex flex-1 justify-center px-4 sm:px-8 md:px-20 lg:px-40 py-5">
+<div class="layout-content-container flex flex-col w-full max-w-[1100px] flex-1">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-white/10 px-4 sm:px-10 py-3">
+<div class="flex items-center gap-4 text-white">
+<div class="text-primary">
+<span class="material-symbols-outlined" style="font-size: 24px;">hub</span>
+</div>
+<h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">AI/IT News</h2>
+</div>
+<div class="hidden md:flex flex-1 justify-center gap-9">
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Home</a>
+<a class="text-primary text-sm font-bold leading-normal" href="#">Discover</a>
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Bookmarks</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-white/10 text-white">
+<span class="material-symbols-outlined text-white" style="font-size: 20px;">notifications</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User profile picture with abstract shapes" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCI7brhgJO7D4EA66K8wA_2z9a-yO7V03RqN7c-KILOiIZJvrjJBKEBD8BytDdbfdrnqW26Hz6kwc-lF4kO-CBpydoLhsFDIZHkLTtYogXODii7k7oQN2grVlOYWk5KcTxkLN9abzAJLVnzitMCxGqdX54OBMeyVg0Cc8ROYckdq_gZ4XmS2voqOrgGbuzMbZsOboz-_bfssbcBi-ZdWsCOm-uvgsfrr-ffWnX6zmKmztSMdF7jvhferAaaSi-9VRXwArY8C5ssDVw");'></div>
+</div>
+</header>
+<main class="flex-1 px-4 sm:px-10 py-8">
+<div class="flex flex-wrap justify-between items-center gap-4 mb-4">
+<div class="flex flex-col gap-2">
+<h1 class="text-white text-4xl font-black leading-tight tracking-[-0.033em]">Find the Latest in AI &amp; IT</h1>
+<p class="text-white/60 text-base font-normal leading-normal">Explore AI trends, companies, and breaking news.</p>
+</div>
+</div>
+<div class="py-3">
+<div class="relative flex flex-col min-w-40 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-14">
+<div class="text-white/60 flex border-none bg-white/5 items-center justify-center pl-4 rounded-l-lg">
+<span class="material-symbols-outlined" style="font-size: 24px;">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-white focus:outline-0 focus:ring-2 focus:ring-primary border-none bg-white/5 h-full placeholder:text-white/60 px-4 text-base font-normal leading-normal" placeholder="Search for 'Generative AI'..." value="Generative AI"/>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-4 py-4 border-b border-white/10">
+<div class="flex gap-2 flex-wrap">
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary pl-4 pr-3 text-white">
+<p class="text-sm font-medium leading-normal">Latest</p>
+<span class="material-symbols-outlined" style="font-size: 20px;">arrow_drop_down</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white/10 pl-4 pr-3 text-white/80 hover:bg-white/20 transition-colors">
+<p class="text-sm font-medium leading-normal">Popular</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white/10 pl-4 pr-3 text-white/80 hover:bg-white/20 transition-colors">
+<p class="text-sm font-medium leading-normal">By Source</p>
+<span class="material-symbols-outlined" style="font-size: 20px;">arrow_drop_down</span>
+</button>
+</div>
+<p class="text-white/60 text-sm font-normal leading-normal">Showing 2,415 results</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-8">
+<div class="flex flex-col gap-4 rounded-xl bg-white/5 p-5 border border-white/10 hover:border-primary/50 transition-colors duration-300">
+<div class="flex items-center gap-3">
+<img class="h-8 w-8 rounded-full object-cover" data-alt="TechCrunch logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCu2Kgv8ODXQT8xWs0hHDJkVA_dcZFduOiZVWTzTUNU5c9ikEJc2DwjpJb92tWAQ_fg2ZlCI3xJIRxWL48frAmGpMX1DR-2_zzLPkicwIKJmfd4315elUrOdUYX35R5aCiedhK2jKsZdDZPdZ6KZ0AfkCaL9XD-orzFZe7ICOHet0akBCe0UgAmi1jBfmadPTN1LdTlS0sM_I252oKm-OaXZQsOEMgJwpdxUIs0LzZErF8yGBGkxGbPIhQ61_AvqPJL43YIMRXT1Bo"/>
+<div>
+<p class="text-white text-sm font-semibold">TechCrunch</p>
+<p class="text-white/60 text-xs">2 hours ago</p>
+</div>
+</div>
+<h3 class="text-white text-lg font-bold leading-snug">OpenAI releases GPT-5 with groundbreaking reasoning capabilities</h3>
+<p class="text-white/70 text-sm font-normal leading-relaxed">The new model shows significant improvements in complex problem-solving and logical inference, setting a new benchmark for artificial general intelligence research.</p>
+<div class="flex items-center justify-between mt-2">
+<div class="flex items-center gap-2">
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-white/60 hover:bg-primary/20 hover:text-white transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">bookmark_border</span>
+</button>
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-white/60 hover:bg-primary/20 hover:text-white transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">share</span>
+</button>
+</div>
+<a class="text-primary text-sm font-semibold hover:underline" href="#">Read More</a>
+</div>
+</div>
+<div class="flex flex-col gap-4 rounded-xl bg-white/5 p-5 border border-white/10 hover:border-primary/50 transition-colors duration-300">
+<div class="flex items-center gap-3">
+<img class="h-8 w-8 rounded-full object-cover bg-white p-1" data-alt="MIT News logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD10olnl9so92GLEKKfigjtiRuLGsILz3RLhIfXInmyC3g8BQH3acA7zuwDxmYAqZ3Ki6pvk_29e5uIzjyZOgJx8x5tfEBGI26bs32JnlNs5fn5KI-nSwDhxp2tTR9BNtEi9hdhKqHHJVI0TPDQKIg-N19a2aGeXZy-H07BBdGDJothUXGuRLufzuQADINaTkhmBv_-Qwn8woE2KvxcptPolpjvg-3ReNOoOcZgF8fLBbslNwsMTVU6T2Zkf7bsnkEOll3Ew3FBDIs"/>
+<div>
+<p class="text-white text-sm font-semibold">MIT News</p>
+<p class="text-white/60 text-xs">5 hours ago</p>
+</div>
+</div>
+<h3 class="text-white text-lg font-bold leading-snug">New Framework for Ethical AI in Autonomous Systems</h3>
+<p class="text-white/70 text-sm font-normal leading-relaxed">Researchers at MIT's CSAIL have developed a novel framework that allows autonomous vehicles to make more transparent and ethical decisions in critical situations.</p>
+<div class="flex items-center justify-between mt-2">
+<div class="flex items-center gap-2">
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-white/60 hover:bg-primary/20 hover:text-white transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">bookmark_border</span>
+</button>
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-white/60 hover:bg-primary/20 hover:text-white transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">share</span>
+</button>
+</div>
+<a class="text-primary text-sm font-semibold hover:underline" href="#">Read More</a>
+</div>
+</div>
+<div class="flex flex-col gap-4 rounded-xl bg-white/5 p-5 border border-white/10 hover:border-primary/50 transition-colors duration-300">
+<div class="flex items-center gap-3">
+<img class="h-8 w-8 rounded-full object-cover" data-alt="Ars Technica logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIWfuf7QeRo3qG5v6nStnCQmBgbfNhmGva_KlxNi09SHHdLPc65Jejhr_6Ci3IuxlTlMESGZToU17eNu6ps1-JMOjkulFP6LYiNXejq04K-GnTHg1zsavAlqWeLmtrwKZE2t2PpAkmdB7jAvMliY4fOQbYsfCImPVwkFdTPm7vhYvz84RIpNp4uQaxV0GrB38EGXJ8esWPGfhRxj5j2zMfLtbYTo9FuN9tzH16I15pobQK6557rQTyfmITuk_FcE6j3cfnayLqQEo"/>
+<div>
+<p class="text-white text-sm font-semibold">Ars Technica</p>
+<p class="text-white/60 text-xs">1 day ago</p>
+</div>
+</div>
+<h3 class="text-white text-lg font-bold leading-snug">The Quantum Computing Race: Who's Leading the Pack?</h3>
+<p class="text-white/70 text-sm font-normal leading-relaxed">An in-depth analysis of the current state of quantum computing, comparing the progress of major players like Google, IBM, and emerging startups in the field.</p>
+<div class="flex items-center justify-between mt-2">
+<div class="flex items-center gap-2">
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-white/60 hover:bg-primary/20 hover:text-white transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">bookmark</span>
+</button>
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-white/60 hover:bg-primary/20 hover:text-white transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">share</span>
+</button>
+</div>
+<a class="text-primary text-sm font-semibold hover:underline" href="#">Read More</a>
+</div>
+</div>
+<div class="flex flex-col gap-4 rounded-xl bg-white/5 p-5 border border-white/10 hover:border-primary/50 transition-colors duration-300">
+<div class="flex items-center gap-3">
+<img class="h-8 w-8 rounded-full object-cover bg-white p-1" data-alt="Wired logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwBqGQJrNgSxQi4jDDtFws7KbEABstMbTZV8GTM4L0tkByypAa0AXWsDF9dIvwwfmP7PsvhGXXzZbSdCUaq3QOKf4RzYZh6OWN1jvnhNhLdn_OFLx1U-3VYAenCy9ndTJyK4vnyL_pK0QG9PFKYyW-OkcY0YYeOLdxaoT8-2C6g6RVSDnAYjtqMdGCWRi87sq8LIKYyg1s8r4cLe6MHt0hU_h7EdlLzxIjbtmpsgsLupSB8MvfzlaDRGeUJ38MWll2H_07CBmKPHQ"/>
+<div>
+<p class="text-white text-sm font-semibold">Wired</p>
+<p class="text-white/60 text-xs">2 days ago</p>
+</div>
+</div>
+<h3 class="text-white text-lg font-bold leading-snug">How Generative AI is Changing the Landscape of Digital Art</h3>
+<p class="text-white/70 text-sm font-normal leading-relaxed">Exploring the tools, techniques, and ethical debates surrounding AI-generated art, and how artists are leveraging this technology to push creative boundaries.</p>
+<div class="flex items-center justify-between mt-2">
+<div class="flex items-center gap-2">
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-white/60 hover:bg-primary/20 hover:text-white transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">bookmark_border</span>
+</button>
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-white/60 hover:bg-primary/20 hover:text-white transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">share</span>
+</button>
+</div>
+<a class="text-primary text-sm font-semibold hover:underline" href="#">Read More</a>
+</div>
+</div>
+<div class="flex flex-col gap-4 rounded-xl bg-white/5 p-5 border border-white/10 hover:border-primary/50 transition-colors duration-300">
+<div class="flex items-center gap-3">
+<img class="h-8 w-8 rounded-full object-cover" data-alt="TechCrunch logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5uzn8v-gpKjJkfP54oJnSC5ruwyfrfhxUbyxiwRBmOdc8ifoF6LUwtM2ctTfn5foc3Zc86LffEcOsq9bJDU7kwpTfHHilN3D13RjXD_gIbzX6yECL75NZwGTdzUuog5b0l6Rg9elpskPB4baYn-3tWy0M9ab-Q_o05ZFhi1ZDyM4RG1aDpHHTFQ-mYYsQ9_yMKVckABSbbBcem0XqEinndRzDVLOPf_K8vINceElv84ecpdYL5i_Aeyu6wnXu9pIQtlJQpJQ_cbg"/>
+<div>
+<p class="text-white text-sm font-semibold">TechCrunch</p>
+<p class="text-white/60 text-xs">2 days ago</p>
+</div>
+</div>
+<h3 class="text-white text-lg font-bold leading-snug">Microsoft Invests Another $10B in AI Infrastructure</h3>
+<p class="text-white/70 text-sm font-normal leading-relaxed">The tech giant is doubling down on its cloud and AI capabilities to compete in the rapidly evolving market for large-scale generative models and enterprise AI solutions.</p>
+<div class="flex items-center justify-between mt-2">
+<div class="flex items-center gap-2">
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-white/60 hover:bg-primary/20 hover:text-white transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">bookmark_border</span>
+</button>
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-white/60 hover:bg-primary/20 hover:text-white transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">share</span>
+</button>
+</div>
+<a class="text-primary text-sm font-semibold hover:underline" href="#">Read More</a>
+</div>
+</div>
+<div class="flex flex-col gap-4 rounded-xl bg-white/5 p-5 border border-white/10 hover:border-primary/50 transition-colors duration-300">
+<div class="flex items-center gap-3">
+<img class="h-8 w-8 rounded-full object-cover bg-white p-1" data-alt="The Verge logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLoBz_C6cpPVqHjppf5TyyRw9TxJBRqc8KGUkKZiMZ56mTr2ycQjCTYGng6ALiz4DShrZ58CWOqWLKZMiOMz04nVakBSJDUaaIKLX_MoHlcD2uWBS9pJVoi_dgiFasRnED2qjchvSVgl0U-tiBuk8jZBmq4VS7OlY4gQbfTVq_5JHc0CrUSxhGP1B6s7HkI43NF0mLERfP2EGWYTFuD8zVeAYHITzNpqPC_-Q_21HUVmYx_dcd1sX1Nrh3FVSbiTWT1it1hoCc86k"/>
+<div>
+<p class="text-white text-sm font-semibold">The Verge</p>
+<p class="text-white/60 text-xs">3 days ago</p>
+</div>
+</div>
+<h3 class="text-white text-lg font-bold leading-snug">Google's New AI Can Generate Realistic Video from Text</h3>
+<p class="text-white/70 text-sm font-normal leading-relaxed">A look into Google's latest text-to-video model, which promises to revolutionize content creation but also raises concerns about misinformation and deepfakes.</p>
+<div class="flex items-center justify-between mt-2">
+<div class="flex items-center gap-2">
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-white/60 hover:bg-primary/20 hover:text-white transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">bookmark_border</span>
+</button>
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-white/60 hover:bg-primary/20 hover:text-white transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">share</span>
+</button>
+</div>
+<a class="text-primary text-sm font-semibold hover:underline" href="#">Read More</a>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-center gap-2 py-10 mt-6">
+<button class="flex h-10 w-10 items-center justify-center rounded-lg text-white/60 bg-white/10 hover:bg-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">chevron_left</span>
+</button>
+<button class="flex h-10 w-10 items-center justify-center rounded-lg font-semibold text-white bg-primary transition-colors">1</button>
+<button class="flex h-10 w-10 items-center justify-center rounded-lg font-semibold text-white/60 hover:bg-white/10 transition-colors">2</button>
+<button class="flex h-10 w-10 items-center justify-center rounded-lg font-semibold text-white/60 hover:bg-white/10 transition-colors">3</button>
+<span class="text-white/60">...</span>
+<button class="flex h-10 w-10 items-center justify-center rounded-lg font-semibold text-white/60 hover:bg-white/10 transition-colors">10</button>
+<button class="flex h-10 w-10 items-center justify-center rounded-lg text-white/60 bg-white/10 hover:bg-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">chevron_right</span>
+</button>
+</div>
+</main>
+</div>
+</div>
+</div>
+</div>
+</body></html>

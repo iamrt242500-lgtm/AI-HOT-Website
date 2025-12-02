@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TrendPulse - Explore AI/IT Trends</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#4D9FFF",
+              "secondary": "#C86BFF",
+              "background-light": "#f5f6f8",
+              "background-dark": "#12121c",
+              "surface-dark": "#1A1A2E",
+              "text-primary-dark": "#E0E0E0",
+              "text-secondary-dark": "#8A8A9E",
+              "border-dark": "#2A2A3F",
+            },
+            fontFamily: {
+              "display": ["Space Grotesk", "sans-serif"]
+            },
+            borderRadius: {
+              "DEFAULT": "0.5rem",
+              "lg": "0.75rem",
+              "xl": "1rem",
+              "full": "9999px"
+            },
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-primary-dark">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- TopNavBar Start -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-dark px-6 sm:px-10 py-3 sticky top-0 z-50 bg-background-dark/80 backdrop-blur-sm">
+<div class="flex items-center gap-4 text-text-primary-dark">
+<div class="text-primary">
+<svg class="w-6 h-6" fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M13.8261 17.4264C16.7203 18.1174 20.2244 18.5217 24 18.5217C27.7756 18.5217 31.2797 18.1174 34.1739 17.4264C36.9144 16.7722 39.9967 15.2331 41.3563 14.1648L24.8486 40.6391C24.4571 41.267 23.5429 41.267 23.1514 40.6391L6.64374 14.1648C8.00331 15.2331 11.0856 16.7722 13.8261 17.4264Z"></path>
+<path clip-rule="evenodd" d="M39.998 12.236C39.9944 12.2537 39.9875 12.2845 39.9748 12.3294C39.9436 12.4399 39.8949 12.5741 39.8346 12.7175C39.8168 12.7597 39.7989 12.8007 39.7813 12.8398C38.5103 13.7113 35.9788 14.9393 33.7095 15.4811C30.9875 16.131 27.6413 16.5217 24 16.5217C20.3587 16.5217 17.0125 16.131 14.2905 15.4811C12.0012 14.9346 9.44505 13.6897 8.18538 12.8168C8.17384 12.7925 8.16216 12.767 8.15052 12.7408C8.09919 12.6249 8.05721 12.5114 8.02977 12.411C8.00356 12.3152 8.00039 12.2667 8.00004 12.2612C8.00004 12.261 8 12.2607 8.00004 12.2612C8.00004 12.2359 8.0104 11.9233 8.68485 11.3686C9.34546 10.8254 10.4222 10.2469 11.9291 9.72276C14.9242 8.68098 19.1919 8 24 8C28.8081 8 33.0758 8.68098 36.0709 9.72276C37.5778 10.2469 38.6545 10.8254 39.3151 11.3686C39.9006 11.8501 39.9857 12.1489 39.998 12.236ZM4.95178 15.2312L21.4543 41.6973C22.6288 43.5809 25.3712 43.5809 26.5457 41.6973L43.0534 15.223C43.0709 15.1948 43.0878 15.1662 43.104 15.1371L41.3563 14.1648C43.104 15.1371 43.1038 15.1374 43.104 15.1371L43.1051 15.135L43.1065 15.1325L43.1101 15.1261L43.1199 15.1082C43.1276 15.094 43.1377 15.0754 43.1497 15.0527C43.1738 15.0075 43.2062 14.9455 43.244 14.8701C43.319 14.7208 43.4196 14.511 43.5217 14.2683C43.6901 13.8679 44 13.0689 44 12.2609C44 10.5573 43.003 9.22254 41.8558 8.2791C40.6947 7.32427 39.1354 6.55361 37.385 5.94477C33.8654 4.72057 29.133 4 24 4C18.867 4 14.1346 4.72057 10.615 5.94478C8.86463 6.55361 7.30529 7.32428 6.14419 8.27911C4.99695 9.22255 3.99999 10.5573 3.99999 12.2609C3.99999 13.1275 4.29264 13.9078 4.49321 14.3607C4.60375 14.6102 4.71348 14.8196 4.79687 14.9689C4.83898 15.0444 4.87547 15.1065 4.9035 15.1529C4.91754 15.1762 4.92954 15.1957 4.93916 15.2111L4.94662 15.223L4.95178 15.2312ZM35.9868 18.996L24 38.22L12.0131 18.996C12.4661 19.1391 12.9179 19.2658 13.3617 19.3718C16.4281 20.1039 20.0901 20.5217 24 20.5217C27.9099 20.5217 31.5719 20.1039 34.6383 19.3718C35.082 19.2658 35.5339 19.1391 35.9868 18.996Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-text-primary-dark text-lg font-bold leading-tight tracking-[-0.015em]">TrendPulse</h2>
+</div>
+<div class="hidden md:flex flex-1 justify-center gap-8">
+<div class="flex items-center gap-9">
+<a class="text-text-secondary-dark hover:text-primary text-sm font-medium leading-normal" href="#">Home</a>
+<a class="text-primary text-sm font-bold leading-normal" href="#">Trends</a>
+<a class="text-text-secondary-dark hover:text-primary text-sm font-medium leading-normal" href="#">Search</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-2">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 w-10 bg-surface-dark text-text-primary-dark hover:bg-border-dark transition-colors text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 w-10 bg-surface-dark text-text-primary-dark hover:bg-border-dark transition-colors text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAjNynoZgLXyHx8sDXyhbsLsOJf4Oem6XCEJ7nmg0PKlmQRfGbjeo9dOPRobu9r4MlE5OHR5efS1vupbOqBtQRGf-tym24Xafymdc76NOiV0zT3BaDHqpiQBOeukHcNCK3_wjgvQMxEq3-9K_HOMs22ktJgKxDjqg8v6jIgKTOlSsQVyNJL4Of90UimicKIfubSc6xlok7Evaa7B1cIpnE90f8UWc9QlZtBLT9vFFyR3RWRdr3O2axmOR4HUIzCWUA5Z1k7RjETb1w");'></div>
+</div>
+</header>
+<!-- TopNavBar End -->
+<main class="px-6 sm:px-10 flex-1 py-5">
+<div class="layout-content-container mx-auto flex flex-col w-full max-w-7xl">
+<!-- PageHeading Start -->
+<div class="flex flex-wrap justify-between gap-3 p-4">
+<div class="flex min-w-72 flex-col gap-3">
+<p class="text-text-primary-dark text-4xl font-black leading-tight tracking-[-0.033em]">Explore AI/IT Trends</p>
+<p class="text-text-secondary-dark text-base font-normal leading-normal">Discover the latest topics and discussions shaping the tech landscape.</p>
+</div>
+</div>
+<!-- PageHeading End -->
+<!-- HeadlineText Start -->
+<h2 class="text-text-primary-dark tracking-light text-[28px] font-bold leading-tight px-4 text-left pb-3 pt-8">Popular Keyword Cloud</h2>
+<!-- HeadlineText End -->
+<!-- Chips Start -->
+<div class="flex gap-3 p-4 flex-wrap">
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-surface-dark pl-4 pr-4 cursor-pointer hover:bg-primary transition-colors">
+<p class="text-text-primary-dark text-lg font-medium leading-normal">LLM</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-secondary/20 pl-4 pr-4 cursor-pointer hover:bg-secondary transition-colors">
+<p class="text-secondary text-base font-bold leading-normal">NVIDIA</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-surface-dark pl-4 pr-4 cursor-pointer hover:bg-primary transition-colors">
+<p class="text-text-primary-dark text-sm font-medium leading-normal">GPT-5</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary/20 pl-4 pr-4 cursor-pointer hover:bg-primary transition-colors">
+<p class="text-primary text-2xl font-black leading-normal">AGI</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-surface-dark pl-4 pr-4 cursor-pointer hover:bg-primary transition-colors">
+<p class="text-text-primary-dark text-base font-medium leading-normal">Quantum Computing</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-surface-dark pl-4 pr-4 cursor-pointer hover:bg-primary transition-colors">
+<p class="text-text-primary-dark text-sm font-medium leading-normal">VC Funding</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-surface-dark pl-4 pr-4 cursor-pointer hover:bg-primary transition-colors">
+<p class="text-text-primary-dark text-lg font-medium leading-normal">RAG</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary/20 pl-4 pr-4 cursor-pointer hover:bg-primary transition-colors">
+<p class="text-primary text-sm font-bold leading-normal">Cybersecurity</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-surface-dark pl-4 pr-4 cursor-pointer hover:bg-primary transition-colors">
+<p class="text-text-primary-dark text-base font-medium leading-normal">Mistral</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-secondary/20 pl-4 pr-4 cursor-pointer hover:bg-secondary transition-colors">
+<p class="text-secondary text-sm font-bold leading-normal">Cloud Infrastructure</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-surface-dark pl-4 pr-4 cursor-pointer hover:bg-primary transition-colors">
+<p class="text-text-primary-dark text-xl font-medium leading-normal">Sora</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-surface-dark pl-4 pr-4 cursor-pointer hover:bg-primary transition-colors">
+<p class="text-text-primary-dark text-sm font-medium leading-normal">AI Ethics</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary/20 pl-4 pr-4 cursor-pointer hover:bg-primary transition-colors">
+<p class="text-primary text-base font-bold leading-normal">Devin AI</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-surface-dark pl-4 pr-4 cursor-pointer hover:bg-primary transition-colors">
+<p class="text-text-primary-dark text-sm font-medium leading-normal">Fine-tuning</p>
+</div>
+<div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-secondary/20 pl-4 pr-4 cursor-pointer hover:bg-secondary transition-colors">
+<p class="text-secondary text-xl font-bold leading-normal">OpenAI</p>
+</div>
+</div>
+<!-- Chips End -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 pt-10">
+<!-- Left Sidebar -->
+<aside class="col-span-1 flex flex-col gap-6">
+<div class="bg-surface-dark p-4 rounded-lg flex flex-col">
+<!-- Accordions Start -->
+<details class="flex flex-col border-b border-border-dark py-2 group" open="">
+<summary class="flex cursor-pointer items-center justify-between gap-6 py-2 list-none">
+<p class="text-text-primary-dark text-base font-medium leading-normal">Category</p>
+<span class="material-symbols-outlined text-text-secondary-dark group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="flex flex-col gap-3 pt-3 pb-2">
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="h-4 w-4 rounded border-border-dark bg-background-dark text-primary focus:ring-primary focus:ring-offset-background-dark" type="checkbox"/>
+<span class="text-text-secondary-dark text-sm">AI Models</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="h-4 w-4 rounded border-border-dark bg-background-dark text-primary focus:ring-primary focus:ring-offset-background-dark" type="checkbox"/>
+<span class="text-text-secondary-dark text-sm">Semiconductors</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="h-4 w-4 rounded border-border-dark bg-background-dark text-primary focus:ring-primary focus:ring-offset-background-dark" type="checkbox"/>
+<span class="text-text-secondary-dark text-sm">Startups</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="h-4 w-4 rounded border-border-dark bg-background-dark text-primary focus:ring-primary focus:ring-offset-background-dark" type="checkbox"/>
+<span class="text-text-secondary-dark text-sm">App Services</span>
+</label>
+</div>
+</details>
+<details class="flex flex-col border-b border-border-dark py-2 group" open="">
+<summary class="flex cursor-pointer items-center justify-between gap-6 py-2 list-none">
+<p class="text-text-primary-dark text-base font-medium leading-normal">Social Source</p>
+<span class="material-symbols-outlined text-text-secondary-dark group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="flex flex-col gap-3 pt-3 pb-2">
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="h-4 w-4 rounded border-border-dark bg-background-dark text-primary focus:ring-primary focus:ring-offset-background-dark" type="checkbox"/>
+<span class="text-text-secondary-dark text-sm">X / Twitter</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="h-4 w-4 rounded border-border-dark bg-background-dark text-primary focus:ring-primary focus:ring-offset-background-dark" type="checkbox"/>
+<span class="text-text-secondary-dark text-sm">Reddit</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="h-4 w-4 rounded border-border-dark bg-background-dark text-primary focus:ring-primary focus:ring-offset-background-dark" type="checkbox"/>
+<span class="text-text-secondary-dark text-sm">Medium</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="h-4 w-4 rounded border-border-dark bg-background-dark text-primary focus:ring-primary focus:ring-offset-background-dark" type="checkbox"/>
+<span class="text-text-secondary-dark text-sm">Hacker News</span>
+</label>
+</div>
+</details>
+<details class="flex flex-col border-b border-border-dark py-2 group">
+<summary class="flex cursor-pointer items-center justify-between gap-6 py-2 list-none">
+<p class="text-text-primary-dark text-base font-medium leading-normal">Timeframe</p>
+<span class="material-symbols-outlined text-text-secondary-dark group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<div class="flex flex-col gap-3 pt-3 pb-2">
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="h-4 w-4 border-border-dark bg-background-dark text-primary focus:ring-primary focus:ring-offset-background-dark" name="timeframe" type="radio"/>
+<span class="text-text-secondary-dark text-sm">Last 1 hour</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="h-4 w-4 border-border-dark bg-background-dark text-primary focus:ring-primary focus:ring-offset-background-dark" name="timeframe" type="radio"/>
+<span class="text-text-secondary-dark text-sm">Last 6 hours</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input checked="" class="h-4 w-4 border-border-dark bg-background-dark text-primary focus:ring-primary focus:ring-offset-background-dark" name="timeframe" type="radio"/>
+<span class="text-text-secondary-dark text-sm">Last 24 hours</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer">
+<input class="h-4 w-4 border-border-dark bg-background-dark text-primary focus:ring-primary focus:ring-offset-background-dark" name="timeframe" type="radio"/>
+<span class="text-text-secondary-dark text-sm">Last 7 days</span>
+</label>
+</div>
+</details>
+</div>
+<div class="flex flex-col gap-3 p-4">
+<button class="w-full flex items-center justify-center h-10 px-4 rounded-lg bg-secondary text-white font-bold hover:opacity-90 transition-opacity">Apply Filters</button>
+<button class="w-full flex items-center justify-center h-10 px-4 rounded-lg bg-transparent border border-border-dark text-text-secondary-dark font-medium hover:bg-surface-dark transition-colors">Reset</button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="col-span-1 md:col-span-3 flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<button class="px-4 py-2 text-sm font-bold bg-primary text-white rounded-lg">Trending</button>
+<button class="px-4 py-2 text-sm font-medium text-text-secondary-dark hover:bg-surface-dark rounded-lg">Latest</button>
+<button class="px-4 py-2 text-sm font-medium text-text-secondary-dark hover:bg-surface-dark rounded-lg">Most Popular</button>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex h-10 w-10 items-center justify-center bg-surface-dark rounded-lg text-text-secondary-dark hover:text-primary">
+<span class="material-symbols-outlined">grid_view</span>
+</button>
+<button class="flex h-10 w-10 items-center justify-center bg-primary rounded-lg text-white">
+<span class="material-symbols-outlined">view_list</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Article Card 1 -->
+<div class="flex flex-col gap-3 p-4 bg-surface-dark rounded-lg border border-transparent hover:border-primary transition-all cursor-pointer">
+<h3 class="text-lg font-bold text-text-primary-dark">NVIDIA Unveils Blackwell, the World's Most Powerful AI Chip</h3>
+<p class="text-sm text-text-secondary-dark">The new architecture promises up to 30x performance for large language model inference workloads and is set to power the next generation of AI data centers.</p>
+<div class="flex items-center justify-between text-xs text-text-secondary-dark mt-2">
+<div class="flex items-center gap-2">
+<span class="font-bold">TechCrunch</span>
+<span>·</span>
+<span>2 hours ago</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined !text-base">thumb_up</span>
+<span>1.2k</span>
+</div>
+</div>
+</div>
+<!-- Article Card 2 -->
+<div class="flex flex-col gap-3 p-4 bg-surface-dark rounded-lg border border-transparent hover:border-primary transition-all cursor-pointer">
+<h3 class="text-lg font-bold text-text-primary-dark">Is AGI Closer Than We Think? Leaked Memo from OpenAI Researcher Sparks Debate</h3>
+<p class="text-sm text-text-secondary-dark">A controversial internal document suggests that key milestones towards Artificial General Intelligence have been met, raising both excitement and ethical concerns across the industry.</p>
+<div class="flex items-center justify-between text-xs text-text-secondary-dark mt-2">
+<div class="flex items-center gap-2">
+<span class="font-bold">r/futurology on Reddit</span>
+<span>·</span>
+<span>5 hours ago</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined !text-base">arrow_upward</span>
+<span>4.8k</span>
+</div>
+</div>
+</div>
+<!-- Article Card 3 -->
+<div class="flex flex-col gap-3 p-4 bg-surface-dark rounded-lg border border-transparent hover:border-primary transition-all cursor-pointer">
+<h3 class="text-lg font-bold text-text-primary-dark">VC Funding for AI Startups Cools Down in Q1 2024, Focus Shifts to Profitability</h3>
+<p class="text-sm text-text-secondary-dark">After a record-breaking 2023, venture capital investment in the AI sector is showing signs of slowing as investors demand clearer paths to monetization and sustainable growth.</p>
+<div class="flex items-center justify-between text-xs text-text-secondary-dark mt-2">
+<div class="flex items-center gap-2">
+<span class="font-bold">Axios Pro</span>
+<span>·</span>
+<span>8 hours ago</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined !text-base">bookmark</span>
+<span>750</span>
+</div>
+</div>
+</div>
+<!-- Article Card 4 -->
+<div class="flex flex-col gap-3 p-4 bg-surface-dark rounded-lg border border-transparent hover:border-primary transition-all cursor-pointer">
+<h3 class="text-lg font-bold text-text-primary-dark">Mistral AI's New Open-Source Model Challenges GPT-4 on Key Benchmarks</h3>
+<p class="text-sm text-text-secondary-dark">The European AI powerhouse releases its latest model, "Le Grand," which demonstrates competitive performance in reasoning and coding tasks, reaffirming the strength of the open-source community.</p>
+<div class="flex items-center justify-between text-xs text-text-secondary-dark mt-2">
+<div class="flex items-center gap-2">
+<span class="font-bold">Hacker News</span>
+<span>·</span>
+<span>14 hours ago</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined !text-base">chat</span>
+<span>982 comments</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

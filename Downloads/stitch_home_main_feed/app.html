@@ -1,0 +1,2511 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI HOT NEWS - AI News Portal</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #2547f4;
+            --color-primary-light: #4a9fff;
+            --color-bg: #000000;
+            --color-surface: #1a1a1a;
+            --color-surface-light: #2a2a2a;
+            --color-text: #ffffff;
+            --color-text-secondary: #888888;
+            --color-border: #333333;
+            --color-accent: #4a9fff;
+        }
+
+        html.light-mode {
+            --color-bg: #ffffff;
+            --color-surface: #f5f5f5;
+            --color-surface-light: #eeeeee;
+            --color-text: #000000;
+            --color-text-secondary: #666666;
+            --color-border: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--color-bg);
+            color: var(--color-text);
+            overflow-x: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: background 0.3s ease;
+        }
+
+        html.light-mode header {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .hamburger-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            color: var(--color-text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0;
+        }
+
+        .hamburger-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .header-title {
+            flex: 1;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--color-primary-light);
+        }
+
+        /* Main Layout */
+        main {
+            margin-top: 65px;
+            min-height: calc(100vh - 65px);
+        }
+
+        /* Drawer Overlay */
+        .drawer-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 40;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .drawer-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Sidebar Drawer */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 50;
+            width: 350px;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            overflow-y: auto;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            padding-top: 65px;
+        }
+
+        .sidebar.open {
+            transform: translateX(0);
+        }
+
+        /* Profile Section */
+        .profile-section {
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(37, 71, 244, 0.2) 0%, rgba(123, 45, 255, 0.2) 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(74, 159, 255, 0.3);
+            font-size: 36px;
+        }
+
+        .profile-info {
+            text-align: center;
+            display: none;
+        }
+
+        .profile-info.show {
+            display: block;
+        }
+
+        .profile-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 2px;
+        }
+
+        .profile-email {
+            font-size: 11px;
+            color: #888;
+        }
+
+        .profile-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .profile-buttons.logged-in {
+            display: none;
+        }
+
+        .btn-primary {
+            padding: 8px;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-primary-light);
+        }
+
+        .btn-logout {
+            grid-column: 1 / -1;
+            padding: 8px;
+            background: rgba(255, 67, 67, 0.2);
+            color: #ff6b6b;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: none;
+        }
+
+        .btn-logout.show {
+            display: block;
+        }
+
+        /* Menu */
+        .menu-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+        }
+
+        .menu-section {
+            margin-bottom: 16px;
+        }
+
+        .menu-section-title {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #666;
+            padding: 8px 12px;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            color: #ccc;
+            text-decoration: none;
+            border-radius: 6px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .menu-item.active {
+            background: rgba(37, 71, 244, 0.2);
+            color: var(--color-primary-light);
+            border-left: 3px solid var(--color-primary-light);
+            padding-left: 9px;
+        }
+
+        .menu-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .menu-item .material-symbols-outlined {
+            font-size: 18px;
+        }
+
+        /* Sidebar Footer */
+        .sidebar-footer {
+            padding: 12px 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #666;
+            font-size: 11px;
+        }
+
+        /* Content Area */
+        .content {
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+        }
+
+        .content-main {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ad-sidebar {
+            width: 90px;
+            flex-shrink: 0;
+        }
+
+        .ad-container {
+            position: sticky;
+            top: 85px;
+            background: var(--color-surface-light);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            font-size: 11px;
+            color: var(--color-text-secondary);
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Page Sections */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .section {
+            background: var(--color-surface);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--color-border);
+            margin-bottom: 20px;
+            margin-top: 30px;
+        }
+
+        .section h2 {
+            color: var(--color-primary-light);
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .section h3 {
+            color: var(--color-text);
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+        /* News Grid */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .news-card {
+            background: var(--color-surface-light);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .news-card:hover {
+            border-color: var(--color-primary);
+            box-shadow: 0 4px 12px rgba(37, 71, 244, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .news-card h3 {
+            color: var(--color-text);
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .news-card p {
+            color: var(--color-text-secondary);
+            font-size: 12px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--color-text-secondary);
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .news-source {
+            background: rgba(37, 71, 244, 0.1);
+            padding: 2px 8px;
+            border-radius: 12px;
+            border: 1px solid rgba(37, 71, 244, 0.3);
+            color: var(--color-primary-light);
+            font-size: 10px;
+        }
+
+        .bookmark-btn {
+            background: none;
+            border: none;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .bookmark-btn.saved {
+            color: #ffd700;
+        }
+
+        /* Settings */
+        .settings-group {
+            background: var(--color-surface-light);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-label {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .toggle-switch {
+            width: 40px;
+            height: 24px;
+            background: #2547f4;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-switch.off {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: left 0.3s ease;
+        }
+
+        .toggle-switch.off::after {
+            left: 19px;
+        }
+
+        select, input[type="text"] {
+            padding: 8px;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            color: var(--color-text);
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .pagination button {
+            padding: 6px 10px;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .pagination button:disabled {
+            background: var(--color-surface-light);
+            color: var(--color-text-secondary);
+            cursor: not-allowed;
+        }
+
+        .pagination button.active {
+            background: var(--color-primary-light);
+            font-weight: bold;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: rgba(0, 0, 0, 0.7);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--color-surface);
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 90%;
+            border: 1px solid var(--color-border);
+        }
+
+        .modal-content h2 {
+            color: var(--color-primary-light);
+            margin-bottom: 20px;
+        }
+
+        .modal-content input {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Loading & Empty States */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--color-primary-light);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid var(--color-surface-light);
+            border-top: 3px solid var(--color-primary-light);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--color-text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 75vw;
+                max-width: 280px;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-title {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Status Indicator -->
+    <div id="statusIndicator" style="position: fixed; top: 0; left: 0; right: 0; background: #2a9f1d; color: white; padding: 10px; text-align: center; font-size: 12px; z-index: 10001; display: none;">
+        Page is loading...
+    </div>
+
+    <!-- Header -->
+        <header>
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+        <button class="hamburger-btn" id="backBtn" style="display: none;" aria-label="Back" onclick="app.goBack()">
+            <span class="material-symbols-outlined">arrow_back</span>
+        </button>
+        <div class="header-title" onclick="app.navigate('home')" style="cursor: pointer; transition: opacity 0.2s ease;" 
+             onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+            🔥 AI HOT NEWS
+        </div>
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+            <div style="display: flex; align-items: center; background: var(--color-surface-light); border: 1px solid var(--color-border); border-radius: 6px; padding-right: 4px; width: 280px;">
+                <input type="text" id="headerSearchInput" placeholder="Search news..." 
+                       style="flex: 1; padding: 8px 12px; background: transparent; border: none; color: var(--color-text); font-size: 12px; outline: none;" 
+                       onkeypress="if(event.key==='Enter') app.headerSearch()">
+                <button onclick="app.headerSearch()" style="padding: 6px 8px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; color: #999;" 
+                        onmouseover="this.style.color='#ccc'" 
+                        onmouseout="this.style.color='#999'" 
+                        title="Search">
+                    <span class="material-symbols-outlined" style="font-size: 18px;">search</span>
+                </button>
+            </div>
+        </div>
+        <button class="hamburger-btn" id="themeToggle" aria-label="Toggle theme">
+            <span class="material-symbols-outlined" id="themeIcon">dark_mode</span>
+        </button>
+    </header>
+
+    <!-- Drawer Overlay -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="profile-section">
+            <div class="profile-avatar" id="profileAvatar">👤</div>
+            <div class="profile-info" id="profileInfo">
+                <div class="profile-name" id="profileName">User</div>
+                <div class="profile-email" id="profileEmail">user@example.com</div>
+            </div>
+            <div class="profile-buttons" id="profileButtons">
+                <button class="btn-primary" onclick="app.openLogin()">Login</button>
+                <button class="btn-primary" onclick="app.openSignup()">Sign Up</button>
+            </div>
+            <button class="btn-logout" id="logoutBtn" onclick="app.logout()">Logout</button>
+        </div>
+
+        <div class="menu-list">
+            <div class="menu-section">
+                <div class="menu-item active" data-route="home" onclick="app.navigate('home')">
+                    <span class="material-symbols-outlined">home</span>
+                    <span>Home</span>
+                </div>
+                <div class="menu-item" data-route="latest" onclick="app.navigate('latest')">
+                    <span class="material-symbols-outlined">newspaper</span>
+                    <span>Latest</span>
+                </div>
+                <div class="menu-item" data-route="trends" onclick="app.navigate('trends')">
+                    <span class="material-symbols-outlined">trending_up</span>
+                    <span>Trends</span>
+                </div>
+                <div class="menu-item" data-route="sns" onclick="app.navigate('sns')">
+                    <span class="material-symbols-outlined">📱</span>
+                    <span>SNS Official Updates</span>
+                </div>
+                <div class="menu-item" data-route="search" onclick="app.navigate('search')">
+                    <span class="material-symbols-outlined">search</span>
+                    <span>Search</span>
+                </div>
+                <div class="menu-item" data-route="saved" onclick="app.navigate('saved')">
+                    <span class="material-symbols-outlined">schedule</span>
+                    <span>Save for Later</span>
+                </div>
+            </div>
+
+            <div class="menu-section">
+                <div class="menu-section-title">Settings</div>
+                <div class="menu-item" onclick="app.navigate('settings')">
+                    <span class="material-symbols-outlined">settings</span>
+                    <span>Settings</span>
+                </div>
+                <div class="menu-item" onclick="app.navigate('help')">
+                    <span class="material-symbols-outlined">help</span>
+                    <span>Help & Support</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div>AI HOT NEWS v1.0.0</div>
+            <div>© 2025 AI News</div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="content">
+        <div class="content-main">
+        <!-- Home Page -->
+        <div class="page active" id="homePage">
+            <div class="section">
+                <h3>Featured News</h3>
+                <div id="homeNewsList" class="news-grid"></div>
+                <div id="homePagination" class="pagination"></div>
+            </div>
+
+            <!-- SNS Official Accounts Section -->
+            <div class="section">
+                <h3 style="margin-bottom: 15px;">📱 SNS Official Updates</h3>
+                
+                <!-- Company Filter -->
+                <div id="snsFeaturedCompanyFilter" style="display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; overflow-x: auto;">
+                    <!-- Companies will be populated by JavaScript -->
+                </div>
+                
+                <!-- SNS Articles Grid -->
+                <div id="snsFeaturedArticlesGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
+                    <!-- SNS articles will be populated by JavaScript -->
+                </div>
+                <div id="snsFeaturedPagination" class="pagination"></div>
+            </div>
+
+            <div class="section">
+                <h3>🔥 HOT TAGS</h3>
+                <div id="hotTags" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
+            </div>
+
+            <!-- AI Tools & Services Recommendation Section -->
+            <div class="section">
+                <h3 style="margin-bottom: 15px;">🤖 Recommended AI Tools</h3>
+                
+                <!-- Category Filter -->
+                <div id="toolsCategoryFilter" style="display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;">
+                    <!-- Categories will be populated by JavaScript -->
+                </div>
+                
+                <!-- AI Tools Grid -->
+                <div id="aiToolsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;">
+                    <!-- Tools will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Latest Page -->
+        <div class="page" id="latestPage">
+            <div class="section">
+                <h2>📰 Latest News</h2>
+                <div id="latestNewsList" class="news-grid"></div>
+                <div id="latestPagination" class="pagination"></div>
+            </div>
+
+            <!-- SNS Official Accounts Section -->
+            <div class="section">
+                <h3 style="margin-bottom: 15px;">📱 SNS Official Updates</h3>
+                
+                <!-- Company Filter -->
+                <div id="snsCompanyFilter" style="display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; overflow-x: auto;">
+                    <!-- Companies will be populated by JavaScript -->
+                </div>
+                
+                <!-- SNS Articles Grid -->
+                <div id="snsArticlesGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
+                    <!-- SNS articles will be populated by JavaScript -->
+                </div>
+                <div id="snsPagination" class="pagination"></div>
+            </div>
+        </div>
+
+        <!-- Trends Page -->
+        <div class="page" id="trendsPage">
+            <div class="section">
+                <h2>🔥 Trending Topics</h2>
+                <div id="trendsList"></div>
+            </div>
+        </div>
+
+        <!-- Saved Page -->
+        <div class="page" id="savedPage">
+            <div class="section">
+                <h2>� Save for Later</h2>
+                <div id="savedNewsList" class="news-grid"></div>
+                <div id="savedPagination" class="pagination"></div>
+            </div>
+        </div>
+
+        <!-- Search Page -->
+        <div class="page" id="searchPage">
+            <div class="section">
+                <h2>🔍 Search</h2>
+                <div style="display: flex; gap: 10px; margin-bottom: 15px; position: relative;">
+                    <div style="position: relative; flex: 1;">
+                        <input type="text" id="searchInput" placeholder="Search articles..." 
+                               style="width: 100%;" 
+                               oninput="app.updateSearchSuggestions()" 
+                               onfocus="app.updateSearchSuggestions()"
+                               onblur="setTimeout(() => { document.getElementById('searchSuggestions').style.display = 'none'; }, 200)"
+                               onkeypress="if(event.key==='Enter') app.search()">
+                        <div id="searchSuggestions" style="position: absolute; top: 100%; left: 0; right: 0; background: var(--color-surface); border: 1px solid var(--color-border); border-top: none; border-radius: 0 0 4px 4px; max-height: 200px; overflow-y: auto; z-index: 10; display: none;"></div>
+                    </div>
+                    <button class="btn-primary" onclick="app.search()">Search</button>
+                </div>
+
+                <!-- Hot Tags Section -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="margin-bottom: 10px; font-size: 14px; color: var(--color-text-secondary);">🔥 Popular Tags</h3>
+                    <div id="searchHotTags" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
+                </div>
+
+                <div id="searchResults" class="news-grid"></div>
+            </div>
+        </div>
+
+        <!-- Settings Page -->
+        <div class="page" id="settingsPage">
+            <div class="section">
+                <h2>⚙️ Settings</h2>
+
+                <div class="settings-group">
+                    <h3>Language</h3>
+                    <div class="settings-item">
+                        <span class="settings-label">Interface Language</span>
+                        <select id="languageSelect" onchange="app.changeLanguage(this.value)">
+                            <option value="en">English</option>
+                            <option value="ko">한국어</option>
+                            <option value="ja">日本語</option>
+                            <option value="zh">中文</option>
+                        </select>
+                    </div>
+                    <div class="settings-item">
+                        <span class="settings-label">Auto-translate articles</span>
+                        <button class="toggle-switch" id="autoTranslateToggle" onclick="app.toggleAutoTranslate()"></button>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <h3>Priority Topics</h3>
+                    <div id="priorityTopics"></div>
+                </div>
+
+                <div class="settings-group">
+                    <h3>Notifications</h3>
+                    <div class="settings-item">
+                        <span class="settings-label">Enable notifications</span>
+                        <button class="toggle-switch" id="notificationToggle" onclick="app.toggleNotifications()"></button>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <h3>Data</h3>
+                    <button class="btn-primary" onclick="app.clearCache()" style="width: 100%; margin-bottom: 10px;">Clear Cache</button>
+                    <button class="btn-primary" onclick="app.clearSaved()" style="width: 100%; background: rgba(255, 67, 67, 0.3); color: #ff6b6b;">Clear All Saved</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Page -->
+        <div class="page" id="helpPage">
+            <div class="section">
+                <h2>🆘 Help & Support</h2>
+                <div style="line-height: 1.8;">
+                    <h3 style="margin-top: 15px;">FAQ</h3>
+                    <p><strong>Q: How do I save articles?</strong></p>
+                    <p>A: Click the bookmark icon on any article to save it to your collection.</p>
+
+                    <p><strong>Q: Can I change the interface language?</strong></p>
+                    <p>A: Yes! Go to Settings > Language to choose your preferred language.</p>
+
+                    <p><strong>Q: How often are articles updated?</strong></p>
+                    <p>A: Articles are updated every 5 minutes from multiple sources.</p>
+
+                    <h3 style="margin-top: 20px;">Contact Us</h3>
+                    <p>Email: support@aihotnews.com</p>
+                    <p>Version: v1.0.0</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Article Detail Page -->
+        <div class="page" id="detailPage" style="background: var(--color-bg); padding: 20px 0; overflow-y: auto;">
+            <div class="section" style="max-width: 900px; margin: 60px auto 0;">
+                <!-- Breadcrumb -->
+                <div style="display: flex; gap: 10px; margin-bottom: 25px; font-size: 13px; color: var(--color-text-secondary); flex-wrap: wrap;">
+                    <a href="#" onclick="app.navigate('home')" style="color: var(--color-text-secondary); text-decoration: none; cursor: pointer;">홈</a>
+                    <span>/</span>
+                    <span id="detailCategory" style="color: var(--color-text-secondary);">Category</span>
+                    <span>/</span>
+                    <span id="detailBreadcrumb" style="color: var(--color-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
+                </div>
+
+                <!-- Main Content -->
+                <div style="display: grid; grid-template-columns: 1fr 300px; gap: 40px; align-items: start;">
+                    <!-- Article Content -->
+                    <div>
+                        <!-- Header -->
+                        <div style="border-bottom: 1px solid var(--color-border); padding-bottom: 25px; margin-bottom: 25px;">
+                            <h1 id="detailTitle" style="font-size: 42px; font-weight: bold; line-height: 1.2; margin-bottom: 15px; color: var(--color-text);"></h1>
+                            
+                            <!-- Meta Info -->
+                            <div style="display: flex; gap: 20px; font-size: 13px; color: var(--color-text-secondary); flex-wrap: wrap;">
+                                <div style="display: flex; align-items: center; gap: 5px;">
+                                    <span style="font-size: 18px;">✍️</span>
+                                    <span id="detailAuthor"></span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 5px;">
+                                    <span style="font-size: 18px;">📰</span>
+                                    <span id="detailSource"></span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 5px;">
+                                    <span style="font-size: 18px;">📅</span>
+                                    <span id="detailDate"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Article Body -->
+                        <article id="detailContent" style="line-height: 1.8; font-size: 16px; color: var(--color-text); margin-bottom: 30px;">
+                        </article>
+
+                        <!-- Summary Box -->
+                        <div style="background: var(--color-surface-light); border: 1px solid var(--color-border); border-radius: 8px; padding: 20px; margin: 30px 0;">
+                            <h3 style="color: var(--color-accent); font-size: 16px; font-weight: bold; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 20px;">✨</span>
+                                Key Summary
+                            </h3>
+                            <ul id="detailSummary" style="list-style: disc; margin-left: 20px; display: flex; flex-direction: column; gap: 10px; color: var(--color-text);"></ul>
+                        </div>
+
+                        <!-- Read More Button -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px;">
+                            <button id="detailSaveForLater" style="cursor: pointer; display: flex; align-items: center; gap: 8px; background: var(--color-surface-light); border: 1px solid var(--color-border); color: var(--color-text); padding: 10px 16px; border-radius: 6px; font-size: 14px; transition: all 0.3s ease;" onmouseover="this.style.background='var(--color-surface)'; this.style.borderColor='var(--color-accent)';" onmouseout="this.style.background='var(--color-surface-light)'; this.style.borderColor='var(--color-border)';">
+                                <input type="checkbox" id="saveCheckbox" style="cursor: pointer;">
+                                <span>Save for Later</span>
+                            </button>
+                            <button id="detailReadMore" class="btn-primary" style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                                Read Full Article
+                                <span style="font-size: 18px;">→</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar - Related Articles -->
+                    <div style="position: sticky; top: 100px;">
+                        <h3 style="font-size: 16px; font-weight: bold; margin-bottom: 15px; color: var(--color-text);">Related Articles</h3>
+                        <div id="detailRelated" style="display: flex; flex-direction: column; gap: 15px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Ad Sidebar -->
+        <aside class="ad-sidebar">
+            <div class="ad-container">
+                <div style="margin-bottom: 10px; font-size: 14px; font-weight: bold;">Advertisement</div>
+                <!-- Google AdSense Code (Replace with your AdSense code) -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-xxxxxxxxxxxxxxxx"
+                     data-ad-slot="xxxxxxxxxx"
+                     data-ad-format="vertical"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+                <!-- Fallback: Placeholder text -->
+                <p style="color: var(--color-text-secondary); font-size: 11px; margin-top: 20px;">
+                    📢 Google AdSense<br>
+                    광고 영역<br>
+                    (Your ads here)
+                </p>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <h2>Login</h2>
+            <input type="email" id="loginEmail" placeholder="Email">
+            <input type="password" id="loginPassword" placeholder="Password">
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="app.performLogin()">Login</button>
+                <button style="background: var(--color-surface-light); border: 1px solid var(--color-border); color: var(--color-text);" onclick="app.closeLogin()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal" id="signupModal">
+        <div class="modal-content">
+            <h2>Sign Up</h2>
+            <input type="email" id="signupEmail" placeholder="Email" onchange="app.validateSignupForm()">
+            <div id="signupEmailError" style="font-size: 11px; color: #ff6b6b; font-weight: 300; margin-top: 5px; display: none;"></div>
+            
+            <input type="text" id="signupName" placeholder="Full Name">
+            
+            <input type="password" id="signupPassword" placeholder="Password (Min 8 chars, uppercase, lowercase, number, special char)" onchange="app.validateSignupForm()" style="margin-top: 12px;">
+            <div id="signupPasswordError" style="font-size: 11px; color: #ff6b6b; font-weight: 300; margin-top: 5px; display: none;"></div>
+            
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="app.performSignup()">Sign Up</button>
+                <button style="background: var(--color-surface-light); border: 1px solid var(--color-border); color: var(--color-text);" onclick="app.closeSignup()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="api-client.js"></script>
+    <script>
+        // i18n translations
+        const i18n = {
+            en: {
+                home: 'Home',
+                latest: 'Latest',
+                trends: 'Trends',
+                saved: 'Saved',
+                search: 'Search',
+                settings: 'Settings',
+                help: 'Help',
+                logout: 'Logout',
+                login: 'Login',
+                signup: 'Sign Up'
+            },
+            ko: {
+                home: '홈',
+                latest: '최신',
+                trends: '트렌드',
+                saved: '저장됨',
+                search: '검색',
+                settings: '설정',
+                help: '도움말',
+                logout: '로그아웃',
+                login: '로그인',
+                signup: '회원가입'
+            }
+        };
+
+        // App State
+        const app = {
+            currentUser: null,
+            currentPageName: 'home',
+            currentLang: 'en',
+            isDarkMode: true,
+            allNews: [],
+            savedNews: [],
+            currentPage: 1,
+            itemsPerPage: 10,
+
+            // Initialize
+            async init() {
+                const indicator = document.getElementById('statusIndicator');
+                try {
+                    console.log('🚀 AI HOT NEWS Initializing...');
+                    if (indicator) indicator.textContent = '📍 Setting up UI...';
+                    console.log('newsAPI available:', typeof newsAPI !== 'undefined');
+                    
+                    // Setup event listeners with null checks
+                    const hamburgerBtn = document.getElementById('hamburgerBtn');
+                    const drawerOverlay = document.getElementById('drawerOverlay');
+                    const themeToggle = document.getElementById('themeToggle');
+                    
+                    console.log('DOM Elements found - hamburger:', !!hamburgerBtn, 'overlay:', !!drawerOverlay, 'theme:', !!themeToggle);
+                    
+                    if (hamburgerBtn) hamburgerBtn.addEventListener('click', () => this.toggleDrawer());
+                    if (drawerOverlay) drawerOverlay.addEventListener('click', () => this.closeDrawer());
+                    if (themeToggle) themeToggle.addEventListener('click', () => this.toggleTheme());
+
+                    console.log('✓ Event listeners attached');
+
+                    // Load user data if logged in
+                    if (indicator) indicator.textContent = '👤 Loading profile...';
+                    console.log('Loading user profile...');
+                    await this.loadUserProfile();
+                    
+                    // Load home content
+                    if (indicator) indicator.textContent = '📰 Loading news...';
+                    console.log('Loading home news...');
+                    await this.loadHomeNews();
+                    
+                    if (indicator) indicator.textContent = '📱 Loading SNS...';
+                    console.log('Loading SNS featured articles...');
+                    await this.loadSNSFeaturedArticles();
+                    
+                    // Pre-load trends data in background
+                    if (indicator) indicator.textContent = '🔥 Loading trends...';
+                    this.loadTrends().catch(e => console.log('Trends preload error:', e));
+                    
+                    if (indicator) {
+                        indicator.style.backgroundColor = '#4caf50';
+                        indicator.textContent = '✅ Ready!';
+                        setTimeout(() => {
+                            indicator.style.display = 'none';
+                        }, 2000);
+                    }
+                    
+                    console.log('✅ AI HOT NEWS Ready!');
+                } catch (error) {
+                    console.error('🔴 Initialization Error:', error);
+                    console.error('Error stack:', error.stack);
+                    if (indicator) {
+                        indicator.style.backgroundColor = '#f44336';
+                        indicator.textContent = `❌ Error: ${error.message}`;
+                    }
+                }
+            },
+
+            // Navigation
+            navigate(page) {
+                // Hide all pages
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                
+                // Update menu (only for pages in menu)
+                if (page !== 'detail') {
+                    document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+                    document.querySelector(`[data-route="${page}"]`)?.classList.add('active');
+                }
+                
+                // Show selected page
+                document.getElementById(`${page}Page`)?.classList.add('active');
+                this.currentPageName = page;
+
+                // Show/hide back button
+                const backBtn = document.getElementById('backBtn');
+                if (page === 'detail') {
+                    backBtn.style.display = 'flex';
+                    document.getElementById('hamburgerBtn').style.display = 'none';
+                } else {
+                    backBtn.style.display = 'none';
+                    document.getElementById('hamburgerBtn').style.display = 'flex';
+                }
+
+                // Close drawer
+                this.closeDrawer();
+
+                // Load page-specific content
+                if (page === 'home') {
+                    this.currentPage = 1;
+                    this.loadHomeNews();
+                } else if (page === 'latest') {
+                    this.currentPage = 1;
+                    this.loadLatestNews();
+                } else if (page === 'trends') {
+                    this.loadTrends();
+                } else if (page === 'sns') {
+                    this.currentPage = 1;
+                    this.loadSNSFeaturedArticles();
+                } else if (page === 'saved') {
+                    this.currentPage = 1;
+                    this.loadSavedNews();
+                } else if (page === 'search') {
+                    this.currentPage = 1;
+                    this.loadSearchPage();
+                }
+            },
+
+            // Back navigation for detail page
+            goBack() {
+                // Go back to the page we came from
+                if (this.previousPageName) {
+                    this.navigate(this.previousPageName);
+                } else {
+                    // Default to home if no previous page
+                    this.navigate('home');
+                }
+            },
+
+            // Drawer
+            toggleDrawer() {
+                document.getElementById('sidebar').classList.toggle('open');
+                document.getElementById('drawerOverlay').classList.toggle('open');
+            },
+
+            closeDrawer() {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('drawerOverlay').classList.remove('open');
+            },
+
+            // Theme
+            toggleTheme() {
+                this.isDarkMode = !this.isDarkMode;
+                const html = document.documentElement;
+                if (this.isDarkMode) {
+                    html.classList.remove('light-mode');
+                    document.getElementById('themeIcon').textContent = 'dark_mode';
+                } else {
+                    html.classList.add('light-mode');
+                    document.getElementById('themeIcon').textContent = 'light_mode';
+                }
+                localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
+            },
+
+            // Load home news
+            async loadHomeNews() {
+                try {
+                    const container = document.getElementById('homeNewsList');
+                    if (!container) {
+                        console.error('❌ homeNewsList container not found');
+                        return;
+                    }
+                    
+                    container.innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
+                    
+                    console.log('📡 Calling newsAPI.getLatestNews...');
+                    if (!newsAPI) {
+                        throw new Error('newsAPI is not defined');
+                    }
+                    
+                    const data = await newsAPI.getLatestNews(1, 50);
+                    console.log('✓ Got news data:', data);
+                    
+                    this.allNews = data.news || [];
+                    this.currentPage = 1;
+                    this.renderNews(this.allNews, 'homeNewsList', 'homePagination');
+                    this.renderHotTags(this.allNews);
+                    
+                    // Load AI Tools
+                    this.loadAITools();
+                    
+                    console.log('✓ Home news loaded successfully');
+                } catch (error) {
+                    console.error('🔴 Home News Error:', error);
+                    console.error('Stack:', error.stack);
+                    const container = document.getElementById('homeNewsList');
+                    if (container) {
+                        container.innerHTML = `<div class="empty-state" style="color: #ff6b6b;"><strong>⚠️ Error loading news:</strong><br>${error.message}</div>`;
+                    }
+                }
+            },
+
+            // Load latest news
+            async loadLatestNews() {
+                try {
+                    const container = document.getElementById('latestNewsList');
+                    container.innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
+                    
+                    const data = await newsAPI.getLatestNews(1, 50);
+                    this.allNews = data.news || [];
+                    this.currentPage = 1;
+                    this.renderNews(this.allNews, 'latestNewsList', 'latestPagination');
+                    
+                    // Load SNS articles
+                    this.loadSNSArticles();
+                } catch (error) {
+                    document.getElementById('latestNewsList').innerHTML = `<div class="empty-state">Error loading news: ${error.message}</div>`;
+                }
+            },
+
+            // Load trends
+            async loadTrends() {
+                try {
+                    const container = document.getElementById('trendsList');
+                    container.innerHTML = '<div class="loading"><div class="spinner"></div>Loading trending topics...</div>';
+                    
+                    // Try to get hot topics first
+                    let trendingData = null;
+                    try {
+                        trendingData = await newsAPI.getHotTopics(15);
+                    } catch (e) {
+                        console.log('Hot topics API error, using fallback data');
+                    }
+
+                    // Fallback: use keywords from hot tags
+                    if (!trendingData || !trendingData.topics) {
+                        const hotTagsKeywords = ['AI', 'Machine Learning', 'Cloud', 'Data', 'Security', 'API', 
+                                                'DevOps', 'Python', 'JavaScript', 'LLM', 'GPT', 'Neural', 
+                                                'Algorithm', 'Deep Learning', 'Tech', 'Innovation', 'Software', 
+                                                'Web', 'Mobile', 'Enterprise'];
+                        trendingData = {
+                            topics: hotTagsKeywords.map((name, idx) => ({
+                                name: name,
+                                weight: 100 - (idx * 5)
+                            }))
+                        };
+                    }
+
+                    if (!trendingData.topics || trendingData.topics.length === 0) {
+                        container.innerHTML = '<div class="empty-state">No trending topics available</div>';
+                        return;
+                    }
+
+                    // Create trending topics with better UI
+                    const html = trendingData.topics.map((t, idx) => {
+                        const rank = idx + 1;
+                        const rankEmoji = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `${rank}.`;
+                        const weight = t.weight || 100 - (idx * 5);
+                        
+                        return `
+                            <div style="padding: 15px; background: var(--color-surface-light); border: 1px solid var(--color-border); 
+                                        border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: all 0.3s ease;"
+                                 onmouseover="this.style.background='var(--color-surface)'; this.style.borderColor='var(--color-accent)';"
+                                 onmouseout="this.style.background='var(--color-surface-light)'; this.style.borderColor='var(--color-border)';"
+                                 onclick="document.getElementById('searchInput').value='${t.name}'; app.navigate('search'); app.search();">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <span style="font-size: 24px; min-width: 40px;">${rankEmoji}</span>
+                                    <div style="flex: 1;">
+                                        <h4 style="margin: 0 0 4px 0; font-size: 16px; font-weight: bold; color: var(--color-text);">
+                                            #${t.name}
+                                        </h4>
+                                        <div style="display: flex; gap: 8px; font-size: 12px; color: var(--color-text-secondary);">
+                                            <span>📊 Weight: ${weight}</span>
+                                        </div>
+                                    </div>
+                                    <span style="font-size: 18px;">🔥</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    container.innerHTML = html;
+                } catch (error) {
+                    console.error('Error loading trends:', error);
+                    document.getElementById('trendsList').innerHTML = `<div class="empty-state">Error loading trends: ${error.message}</div>`;
+                }
+            },
+
+            // Load saved news
+            async loadSavedNews() {
+                try {
+                    const container = document.getElementById('savedNewsList');
+                    
+                    // Load "Save for Later" articles from localStorage
+                    const savedForLater = JSON.parse(localStorage.getItem('savedForLater') || '[]');
+                    
+                    if (!savedForLater.length) {
+                        container.innerHTML = '<div class="empty-state">No saved articles</div>';
+                        document.getElementById('savedPagination').innerHTML = '';
+                        return;
+                    }
+
+                    this.savedNews = savedForLater;
+                    this.renderNews(this.savedNews, 'savedNewsList', 'savedPagination');
+                } catch (error) {
+                    document.getElementById('savedNewsList').innerHTML = `<div class="empty-state">Error loading saved articles</div>`;
+                }
+            },
+
+            // Render news
+            renderNews(newsArray, containerId, paginationId) {
+                const container = document.getElementById(containerId);
+                const totalPages = Math.ceil(newsArray.length / this.itemsPerPage);
+                const start = (this.currentPage - 1) * this.itemsPerPage;
+                const end = start + this.itemsPerPage;
+                const paginatedNews = newsArray.slice(start, end);
+
+                console.log(`📊 Rendering news: array length=${newsArray.length}, totalPages=${totalPages}, currentPage=${this.currentPage}`);
+
+                if (!paginatedNews.length) {
+                    container.innerHTML = '<div class="empty-state">No articles found</div>';
+                    return;
+                }
+
+                container.innerHTML = paginatedNews.map((article, idx) => {
+                    const articleId = `news-${containerId}-${idx}`;
+                    return `
+                        <div class="news-card" id="${articleId}" style="cursor:pointer;">
+                            <h3>${article.title || 'Untitled'}</h3>
+                            <p>${article.summary || 'No summary available'}</p>
+                            <div class="news-meta">
+                                <span class="news-source">${article.source || 'Unknown'}</span>
+                                <button class="bookmark-btn" onclick="event.stopPropagation(); app.toggleBookmark('${article.id}')">🔖</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                // Add click handlers after DOM is ready
+                paginatedNews.forEach((article, idx) => {
+                    const cardId = `news-${containerId}-${idx}`;
+                    const cardEl = document.getElementById(cardId);
+                    if (cardEl) {
+                        cardEl.addEventListener('click', () => app.showArticleDetail(article));
+                    }
+                });
+
+                // Render pagination
+                this.renderPagination(totalPages, paginationId);
+            },
+
+            // Render pagination separately
+            renderPagination(totalPages, paginationId) {
+                if (!paginationId) {
+                    console.log('❌ No pagination ID provided');
+                    return;
+                }
+
+                const paginationElement = document.getElementById(paginationId);
+                if (!paginationElement) {
+                    console.error(`❌ Pagination element not found: ${paginationId}`);
+                    return;
+                }
+
+                if (totalPages <= 1) {
+                    console.log('⚠️ Only 1 page, no pagination needed');
+                    paginationElement.innerHTML = '';
+                    return;
+                }
+
+                console.log(`✅ Rendering pagination: ${totalPages} pages, current page ${this.currentPage}`);
+
+                let html = '<div class="pagination">';
+                
+                // Previous button
+                if (this.currentPage > 1) {
+                    html += `<button onclick="app.prevPage()">← Prev</button>`;
+                } else {
+                    html += `<button disabled>← Prev</button>`;
+                }
+                
+                // Page numbers
+                for (let i = 1; i <= totalPages; i++) {
+                    if (i === this.currentPage) {
+                        html += `<button class="active">${i}</button>`;
+                    } else {
+                        html += `<button onclick="app.goToPage(${i})">${i}</button>`;
+                    }
+                }
+                
+                // Next button
+                if (this.currentPage < totalPages) {
+                    html += `<button onclick="app.nextPage()">Next →</button>`;
+                } else {
+                    html += `<button disabled>Next →</button>`;
+                }
+                
+                html += '</div>';
+                html += `<div style="text-align: center; color: var(--color-text-secondary); margin-top: 10px; font-size: 12px;">Page ${this.currentPage} of ${totalPages}</div>`;
+                
+                paginationElement.innerHTML = html;
+                console.log(`✅ Pagination rendered successfully`);
+            },
+
+            // Render HOT TAGS
+            renderHotTags(newsArray) {
+                const tagFrequency = {};
+                const hotTagsKeywords = ['AI', 'Machine Learning', 'Cloud', 'Data', 'Security', 'API', 'DevOps', 'Python', 'JavaScript', 'LLM', 'GPT', 'Neural', 'Algorithm', 'Deep Learning', 'Tech', 'Innovation', 'Software', 'Web', 'Mobile', 'Enterprise', 'Network', 'Database', 'Framework', 'Platform', 'Service'];
+                
+                // Count tag frequency from news titles and summaries
+                newsArray.forEach(article => {
+                    const text = (article.title + ' ' + article.summary).toLowerCase();
+                    hotTagsKeywords.forEach(keyword => {
+                        if (text.includes(keyword.toLowerCase())) {
+                            tagFrequency[keyword] = (tagFrequency[keyword] || 0) + 1;
+                        }
+                    });
+                });
+
+                // Sort by frequency and get top 20
+                const topTags = Object.entries(tagFrequency)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 20);
+
+                console.log(`🔥 Hot tags with frequency:`, topTags);
+
+                const hotTagsElement = document.getElementById('hotTags');
+                if (hotTagsElement) {
+                    hotTagsElement.innerHTML = topTags.map(([tag, count]) => 
+                        `<span class="news-source" style="padding: 8px 16px; cursor: pointer; transition: all 0.3s ease; position: relative;" 
+                                onclick="app.navigate('search'); document.getElementById('searchInput').value='${tag}'; app.search();"
+                                title="Appears ${count} times">
+                            #${tag} 
+                            <span style="font-size: 11px; opacity: 0.7; margin-left: 4px;">(${count})</span>
+                        </span>`
+                    ).join('');
+                }
+            },
+
+            // Load AI Tools
+            async loadAITools() {
+                try {
+                    const data = await newsAPI.getAITools('all');
+                    this.aiTools = data.tools || [];
+                    this.aiToolCategories = data.categories || [];
+                    
+                    this.renderAIToolCategories();
+                    this.renderAITools(this.aiTools);
+                    
+                    console.log('🤖 AI Tools loaded:', this.aiTools);
+                } catch (error) {
+                    console.error('🔴 AI Tools Error:', error);
+                    const container = document.getElementById('aiToolsGrid');
+                    if (container) {
+                        container.innerHTML = `<div class="empty-state">Error loading AI tools</div>`;
+                    }
+                }
+            },
+
+            // Render AI Tool Category Filter
+            renderAIToolCategories() {
+                const filterContainer = document.getElementById('toolsCategoryFilter');
+                if (!filterContainer || !this.aiToolCategories) return;
+
+                filterContainer.innerHTML = this.aiToolCategories.map(category => 
+                    `<button style="padding: 8px 16px; border-radius: 20px; border: 1px solid var(--color-border); background: ${category.id === 'all' ? 'var(--color-accent)' : 'var(--color-surface-light)'}; color: var(--color-text); cursor: pointer; transition: all 0.3s ease; font-size: 13px;" 
+                            onclick="app.filterAITools('${category.id}')"
+                            id="toolsFilter-${category.id}">
+                        ${category.icon} ${category.name}
+                    </button>`
+                ).join('');
+            },
+
+            // Filter AI Tools by category
+            filterAITools(category) {
+                let filtered = this.aiTools;
+                if (category !== 'all') {
+                    filtered = this.aiTools.filter(tool => tool.category === category);
+                }
+
+                // Update button styles
+                const buttons = document.querySelectorAll('[id^="toolsFilter-"]');
+                buttons.forEach(btn => {
+                    const btnCategory = btn.id.replace('toolsFilter-', '');
+                    if (btnCategory === category) {
+                        btn.style.background = 'var(--color-accent)';
+                    } else {
+                        btn.style.background = 'var(--color-surface-light)';
+                    }
+                });
+
+                this.renderAITools(filtered);
+            },
+
+            // Render AI Tools Grid
+            renderAITools(tools) {
+                const container = document.getElementById('aiToolsGrid');
+                if (!container) return;
+
+                if (!tools || tools.length === 0) {
+                    container.innerHTML = '<div class="empty-state">No AI tools available</div>';
+                    return;
+                }
+
+                container.innerHTML = tools.map(tool => 
+                    `<div style="background: var(--color-surface-light); border: 1px solid var(--color-border); border-radius: 8px; padding: 16px; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; gap: 12px;"
+                          onmouseover="this.style.background='var(--color-surface)'; this.style.borderColor='var(--color-accent)'; this.style.transform='translateY(-4px)';"
+                          onmouseout="this.style.background='var(--color-surface-light)'; this.style.borderColor='var(--color-border)'; this.style.transform='translateY(0)';">
+                        
+                        <!-- Tool Header -->
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span style="font-size: 28px;">${tool.icon || '🤖'}</span>
+                            <div style="flex: 1;">
+                                <h4 style="font-weight: bold; font-size: 15px; color: var(--color-text); margin: 0;">${tool.name}</h4>
+                                <div style="display: inline-block; padding: 4px 10px; background: var(--color-accent); border-radius: 12px; font-size: 11px; color: var(--color-text); margin-top: 4px;">
+                                    ${tool.category.charAt(0).toUpperCase() + tool.category.slice(1)}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Tool Description -->
+                        <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0; line-height: 1.4;">
+                            ${tool.description}
+                        </p>
+                        
+                        <!-- Try Now Button -->
+                        <button style="padding: 10px 16px; background: var(--color-primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.3s ease;"
+                                onmouseover="this.style.background='var(--color-primary-light)';"
+                                onmouseout="this.style.background='var(--color-primary)';"
+                                onclick="event.stopPropagation(); window.open('${tool.url}', '_blank');">
+                            → Try Now
+                        </button>
+                    </div>`
+                ).join('');
+            },
+
+            // Load SNS Articles from Official Accounts
+            async loadSNSArticles() {
+                try {
+                    const companies = await newsAPI.getSNSCompanies();
+                    this.snsCompanies = companies.companies || [];
+                    
+                    const data = await newsAPI.getSNSArticles(1, 20);
+                    this.snsArticles = data.articles || [];
+                    this.snsCurrentPage = 1;
+                    this.snsTotalPages = data.totalPages || 1;
+                    
+                    this.renderSNSCompanyFilter();
+                    this.renderSNSArticles(this.snsArticles);
+                    this.renderSNSPagination();
+                    
+                    console.log('📱 SNS articles loaded:', this.snsArticles.length);
+                } catch (error) {
+                    console.error('🔴 SNS Articles Error:', error);
+                    const container = document.getElementById('snsArticlesGrid');
+                    if (container) {
+                        container.innerHTML = `<div class="empty-state">Error loading SNS articles</div>`;
+                    }
+                }
+            },
+
+            // Render SNS Company Filter
+            renderSNSCompanyFilter() {
+                const filterContainer = document.getElementById('snsCompanyFilter');
+                if (!filterContainer || !this.snsCompanies) return;
+
+                // Add "All" button
+                let filterHTML = `<button style="padding: 8px 16px; border-radius: 20px; border: 1px solid var(--color-border); background: var(--color-accent); color: var(--color-text); cursor: pointer; transition: all 0.3s ease; font-size: 13px;" 
+                        onclick="app.filterSNSByCompany('all')"
+                        id="snsFilter-all">
+                    ⭐ All Companies
+                </button>`;
+
+                filterHTML += this.snsCompanies.map(company => 
+                    `<button style="padding: 8px 16px; border-radius: 20px; border: 1px solid var(--color-border); background: var(--color-surface-light); color: var(--color-text); cursor: pointer; transition: all 0.3s ease; font-size: 13px;" 
+                            onclick="app.filterSNSByCompany('${company.id}')"
+                            id="snsFilter-${company.id}">
+                        ${company.icon} ${company.name}
+                    </button>`
+                ).join('');
+
+                filterContainer.innerHTML = filterHTML;
+            },
+
+            // Filter SNS by company
+            async filterSNSByCompany(company) {
+                try {
+                    let data;
+                    if (company === 'all') {
+                        data = await newsAPI.getSNSArticles(1, 20);
+                    } else {
+                        data = await newsAPI.getSNSByCompany(company, 1, 20);
+                    }
+                    
+                    this.snsArticles = data.articles || [];
+                    this.snsCurrentPage = 1;
+                    this.snsTotalPages = data.totalPages || 1;
+
+                    // Update button styles
+                    const buttons = document.querySelectorAll('[id^="snsFilter-"]');
+                    buttons.forEach(btn => {
+                        const btnCompany = btn.id.replace('snsFilter-', '');
+                        if (btnCompany === company) {
+                            btn.style.background = 'var(--color-accent)';
+                        } else {
+                            btn.style.background = 'var(--color-surface-light)';
+                        }
+                    });
+
+                    this.renderSNSArticles(this.snsArticles);
+                    this.renderSNSPagination();
+                } catch (error) {
+                    console.error('Error filtering SNS:', error);
+                }
+            },
+
+            // Render SNS Articles
+            renderSNSArticles(articles) {
+                const container = document.getElementById('snsArticlesGrid');
+                if (!container) return;
+
+                if (!articles || articles.length === 0) {
+                    container.innerHTML = '<div class="empty-state">No SNS articles available</div>';
+                    return;
+                }
+
+                container.innerHTML = articles.map(article => 
+                    `<div style="background: var(--color-surface-light); border: 1px solid var(--color-border); border-radius: 8px; padding: 16px; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; gap: 10px;"
+                          onmouseover="this.style.background='var(--color-surface)'; this.style.borderColor='var(--color-accent)'; this.style.transform='translateY(-4px)';"
+                          onmouseout="this.style.background='var(--color-surface-light)'; this.style.borderColor='var(--color-border)'; this.style.transform='translateY(0)';"
+                          onclick="app.showArticleDetail(${JSON.stringify(article).replace(/"/g, '&quot;')})">
+                        
+                        <!-- Article Header -->
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 24px;">${article.icon || '📱'}</span>
+                            <div style="flex: 1;">
+                                <div style="font-weight: bold; color: var(--color-text); font-size: 13px; margin-bottom: 4px;">
+                                    ${article.source || 'Official'}
+                                </div>
+                                <div style="display: inline-block; padding: 4px 10px; background: var(--color-primary); border-radius: 12px; font-size: 11px; color: var(--color-text);">
+                                    ${article.type || 'update'}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Article Title -->
+                        <h4 style="font-weight: bold; font-size: 14px; color: var(--color-text); margin: 0; line-height: 1.3;">
+                            ${article.title}
+                        </h4>
+                        
+                        <!-- Article Summary -->
+                        <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                            ${article.summary || 'No summary available'}
+                        </p>
+                        
+                        <!-- Timestamp -->
+                        <div style="font-size: 12px; color: var(--color-text-secondary);">
+                            📅 ${new Date(article.timestamp).toLocaleDateString()}
+                        </div>
+                    </div>`
+                ).join('');
+            },
+
+            // Render SNS Pagination
+            renderSNSPagination() {
+                const container = document.getElementById('snsPagination');
+                if (!container) return;
+
+                if (this.snsTotalPages <= 1) {
+                    container.innerHTML = '';
+                    return;
+                }
+
+                let paginationHTML = '';
+                for (let i = 1; i <= this.snsTotalPages; i++) {
+                    const isActive = i === this.snsCurrentPage;
+                    paginationHTML += `<button style="padding: 8px 12px; margin: 0 4px; background: ${isActive ? 'var(--color-accent)' : 'var(--color-surface-light)'}; color: var(--color-text); border: 1px solid var(--color-border); border-radius: 4px; cursor: pointer;" 
+                            onclick="app.goToSNSPage(${i})">${i}</button>`;
+                }
+                container.innerHTML = paginationHTML;
+            },
+
+            // Go to SNS page
+            async goToSNSPage(page) {
+                try {
+                    const data = await newsAPI.getSNSArticles(page, 20);
+                    this.snsArticles = data.articles || [];
+                    this.snsCurrentPage = page;
+                    this.renderSNSArticles(this.snsArticles);
+                    this.renderSNSPagination();
+                } catch (error) {
+                    console.error('Error loading SNS page:', error);
+                }
+            },
+
+            // ===== SNS FEATURED (Home Page) =====
+            async loadSNSFeaturedArticles() {
+                try {
+                    // Load companies first
+                    let companiesData = {};
+                    try {
+                        companiesData = await newsAPI.getSNSCompanies();
+                    } catch (e) {
+                        console.warn('⚠️ Failed to load SNS companies:', e.message);
+                    }
+                    this.snsFeaturedCompanies = companiesData.companies || [];
+                    
+                    // Load SNS articles
+                    let articlesData = {};
+                    try {
+                        articlesData = await newsAPI.getSNSArticles(1, 6); // Load only 6 articles for featured
+                    } catch (e) {
+                        console.warn('⚠️ Failed to load SNS articles:', e.message);
+                    }
+                    
+                    this.snsFeaturedArticles = articlesData.articles || [];
+                    this.snsFeaturedCurrentPage = 1;
+                    this.snsFeaturedTotalPages = articlesData.totalPages || 1;
+                    
+                    this.renderSNSFeaturedCompanyFilter();
+                    this.renderSNSFeaturedArticles(this.snsFeaturedArticles);
+                    this.renderSNSFeaturedPagination();
+                    
+                    console.log('📱 SNS featured articles loaded:', this.snsFeaturedArticles.length);
+                } catch (error) {
+                    console.error('🔴 SNS Featured Articles Error:', error);
+                    // Show empty state gracefully
+                    const container = document.getElementById('snsFeaturedArticlesGrid');
+                    if (container) {
+                        container.innerHTML = '<div class="empty-state">No SNS articles available at the moment</div>';
+                    }
+                }
+            },
+
+            // Render SNS Featured Company Filter
+            renderSNSFeaturedCompanyFilter() {
+                const filterContainer = document.getElementById('snsFeaturedCompanyFilter');
+                if (!filterContainer) {
+                    console.warn('⚠️ SNS Featured Company Filter container not found');
+                    return;
+                }
+                
+                if (!this.snsFeaturedCompanies || !Array.isArray(this.snsFeaturedCompanies)) {
+                    console.warn('⚠️ SNS Featured Companies data not available');
+                    return;
+                }
+
+                try {
+                    // Add "All" button
+                    let filterHTML = `<button style="padding: 8px 16px; border-radius: 20px; border: 1px solid var(--color-border); background: var(--color-accent); color: var(--color-text); cursor: pointer; transition: all 0.3s ease; font-size: 13px;" 
+                            onclick="app.filterSNSFeaturedByCompany('all')"
+                            id="snsFeaturedFilter-all">
+                        ⭐ All Companies
+                    </button>`;
+
+                    filterHTML += this.snsFeaturedCompanies.map(company => {
+                        if (!company) return '';
+                        return `<button style="padding: 8px 16px; border-radius: 20px; border: 1px solid var(--color-border); background: var(--color-surface-light); color: var(--color-text); cursor: pointer; transition: all 0.3s ease; font-size: 13px;" 
+                                onclick="app.filterSNSFeaturedByCompany('${company.id}')"
+                                id="snsFeaturedFilter-${company.id}">
+                            ${company.icon || '📱'} ${company.name || 'Unknown'}
+                        </button>`;
+                    }).join('');
+
+                    filterContainer.innerHTML = filterHTML;
+                } catch (error) {
+                    console.error('Error rendering SNS featured company filter:', error);
+                }
+            },
+
+            // Filter SNS Featured by company
+            async filterSNSFeaturedByCompany(company) {
+                try {
+                    console.log(`🔄 Filtering SNS Featured by company: ${company}`);
+                    
+                    let data = {};
+                    if (company === 'all') {
+                        console.log('📡 Fetching all SNS articles...');
+                        data = await newsAPI.getSNSArticles(1, 6);
+                    } else {
+                        console.log(`📡 Fetching SNS articles for company: ${company}`);
+                        data = await newsAPI.getSNSByCompany(company, 1, 6);
+                    }
+                    
+                    console.log('✅ Received data:', data);
+                    
+                    this.snsFeaturedArticles = data.articles || [];
+                    this.snsFeaturedCurrentPage = 1;
+                    this.snsFeaturedTotalPages = data.totalPages || 1;
+
+                    console.log(`✅ Loaded ${this.snsFeaturedArticles.length} articles`);
+
+                    // Update button styles
+                    const buttons = document.querySelectorAll('[id^="snsFeaturedFilter-"]');
+                    buttons.forEach(btn => {
+                        const btnCompany = btn.id.replace('snsFeaturedFilter-', '');
+                        if (btnCompany === company) {
+                            btn.style.background = 'var(--color-accent)';
+                        } else {
+                            btn.style.background = 'var(--color-surface-light)';
+                        }
+                    });
+
+                    this.renderSNSFeaturedArticles(this.snsFeaturedArticles);
+                    this.renderSNSFeaturedPagination();
+                } catch (error) {
+                    console.error('❌ Error filtering SNS Featured:', error);
+                    console.error('Error details:', {
+                        message: error.message,
+                        stack: error.stack
+                    });
+                    
+                    const container = document.getElementById('snsFeaturedArticlesGrid');
+                    if (container) {
+                        container.innerHTML = `<div class="empty-state">Failed to load articles for ${company}. Error: ${error.message}</div>`;
+                    }
+                }
+            },
+
+            // Format relative time (e.g., "2 hours ago")
+            formatRelativeTime(timestamp) {
+                try {
+                    const date = new Date(timestamp);
+                    const now = new Date();
+                    const diffMs = now - date;
+                    const diffMins = Math.floor(diffMs / 60000);
+                    const diffHours = Math.floor(diffMs / 3600000);
+                    const diffDays = Math.floor(diffMs / 86400000);
+
+                    if (diffMins < 1) return '방금 전';
+                    if (diffMins < 60) return `${diffMins}분 전`;
+                    if (diffHours < 24) return `${diffHours}시간 전`;
+                    if (diffDays === 1) return '어제';
+                    if (diffDays < 7) return `${diffDays}일 전`;
+                    
+                    // For older articles, show full date
+                    return date.toLocaleDateString('ko-KR', { 
+                        year: 'numeric', 
+                        month: '2-digit', 
+                        day: '2-digit' 
+                    });
+                } catch (error) {
+                    console.warn('⚠️ Error formatting time:', error);
+                    return '최근';
+                }
+            },
+
+            // Render SNS Featured Articles
+            renderSNSFeaturedArticles(articles) {
+                const container = document.getElementById('snsFeaturedArticlesGrid');
+                if (!container) {
+                    console.warn('⚠️ SNS Featured Articles container not found');
+                    return;
+                }
+
+                if (!articles || !Array.isArray(articles) || articles.length === 0) {
+                    container.innerHTML = '<div class="empty-state">📱 Loading SNS updates...</div>';
+                    return;
+                }
+
+                try {
+                    container.innerHTML = articles.map(article => {
+                        if (!article) return '';
+                        
+                        const title = article.title || 'Untitled';
+                        const summary = article.summary || 'No description available';
+                        const source = article.source || 'Official';
+                        const icon = article.icon || '📱';
+                        const type = article.type || 'update';
+                        
+                        // Use actual article timestamp for display
+                        const relativeTime = this.formatRelativeTime(article.timestamp);
+                        const fullDate = article.timestamp ? new Date(article.timestamp).toLocaleDateString('ko-KR', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }) : 'Unknown';
+                        
+                        return `<div style="background: var(--color-surface-light); border: 1px solid var(--color-border); border-radius: 8px; padding: 16px; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; gap: 10px;"
+                              onmouseover="this.style.background='var(--color-surface)'; this.style.borderColor='var(--color-accent)'; this.style.transform='translateY(-4px)';"
+                              onmouseout="this.style.background='var(--color-surface-light)'; this.style.borderColor='var(--color-border)'; this.style.transform='translateY(0)';"
+                              onclick="app.showArticleDetail(${JSON.stringify(article).replace(/"/g, '&quot;')})"
+                              title="${source} - ${fullDate}">
+                            
+                            <!-- Article Header -->
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 24px;">${icon}</span>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: bold; color: var(--color-text); font-size: 13px; margin-bottom: 4px;">
+                                        ${source}
+                                    </div>
+                                    <div style="display: inline-block; padding: 4px 10px; background: var(--color-primary); border-radius: 12px; font-size: 11px; color: var(--color-text);">
+                                        ${type}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Article Title -->
+                            <h4 style="font-weight: bold; font-size: 14px; color: var(--color-text); margin: 0; line-height: 1.3;">
+                                ${title}
+                            </h4>
+                            
+                            <!-- Article Summary -->
+                            <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                ${summary}
+                            </p>
+                            
+                            <!-- Timestamp with relative and full date -->
+                            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--color-text-secondary);">
+                                <span>📅 ${relativeTime}</span>
+                                <span style="opacity: 0.7; font-size: 11px;">${fullDate}</span>
+                            </div>
+                        </div>`;
+                    }).join('');
+                } catch (error) {
+                    console.error('Error rendering SNS featured articles:', error);
+                    container.innerHTML = '<div class="empty-state">Failed to display SNS articles</div>';
+                }
+            },
+
+            // Render SNS Featured Pagination
+            renderSNSFeaturedPagination() {
+                const container = document.getElementById('snsFeaturedPagination');
+                if (!container) {
+                    console.warn('⚠️ SNS Featured Pagination container not found');
+                    return;
+                }
+
+                if (!this.snsFeaturedTotalPages || this.snsFeaturedTotalPages <= 1) {
+                    container.innerHTML = '';
+                    return;
+                }
+
+                try {
+                    let paginationHTML = '';
+                    for (let i = 1; i <= this.snsFeaturedTotalPages; i++) {
+                        const isActive = i === this.snsFeaturedCurrentPage;
+                        paginationHTML += `<button style="padding: 8px 12px; margin: 0 4px; background: ${isActive ? 'var(--color-accent)' : 'var(--color-surface-light)'}; color: var(--color-text); border: 1px solid var(--color-border); border-radius: 4px; cursor: pointer;" 
+                                onclick="app.goToSNSFeaturedPage(${i})">${i}</button>`;
+                    }
+                    container.innerHTML = paginationHTML;
+                } catch (error) {
+                    console.error('Error rendering SNS featured pagination:', error);
+                }
+            },
+
+            // Go to SNS Featured page
+            async goToSNSFeaturedPage(page) {
+                try {
+                    const data = await newsAPI.getSNSArticles(page, 6);
+                    this.snsFeaturedArticles = data.articles || [];
+                    this.snsFeaturedCurrentPage = page;
+                    this.renderSNSFeaturedArticles(this.snsFeaturedArticles);
+                    this.renderSNSFeaturedPagination();
+                } catch (error) {
+                    console.error('Error loading SNS Featured page:', error);
+                    const container = document.getElementById('snsFeaturedArticlesGrid');
+                    if (container) {
+                        container.innerHTML = '<div class="empty-state">Failed to load page</div>';
+                    }
+                }
+            },
+
+            // Pagination
+            goToPage(page) {
+                this.currentPage = page;
+                if (this.currentPageName === 'home') {
+                    this.renderNews(this.allNews, 'homeNewsList', 'homePagination');
+                } else if (this.currentPageName === 'latest') {
+                    this.renderNews(this.allNews, 'latestNewsList', 'latestPagination');
+                } else if (this.currentPageName === 'saved') {
+                    this.renderNews(this.savedNews, 'savedNewsList', 'savedPagination');
+                }
+            },
+
+            nextPage() {
+                const totalPages = Math.ceil(this.allNews.length / this.itemsPerPage);
+                if (this.currentPage < totalPages) {
+                    this.currentPage++;
+                    this.renderNews(this.allNews, this.currentPageName === 'home' ? 'homeNewsList' : (this.currentPageName === 'latest' ? 'latestNewsList' : 'savedNewsList'), 
+                                    this.currentPageName === 'home' ? 'homePagination' : (this.currentPageName === 'latest' ? 'latestPagination' : 'savedPagination'));
+                }
+            },
+
+            prevPage() {
+                if (this.currentPage > 1) {
+                    this.currentPage--;
+                    this.renderNews(this.allNews, this.currentPageName === 'home' ? 'homeNewsList' : (this.currentPageName === 'latest' ? 'latestNewsList' : 'savedNewsList'), 
+                                    this.currentPageName === 'home' ? 'homePagination' : (this.currentPageName === 'latest' ? 'latestPagination' : 'savedPagination'));
+                }
+            },
+
+            // Search
+            async search() {
+                const keyword = document.getElementById('searchInput').value;
+                if (!keyword) return;
+
+                try {
+                    const data = await newsAPI.searchNews(keyword);
+                    this.renderNews(data.news || [], 'searchResults');
+                } catch (error) {
+                    document.getElementById('searchResults').innerHTML = `<div class="empty-state">Search error</div>`;
+                }
+            },
+
+            // Update search suggestions (autocomplete)
+            updateSearchSuggestions() {
+                const input = document.getElementById('searchInput');
+                const suggestionsDiv = document.getElementById('searchSuggestions');
+                const value = input.value.trim().toLowerCase();
+
+                if (!value) {
+                    suggestionsDiv.style.display = 'none';
+                    return;
+                }
+
+                // Get all unique keywords from HOT TAGS
+                const hotTagsKeywords = ['AI', 'Machine Learning', 'Cloud', 'Data', 'Security', 'API', 
+                                        'DevOps', 'Python', 'JavaScript', 'LLM', 'GPT', 'Neural', 
+                                        'Algorithm', 'Deep Learning', 'Tech', 'Innovation', 'Software', 
+                                        'Web', 'Mobile', 'Enterprise', 'Network', 'Database', 
+                                        'Framework', 'Platform', 'Service', 'Artificial Intelligence',
+                                        'Neural Network', 'Big Data', 'Cybersecurity', 'Cloud Computing',
+                                        'IoT', 'Blockchain', 'Quantum', 'Robotics', 'Automation'];
+
+                // Filter matching suggestions
+                const matches = hotTagsKeywords
+                    .filter(tag => tag.toLowerCase().includes(value))
+                    .slice(0, 8); // Limit to 8 suggestions
+
+                if (matches.length === 0) {
+                    suggestionsDiv.style.display = 'none';
+                    return;
+                }
+
+                // Display suggestions
+                suggestionsDiv.innerHTML = matches.map(tag => 
+                    `<div style="padding: 10px 12px; cursor: pointer; border-bottom: 1px solid var(--color-border); 
+                                 hover:background: var(--color-surface-light); transition: background 0.2s;"
+                         onmouseover="this.style.background='var(--color-surface-light)'"
+                         onmouseout="this.style.background='transparent'"
+                         onclick="document.getElementById('searchInput').value='${tag}'; app.search();">
+                        🔍 ${tag}
+                    </div>`
+                ).join('');
+                suggestionsDiv.style.display = 'block';
+            },
+
+            // Load search page with HOT TAGS
+            async loadSearchPage() {
+                this.showSearchHotTags();
+            },
+
+            showSearchHotTags() {
+                const hotTagsKeywords = ['AI', 'Machine Learning', 'Cloud', 'Data', 'Security', 'API', 
+                                        'DevOps', 'Python', 'JavaScript', 'LLM', 'GPT', 'Neural', 
+                                        'Algorithm', 'Deep Learning', 'Tech', 'Innovation', 'Software', 
+                                        'Web', 'Mobile', 'Enterprise', 'Network', 'Database', 
+                                        'Framework', 'Platform', 'Service'];
+
+                const searchHotTagsDiv = document.getElementById('searchHotTags');
+                if (searchHotTagsDiv) {
+                    searchHotTagsDiv.innerHTML = hotTagsKeywords.map(tag => 
+                        `<span class="news-source" style="padding: 8px 16px; cursor: pointer; transition: all 0.3s ease; 
+                                                          background: var(--color-surface-light); border: 1px solid var(--color-border);"
+                               onmouseover="this.style.background='var(--color-accent)'; this.style.color='white';"
+                               onmouseout="this.style.background='var(--color-surface-light)'; this.style.color='var(--color-text)';"
+                               onclick="document.getElementById('searchInput').value='${tag}'; app.search();"
+                               title="Search for ${tag}">
+                            #${tag}
+                        </span>`
+                    ).join('');
+                }
+            },
+
+            // Bookmarks
+            async toggleBookmark(newsId) {
+                if (!this.currentUser) {
+                    alert('Please log in to save articles');
+                    return;
+                }
+                // API call would go here
+            },
+
+            // Auth
+            openLogin() {
+                document.getElementById('loginModal').classList.add('open');
+            },
+
+            closeLogin() {
+                document.getElementById('loginModal').classList.remove('open');
+            },
+
+            openSignup() {
+                document.getElementById('signupModal').classList.add('open');
+            },
+
+            closeSignup() {
+                document.getElementById('signupModal').classList.remove('open');
+            },
+
+            async performLogin() {
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                
+                try {
+                    const data = await newsAPI.login(email, password);
+                    this.currentUser = data.user;
+                    this.updateProfileUI();
+                    this.closeLogin();
+                } catch (error) {
+                    alert('Login failed: ' + error.message);
+                }
+            },
+
+            validateSignupForm() {
+                const email = document.getElementById('signupEmail').value;
+                const password = document.getElementById('signupPassword').value;
+                const emailError = document.getElementById('signupEmailError');
+                const passwordError = document.getElementById('signupPasswordError');
+                
+                let isEmailValid = true;
+                let isPasswordValid = true;
+                
+                // Email validation - check valid email format
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (email && !emailRegex.test(email)) {
+                    emailError.textContent = 'Please check your email address.';
+                    emailError.style.display = 'block';
+                    isEmailValid = false;
+                } else if (!email) {
+                    emailError.textContent = '';
+                    emailError.style.display = 'none';
+                } else {
+                    emailError.textContent = '';
+                    emailError.style.display = 'none';
+                }
+                
+                // Password validation
+                // Requirements: 8+ chars, uppercase, lowercase, number, special char
+                const passwordRequirements = {
+                    minLength: password.length >= 8,
+                    hasUppercase: /[A-Z]/.test(password),
+                    hasLowercase: /[a-z]/.test(password),
+                    hasNumber: /\d/.test(password),
+                    hasSpecialChar: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
+                };
+                
+                const allPasswordRequirementsMet = Object.values(passwordRequirements).every(req => req);
+                
+                if (password && !allPasswordRequirementsMet) {
+                    passwordError.textContent = 'Please check password requirements.';
+                    passwordError.style.display = 'block';
+                    isPasswordValid = false;
+                } else if (!password) {
+                    passwordError.textContent = '';
+                    passwordError.style.display = 'none';
+                } else {
+                    passwordError.textContent = '';
+                    passwordError.style.display = 'none';
+                }
+                
+                return isEmailValid && isPasswordValid;
+            },
+
+            async performSignup() {
+                const email = document.getElementById('signupEmail').value;
+                const name = document.getElementById('signupName').value;
+                const password = document.getElementById('signupPassword').value;
+                
+                // Validate form before attempting signup
+                if (!this.validateSignupForm()) {
+                    return;
+                }
+                
+                try {
+                    const data = await newsAPI.register(email, password, ['AI', 'Technology']);
+                    this.currentUser = data.user;
+                    this.updateProfileUI();
+                    this.closeSignup();
+                } catch (error) {
+                    alert('Signup failed: ' + error.message);
+                }
+            },
+
+            logout() {
+                newsAPI.logout();
+                this.currentUser = null;
+                this.updateProfileUI();
+                this.closeDrawer();
+            },
+
+            async loadUserProfile() {
+                try {
+                    const token = localStorage.getItem('authToken');
+                    if (token) {
+                        const data = await newsAPI.request('/user/profile', { method: 'GET' });
+                        this.currentUser = data.user;
+                    }
+                } catch (error) {
+                    console.log('Not logged in:', error);
+                }
+                this.updateProfileUI();
+            },
+
+            updateProfileUI() {
+                try {
+                    const profileInfo = document.getElementById('profileInfo');
+                    const profileButtons = document.getElementById('profileButtons');
+                    const logoutBtn = document.getElementById('logoutBtn');
+
+                    if (this.currentUser) {
+                        if (profileInfo) profileInfo.classList.add('show');
+                        const nameEl = document.getElementById('profileName');
+                        const emailEl = document.getElementById('profileEmail');
+                        if (nameEl) nameEl.textContent = this.currentUser.nickname || this.currentUser.email;
+                        if (emailEl) emailEl.textContent = this.currentUser.email;
+                        if (profileButtons) profileButtons.classList.add('logged-in');
+                        if (logoutBtn) logoutBtn.classList.add('show');
+                    } else {
+                        if (profileInfo) profileInfo.classList.remove('show');
+                        if (profileButtons) profileButtons.classList.remove('logged-in');
+                        if (logoutBtn) logoutBtn.classList.remove('show');
+                    }
+                } catch (error) {
+                    console.log('updateProfileUI error:', error);
+                }
+            },
+
+            // Settings
+            changeLanguage(lang) {
+                this.currentLang = lang;
+                localStorage.setItem('language', lang);
+            },
+
+            toggleAutoTranslate() {
+                // API call would go here
+            },
+
+            toggleNotifications() {
+                // API call would go here
+            },
+
+            clearCache() {
+                if (confirm('Clear all cached data?')) {
+                    localStorage.clear();
+                    alert('Cache cleared!');
+                }
+            },
+
+            clearSaved() {
+                if (confirm('Delete all saved articles? This cannot be undone.')) {
+                    // API call would go here
+                }
+            },
+
+            headerSearch() {
+                const searchQuery = document.getElementById('headerSearchInput').value.trim();
+                if (searchQuery) {
+                    this.searchQuery = searchQuery;
+                    this.currentPage = 1;
+                    this.showPage('search');
+                    document.getElementById('searchInput').value = searchQuery;
+                    this.performSearch();
+                }
+            },
+
+            // Show article detail page
+            showArticleDetail(article) {
+                // Store current article for reference
+                this.currentArticle = article;
+                
+                // Store previous page for back navigation
+                this.previousPageName = this.currentPageName || 'home';
+                
+                console.log('📄 Article Detail:', {
+                    title: article.title,
+                    url: article.url,
+                    source: article.source,
+                    isSNS: !!article.sourceId
+                });
+                
+                // Set detail page content
+                document.getElementById('detailTitle').textContent = article.title || '';
+                document.getElementById('detailAuthor').textContent = article.author || article.source || 'Unknown';
+                document.getElementById('detailSource').textContent = article.source || 'Unknown Source';
+                
+                // Handle both regular articles and SNS articles (which use timestamp instead of date)
+                const displayDate = article.date || 
+                    (article.timestamp ? new Date(article.timestamp).toLocaleDateString('ko-KR', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    }) : new Date().toLocaleDateString('ko-KR'));
+                
+                document.getElementById('detailDate').textContent = displayDate;
+                document.getElementById('detailBreadcrumb').textContent = article.title || '';
+                document.getElementById('detailCategory').textContent = article.category || (article.type || 'News');
+                
+                // Article content - if summary is provided, use it; otherwise create paragraphs
+                const contentArray = (article.content || article.summary || 'No content available').split('\n').filter(p => p.trim());
+                document.getElementById('detailContent').innerHTML = contentArray.map(para => 
+                    `<p>${para.trim()}</p>`
+                ).join('');
+
+                // Summary points - generate from summary
+                const summaryText = article.summary || article.content || '';
+                const summaryPoints = summaryText.split('.')
+                    .filter(s => s.trim().length > 10)
+                    .slice(0, 4)
+                    .map(s => s.trim() + '.');
+                
+                document.getElementById('detailSummary').innerHTML = summaryPoints.map(point => 
+                    `<li>${point}</li>`
+                ).join('');
+                
+                // Read more button - ensure we use the correct URL
+                document.getElementById('detailReadMore').onclick = () => {
+                    let url = article.url;
+                    
+                    // Validate and clean URL
+                    if (!url) {
+                        console.warn('⚠️ No URL provided for article:', article.title);
+                        
+                        // For SNS articles, suggest company website
+                        if (article.sourceId) {
+                            alert(`원본 게시글 URL이 없습니다. ${article.source}를 방문하세요.`);
+                        } else {
+                            alert('Article URL is not available');
+                        }
+                        return;
+                    }
+                    
+                    // Ensure URL has protocol
+                    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                        url = 'https://' + url;
+                    }
+                    
+                    console.log('🔗 Opening URL:', url);
+                    window.open(url, '_blank');
+                };
+
+                // Related articles (show 3 similar articles)
+                const relatedHtml = `
+                    <div style="background: var(--color-surface-light); border: 1px solid var(--color-border); border-radius: 6px; padding: 12px; cursor: pointer; transition: all 0.3s ease;" 
+                         onmouseover="this.style.background='var(--color-surface)'; this.style.borderColor='var(--color-accent)';"
+                         onmouseout="this.style.background='var(--color-surface-light)'; this.style.borderColor='var(--color-border)';"
+                         onclick="app.showArticleDetail({title: 'The Rise of AI-Powered Code Assistants', summary: 'Deep analysis of how tools like GitHub Copilot are transforming the software development environment.', source: 'Wired', url: 'https://www.wired.com/story/github-copilot-ai'})">
+                        <h4 style="font-weight: bold; margin-bottom: 8px; color: var(--color-text);">The Rise of AI-Powered Code Assistants</h4>
+                        <p style="font-size: 13px; color: var(--color-text-secondary); margin-bottom: 8px;">Deep analysis of how tools like GitHub Copilot are transforming the software development environment.</p>
+                        <span style="font-size: 12px; color: var(--color-text-secondary);">📰 Wired</span>
+                    </div>
+                    <div style="background: var(--color-surface-light); border: 1px solid var(--color-border); border-radius: 6px; padding: 12px; cursor: pointer; transition: all 0.3s ease;" 
+                         onmouseover="this.style.background='var(--color-surface)'; this.style.borderColor='var(--color-accent)';"
+                         onmouseout="this.style.background='var(--color-surface-light)'; this.style.borderColor='var(--color-border)';"
+                         onclick="app.showArticleDetail({title: 'Ethical Considerations in Generative AI', summary: 'Exploring challenges and responsibilities in developing powerful AI models.', source: 'MIT Technology Review', url: 'https://www.technologyreview.com/2024/generative-ai-ethics'})">
+                        <h4 style="font-weight: bold; margin-bottom: 8px; color: var(--color-text);">Ethical Considerations in Generative AI</h4>
+                        <p style="font-size: 13px; color: var(--color-text-secondary); margin-bottom: 8px;">Exploring challenges and responsibilities in developing powerful AI models.</p>
+                        <span style="font-size: 12px; color: var(--color-text-secondary);">📰 MIT Technology Review</span>
+                    </div>
+                    <div style="background: var(--color-surface-light); border: 1px solid var(--color-border); border-radius: 6px; padding: 12px; cursor: pointer; transition: all 0.3s ease;" 
+                         onmouseover="this.style.background='var(--color-surface)'; this.style.borderColor='var(--color-accent)';"
+                         onmouseout="this.style.background='var(--color-surface-light)'; this.style.borderColor='var(--color-border)';"
+                         onclick="app.showArticleDetail({title: 'NVIDIA\'s New AI Chip Architecture', summary: 'Analysis of latest hardware advances driving next-generation AI.', source: 'AnandTech', url: 'https://www.anandtech.com/show/nvidia-ai-chip-architecture'})">
+                        <h4 style="font-weight: bold; margin-bottom: 8px; color: var(--color-text);">NVIDIA's New AI Chip Architecture</h4>
+                        <p style="font-size: 13px; color: var(--color-text-secondary); margin-bottom: 8px;">Analysis of latest hardware advances driving next-generation AI.</p>
+                        <span style="font-size: 12px; color: var(--color-text-secondary);">📰 AnandTech</span>
+                    </div>
+                `;
+                document.getElementById('detailRelated').innerHTML = relatedHtml;
+
+                // Setup "Save for Later" functionality
+                const saveCheckbox = document.getElementById('saveCheckbox');
+                const saveButton = document.getElementById('detailSaveForLater');
+                
+                // Check if article is already saved
+                const savedArticles = JSON.parse(localStorage.getItem('savedForLater') || '[]');
+                const isSaved = savedArticles.some(saved => saved.title === article.title);
+                saveCheckbox.checked = isSaved;
+                
+                // Save for later checkbox change handler
+                saveCheckbox.onchange = (e) => {
+                    const checkbox = e.target;
+                    const savedArticles = JSON.parse(localStorage.getItem('savedForLater') || '[]');
+                    
+                    if (checkbox.checked) {
+                        // Add to saved
+                        if (!savedArticles.some(saved => saved.title === article.title)) {
+                            savedArticles.push({
+                                title: article.title,
+                                summary: article.summary,
+                                source: article.source,
+                                url: article.url,
+                                date: article.date || new Date().toLocaleDateString('ko-KR'),
+                                content: article.content
+                            });
+                            localStorage.setItem('savedForLater', JSON.stringify(savedArticles));
+                            console.log('✅ Article saved for later');
+                        }
+                    } else {
+                        // Remove from saved
+                        const filtered = savedArticles.filter(saved => saved.title !== article.title);
+                        localStorage.setItem('savedForLater', JSON.stringify(filtered));
+                        console.log('❌ Article removed from saved');
+                    }
+                };
+                
+                // Save for later button handler - just toggle checkbox
+                saveButton.onclick = (e) => {
+                    e.stopPropagation();
+                    saveCheckbox.checked = !saveCheckbox.checked;
+                    saveCheckbox.onchange({ target: saveCheckbox });
+                };
+
+                // Navigate to detail page
+                this.navigate('detail');
+            }
+        };
+
+        // Initialize app on load
+        console.log('📋 Script loaded, waiting for DOMContentLoaded...');
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('✓ DOMContentLoaded fired');
+            const indicator = document.getElementById('statusIndicator');
+            if (indicator) {
+                indicator.style.display = 'block';
+                indicator.textContent = '⏳ Initializing app...';
+            }
+        });
+        
+        window.addEventListener('load', () => {
+            console.log('✓ Window load event fired');
+            app.init();
+        });
+    </script>
+</body>
+
+</html>

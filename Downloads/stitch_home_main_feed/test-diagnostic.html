@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quick Status Test</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #1a1a1a; color: #fff; }
+        .box { background: #2a2a2a; border: 1px solid #444; padding: 15px; margin: 10px 0; }
+        .status { font-weight: bold; }
+        .ok { color: #0f0; }
+        .error { color: #f00; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Diagnostic Test</h1>
+    <div class="box" id="test1">
+        <p class="status">Test 1: HTML Loaded</p>
+        <p><span class="ok">✓ PASS</span> - If you see this, HTML is loading correctly</p>
+    </div>
+    
+    <div class="box" id="test2">
+        <p class="status">Test 2: API Connection</p>
+        <p id="apiResult">Testing...</p>
+    </div>
+    
+    <div class="box" id="test3">
+        <p class="status">Test 3: Load app.html content</p>
+        <iframe src="/app.html" style="width: 100%; height: 600px; border: 1px solid #666;"></iframe>
+    </div>
+    
+    <script src="api-client.js"></script>
+    <script>
+        async function testAPI() {
+            try {
+                const data = await newsAPI.getLatestNews(1, 1);
+                document.getElementById('apiResult').innerHTML = `<span class="ok">✓ PASS</span> - Got ${data.news ? data.news.length : 0} articles`;
+            } catch (error) {
+                document.getElementById('apiResult').innerHTML = `<span class="error">✗ FAIL</span> - ${error.message}`;
+            }
+        }
+        
+        setTimeout(testAPI, 1000);
+    </script>
+</body>
+</html>

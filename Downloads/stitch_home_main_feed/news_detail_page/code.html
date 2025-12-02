@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>AI News Curation - Article Detail</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet" />
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
+  </style>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#4A90E2",
+            "background-light": "#f5f6f8",
+            "background-dark": "#121212",
+            "surface-dark": "#1E1E1E",
+            "text-light": "#121212",
+            "text-dark": "#EAEAEA",
+            "accent-purple": "#8A2BE2"
+          },
+          fontFamily: {
+            "display": ["Space Grotesk", "sans-serif"]
+          },
+          borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+        },
+      },
+    }
+  </script>
+</head>
+
+<body class="font-display bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
+  <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+    <div class="flex h-full grow flex-col">
+      <header
+        class="sticky top-0 z-50 flex items-center justify-center whitespace-nowrap border-b border-solid border-white/10 bg-background-light/80 px-4 py-3 backdrop-blur-sm dark:bg-background-dark/80">
+        <div class="flex w-full max-w-5xl items-center justify-between">
+          <div class="flex items-center gap-8">
+            <div class="flex items-center gap-3 text-text-light dark:text-text-dark">
+              <div class="size-6 text-primary">
+                <svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z"
+                    fill="currentColor"></path>
+                </svg>
+              </div>
+              <h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">AI News Curation</h2>
+            </div>
+            <nav class="hidden items-center gap-9 md:flex">
+              <a class="text-sm font-medium leading-normal text-text-light dark:text-text-dark hover:text-primary"
+                href="#">Home</a>
+              <a class="text-sm font-medium leading-normal text-primary" href="#">Topics</a>
+              <a class="text-sm font-medium leading-normal text-text-light dark:text-text-dark hover:text-primary"
+                href="#">Trending</a>
+              <a class="text-sm font-medium leading-normal text-text-light dark:text-text-dark hover:text-primary"
+                href="#">About</a>
+            </nav>
+          </div>
+          <div class="flex flex-1 items-center justify-end gap-4">
+            <label class="hidden sm:flex flex-col min-w-40 !h-10 max-w-64">
+              <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+                <div
+                  class="text-white/60 flex border-none bg-surface-dark/60 items-center justify-center pl-3 rounded-l-lg border-r-0">
+                  <span class="material-symbols-outlined">search</span>
+                </div>
+                <input
+                  class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-dark focus:outline-0 focus:ring-2 focus:ring-primary border-none bg-surface-dark/60 focus:border-none h-full placeholder:text-white/60 px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
+                  placeholder="Search" value="" />
+              </div>
+            </label>
+            <div class="flex gap-2">
+              <button
+                class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+                <span class="truncate">Log In</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+      <main class="flex flex-1 justify-center py-5 sm:py-10 px-4">
+        <div class="flex w-full max-w-5xl flex-col gap-8">
+          <div class="flex flex-wrap gap-2">
+            <a class="text-white/60 hover:text-primary text-sm font-medium leading-normal" href="#">Home</a>
+            <span class="text-white/60 text-sm font-medium leading-normal">/</span>
+            <a class="text-white/60 hover:text-primary text-sm font-medium leading-normal" href="#"
+              id="news-category">AI</a>
+            <span class="text-white/60 text-sm font-medium leading-normal">/</span>
+            <span class="text-text-dark text-sm font-medium leading-normal truncate"
+              id="news-breadcrumb-title">Loading...</span>
+          </div>
+          <div class="flex flex-col gap-10">
+            <h1 class="text-text-dark text-4xl lg:text-5xl font-black leading-tight tracking-[-0.033em]"
+              id="news-title">Loading Article...</h1>
+
+            <!-- Translation Toggle -->
+            <div class="flex items-center justify-end gap-3" id="translation-controls" style="display: none;">
+              <span class="text-sm text-white/60">Original</span>
+              <button id="lang-toggle"
+                class="relative inline-flex h-6 w-11 items-center rounded-full bg-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background-dark"
+                onclick="toggleLanguage()">
+                <span id="lang-toggle-thumb"
+                  class="translate-x-6 inline-block h-4 w-4 transform rounded-full bg-white transition-transform"></span>
+              </button>
+              <span class="text-sm font-bold text-primary">Korean (Translated)</span>
+            </div>
+
+            <!-- AI Core Summary -->
+            <div
+              class="flex flex-col gap-4 rounded-xl bg-surface-dark p-6 border border-primary/50 shadow-[0_0_20px_theme(colors.primary/0.2)]">
+              <div class="flex items-center justify-between">
+                <h3 class="text-accent-purple text-lg font-bold leading-tight tracking-[-0.015em]">AI Core Summary
+                  (Korean)</h3>
+                <span class="text-xs text-white/40 bg-white/5 px-2 py-1 rounded">Auto-Generated</span>
+              </div>
+              <div id="news-summary" class="text-text-dark/90 text-base font-normal leading-relaxed">
+                Loading summary...
+              </div>
+            </div>
+
+            <!-- Article Content -->
+            <div class="flex flex-col gap-6">
+              <div class="flex items-center justify-between">
+                <h3 class="text-text-dark text-xl font-bold leading-tight tracking-[-0.015em] px-1">Article Content</h3>
+                <div id="lang-indicator" class="text-xs font-bold text-primary border border-primary px-2 py-1 rounded">
+                  KOREAN</div>
+              </div>
+              <div class="rounded-xl bg-surface-dark p-6 border border-white/10">
+                <div class="flex flex-col gap-6">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                      <img class="h-10 w-10 rounded-full" id="source-icon"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbYfyN_731zyZxVAgLDiEncQ9hCeWwxBTx8iYPjS52NqWBi3LU4-_JFGq8YpHyBI-HuR433nz47-ce1qatlEtk6aeCtqKfRGrnJK72vrRmnIA2USt_86OQpFNmiIx8340lbUzTPS2NfU6d_s17j3PMPO7_6-M-WjnKVwOjtn5b_kAJzKkRzI2pEBRSSu3Z91oP1Qq2gHXQjhV9YrBDqyvNPs414foBSsFsiai1POxY0oGaVsnols4iY_gspH7MsD-7AAklqT1YROs" />
+                      <div>
+                        <p class="font-bold text-text-dark" id="news-source">Source</p>
+                        <p class="text-sm text-white/60" id="news-date">Date</p>
+                      </div>
+                    </div>
+                    <a class="flex min-w-[84px] items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-5 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors"
+                      href="#" id="original-link" target="_blank">
+                      <span>Go to Original</span>
+                      <span class="material-symbols-outlined text-base">open_in_new</span>
+                    </a>
+                  </div>
+                  <div class="border-t border-white/10 pt-6">
+                    <p class="text-text-dark/90 text-base font-normal leading-relaxed whitespace-pre-line"
+                      id="news-content">
+                      Loading content...
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Keywords -->
+            <div class="flex flex-col gap-4">
+              <h3 class="text-text-dark text-xl font-bold leading-tight tracking-[-0.015em] px-1">Keywords</h3>
+              <div class="flex flex-wrap gap-3" id="news-tags">
+                <!-- Tags will be inserted here -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // State
+    let currentNews = null;
+    let showTranslated = true;
+
+    // Mock Data (Fallback)
+    const mockNews = {
+      id: "123",
+      title: "OpenAI, 새로운 GPT-5 모델 개발 계획 발표",
+      source_name: "TechCrunch",
+      author_name: "Alex Wilhelm",
+      original_language: "en",
+      published_at: "2025-11-27T10:00:00Z",
+      url: "https://techcrunch.com/ai-news",
+      is_translated: true,
+      content: {
+        original: "OpenAI has officially announced plans for their next generation model, GPT-5. The new model promises significantly improved reasoning capabilities and multimodal understanding. CEO Sam Altman stated that this will be a major leap forward in AI technology, potentially achieving AGI-level performance in specific domains. The release is scheduled for late 2026.",
+        translated_ko: "OpenAI가 차세대 모델인 GPT-5의 개발 계획을 공식 발표했습니다. 새로운 모델은 추론 능력과 멀티모달 이해력이 크게 향상될 것으로 기대됩니다. 샘 알트만 CEO는 이것이 AI 기술의 큰 도약이 될 것이며, 특정 영역에서 AGI 수준의 성능을 달성할 수 있을 것이라고 언급했습니다. 출시는 2026년 말로 예정되어 있습니다."
+      },
+      summary: {
+        ko: "OpenAI가 추론 능력과 멀티모달 기능이 강화된 GPT-5 개발 계획을 발표했습니다. 샘 알트만은 이를 AI 기술의 중대한 도약으로 평가하며, 특정 분야에서 AGI 수준 도달 가능성을 시사했습니다. 출시는 2026년 말로 예정되어 있습니다."
+      },
+      tags: ["OpenAI", "GPT-5", "AGI", "Artificial Intelligence", "Tech News"]
+    };
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const newsId = urlParams.get('id') || '1'; // Default ID
+
+      try {
+        // Try to fetch from API
+        const response = await fetch(`http://localhost:3001/api/news/${newsId}`);
+        if (!response.ok) throw new Error('API failed');
+        currentNews = await response.json();
+        console.log('Loaded from API:', currentNews);
+      } catch (error) {
+        console.warn('API fetch failed, using mock data:', error);
+        currentNews = mockNews;
+      }
+
+      renderNews();
+    });
+
+    // Render News
+    function renderNews() {
+      if (!currentNews) return;
+
+      // Basic Info
+      document.getElementById('news-title').textContent = currentNews.title;
+      document.getElementById('news-breadcrumb-title').textContent = currentNews.title;
+      document.getElementById('news-source').textContent = currentNews.source_name || currentNews.source;
+      document.getElementById('news-date').textContent = new Date(currentNews.published_at || currentNews.created_at).toLocaleDateString();
+      document.getElementById('original-link').href = currentNews.url;
+
+      // Summary (Always Korean)
+      document.getElementById('news-summary').textContent = currentNews.summary.ko || currentNews.summary;
+
+      // Tags
+      const tagsContainer = document.getElementById('news-tags');
+      tagsContainer.innerHTML = (currentNews.tags || []).map(tag =>
+        `<a class="px-3 py-1.5 rounded-full bg-surface-dark text-sm font-medium text-primary border border-primary/50 hover:bg-primary/10 transition-colors" href="#">${tag}</a>`
+      ).join('');
+
+      // Translation Controls
+      if (currentNews.is_translated || currentNews.content.translated_ko) {
+        document.getElementById('translation-controls').style.display = 'flex';
+        updateContentDisplay();
+      } else {
+        // If no translation, just show original
+        document.getElementById('news-content').textContent = currentNews.content.original || currentNews.content;
+        document.getElementById('lang-indicator').textContent = 'ORIGINAL';
+      }
+    }
+
+    // Toggle Language
+    function toggleLanguage() {
+      showTranslated = !showTranslated;
+      updateContentDisplay();
+    }
+
+    // Update Content Display based on toggle
+    function updateContentDisplay() {
+      const contentEl = document.getElementById('news-content');
+      const toggleThumb = document.getElementById('lang-toggle-thumb');
+      const toggleBtn = document.getElementById('lang-toggle');
+      const indicator = document.getElementById('lang-indicator');
+
+      if (showTranslated) {
+        // Show Korean
+        contentEl.textContent = currentNews.content.translated_ko || currentNews.content;
+        toggleThumb.classList.add('translate-x-6');
+        toggleThumb.classList.remove('translate-x-1');
+        toggleBtn.classList.add('bg-primary');
+        toggleBtn.classList.remove('bg-gray-600');
+        indicator.textContent = 'KOREAN';
+      } else {
+        // Show Original
+        contentEl.textContent = currentNews.content.original || currentNews.content;
+        toggleThumb.classList.remove('translate-x-6');
+        toggleThumb.classList.add('translate-x-1');
+        toggleBtn.classList.remove('bg-primary');
+        toggleBtn.classList.add('bg-gray-600');
+        indicator.textContent = 'ORIGINAL';
+      }
+    }
+  </script>
+</body>
+
+</html>

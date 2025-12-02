@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI/IT News Platform - Filters</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2547f4",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#101322",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-display">
+<div class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-background-light/10 dark:border-background-dark/10 bg-white/5 px-10 py-3 shadow-md">
+<div class="flex items-center gap-4 text-white">
+<div class="size-6 text-primary">
+<svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z"></path>
+</svg>
+</div>
+<h2 class="text-slate-800 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">AI/IT News Platform</h2>
+</div>
+<div class="hidden md:flex flex-1 justify-center gap-8">
+<div class="flex items-center gap-9">
+<a class="text-slate-600 dark:text-slate-300 text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary" href="#">Dashboard</a>
+<a class="text-slate-600 dark:text-slate-300 text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary" href="#">Explore</a>
+<a class="text-slate-600 dark:text-slate-300 text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary" href="#">Topics</a>
+<a class="text-slate-600 dark:text-slate-300 text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary" href="#">Sources</a>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+<span class="truncate">Subscribe</span>
+</button>
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-xl">notifications</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User profile picture with abstract shapes" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA0s4g_ZmnWHUKM4NUEGUSUhHZ16u7zGeofhjPvCmhNCwHeTMZCMSSUSuIzR7zUfIMA0XWondhpQsippRLHd0oMmubOYrYT5U-S84zlYL2_ih5J2i5q5h8HuJpmzlZtw-QCTZAgDGA1v0apNVzYnjP06IvQk5zECFemXvuWkEt0t-lCccEreG1E1ZOwB8V_5wZ285_1U3A6SyYv7hZvIQ7vRtorkc6dXkodmSW2XMlaqozjAEC3tClUbbSxU7n_JyeOeJlOVb901LA");'></div>
+</div>
+</header>
+<main class="flex flex-1 justify-center p-4 sm:p-6 md:p-10">
+<div class="layout-content-container flex flex-col w-full max-w-7xl flex-1">
+<div class="flex flex-col gap-6 p-6 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 shadow-sm">
+<div class="relative">
+<label class="flex flex-col min-w-40 h-14 w-full" for="search-input">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-slate-400 dark:text-slate-500 flex border border-r-0 border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 items-center justify-center pl-4 rounded-l-lg">
+<span class="material-symbols-outlined text-2xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-800 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 focus:border-primary h-full placeholder:text-slate-400 dark:placeholder:text-slate-500 px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal" id="search-input" placeholder="Search articles, trends, or sources..." value="Generative AI"/>
+</div>
+</label>
+<div class="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg shadow-xl z-10">
+<ul class="p-2">
+<li class="px-4 py-2 text-sm text-slate-700 dark:text-slate-200 rounded-md hover:bg-primary/10 dark:hover:bg-primary/20 cursor-pointer">
+<strong>Generative AI</strong> applications
+                                     </li>
+<li class="px-4 py-2 text-sm text-slate-700 dark:text-slate-200 rounded-md hover:bg-primary/10 dark:hover:bg-primary/20 cursor-pointer">
+                                         The impact of <strong>Generative AI</strong> on design
+                                     </li>
+<li class="px-4 py-2 text-sm text-slate-700 dark:text-slate-200 rounded-md bg-primary/20 dark:bg-primary/30 cursor-pointer">
+                                         Ethics in <strong>Generative AI</strong>
+</li>
+<li class="px-4 py-2 text-sm text-slate-700 dark:text-slate-200 rounded-md hover:bg-primary/10 dark:hover:bg-primary/20 cursor-pointer">
+                                         Latest news on <strong>Generative AI</strong> startups
+                                     </li>
+</ul>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<h3 class="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Categories</h3>
+<hr class="flex-grow border-t border-slate-200 dark:border-slate-800"/>
+</div>
+<div class="flex flex-wrap gap-3">
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-slate-200 dark:bg-slate-800 px-4 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">AI Models</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary/20 dark:bg-primary/30 px-4 ring-2 ring-primary">
+<p class="text-primary dark:text-sky-300 text-sm font-bold leading-normal">Semiconductors</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-slate-200 dark:bg-slate-800 px-4 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">Cybersecurity</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-slate-200 dark:bg-slate-800 px-4 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">Cloud Computing</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-slate-200 dark:bg-slate-800 px-4 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">Quantum Tech</p>
+</button>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<h3 class="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Source Platforms</h3>
+<hr class="flex-grow border-t border-slate-200 dark:border-slate-800"/>
+</div>
+<div class="flex flex-wrap gap-3">
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-slate-200 dark:bg-slate-800 pl-3 pr-4 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-lg text-slate-600 dark:text-slate-400">close</span>
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">X (Twitter)</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-slate-200 dark:bg-slate-800 pl-3 pr-4 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
+<svg class="text-slate-600 dark:text-slate-400" fill="currentColor" height="20" viewbox="0 0 16 16" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.016-.326.023-.591.023-.795 0-.634-.42-1.178-1.12-1.178-.702 0-1.12.544-1.12 1.178 0 .203.007.468.023.795h2.194zM13.39 6.169c-1.385 0-2.062.908-2.42 1.558h-.025V6.169h-2.2v7.225h2.2v-3.79c0-1.909 1.002-2.805 2.25-2.805 1.226 0 1.95.91 1.95 2.805v3.79h2.2v-4.058c0-2.87-1.595-4.14-3.583-4.14z"></path>
+</svg>
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">LinkedIn</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-slate-200 dark:bg-slate-800 pl-3 pr-4 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-lg text-slate-600 dark:text-slate-400">rss_feed</span>
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">Tech Blogs</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary/20 dark:bg-primary/30 pl-3 pr-4 ring-2 ring-primary">
+<span class="material-symbols-outlined text-lg text-primary dark:text-sky-300">newspaper</span>
+<p class="text-primary dark:text-sky-300 text-sm font-bold leading-normal">News Outlets</p>
+</button>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<h3 class="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Timeframe</h3>
+<hr class="flex-grow border-t border-slate-200 dark:border-slate-800"/>
+</div>
+<div class="flex flex-wrap gap-3">
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-slate-200 dark:bg-slate-800 px-4 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">Last 1 hour</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-slate-200 dark:bg-slate-800 px-4 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">Last 6 hours</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary/20 dark:bg-primary/30 px-4 ring-2 ring-primary">
+<p class="text-primary dark:text-sky-300 text-sm font-bold leading-normal">Last 24 hours</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-slate-200 dark:bg-slate-800 px-4 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">Last 7 days</p>
+</button>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+<span class="font-semibold text-slate-600 dark:text-slate-300">Active Filters:</span>
+<span class="bg-primary/20 text-primary dark:bg-primary/30 dark:text-sky-300 rounded-md px-2 py-1 text-xs font-bold">Semiconductors</span>
+<span class="bg-primary/20 text-primary dark:bg-primary/30 dark:text-sky-300 rounded-md px-2 py-1 text-xs font-bold">News Outlets</span>
+<span class="bg-primary/20 text-primary dark:bg-primary/30 dark:text-sky-300 rounded-md px-2 py-1 text-xs font-bold">Last 24 hours</span>
+</div>
+<button class="text-sm font-medium text-primary hover:underline">Clear all filters</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SNS API Test</title>
+    <script>
+        const API_BASE_URL = 'http://localhost:3001/api';
+
+        async function testSNSAPI() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<p>Testing SNS APIs...</p>';
+
+            try {
+                // Test companies endpoint
+                console.log('Testing /api/sns/companies...');
+                const companiesRes = await fetch(`${API_BASE_URL}/sns/companies`);
+                const companies = await companiesRes.json();
+                console.log('✅ Companies:', companies);
+
+                // Test articles endpoint
+                console.log('Testing /api/sns/latest...');
+                const articlesRes = await fetch(`${API_BASE_URL}/sns/latest?page=1&limit=6`);
+                const articles = await articlesRes.json();
+                console.log('✅ Articles:', articles);
+
+                resultsDiv.innerHTML = `
+                    <h2>✅ SNS API Test Successful!</h2>
+                    <h3>Companies (${companies.count}):</h3>
+                    <pre>${JSON.stringify(companies, null, 2)}</pre>
+                    <h3>Articles (${articles.count}):</h3>
+                    <pre>${JSON.stringify(articles, null, 2)}</pre>
+                `;
+            } catch (error) {
+                console.error('❌ Error:', error);
+                resultsDiv.innerHTML = `<h2>❌ Error: ${error.message}</h2>`;
+            }
+        }
+
+        window.onload = testSNSAPI;
+    </script>
+</head>
+<body style="background: #000; color: #fff; font-family: monospace; padding: 20px;">
+    <h1>🧪 SNS API Test</h1>
+    <div id="results">Loading...</div>
+</body>
+</html>

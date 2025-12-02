@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SNS Date Verification Test</title>
+    <script src="api-client.js"></script>
+    <style>
+        :root {
+            --color-primary: #2547f4;
+            --color-primary-light: #4a9fff;
+            --color-bg: #000000;
+            --color-surface: #1a1a1a;
+            --color-surface-light: #2a2a2a;
+            --color-text: #ffffff;
+            --color-text-secondary: #888888;
+            --color-border: #333333;
+            --color-accent: #4a9fff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: var(--color-bg);
+            color: var(--color-text);
+            font-family: 'Space Grotesk', monospace;
+            padding: 20px;
+        }
+        
+        h1 {
+            margin-bottom: 20px;
+            color: var(--color-accent);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .card {
+            background: var(--color-surface-light);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            background: var(--color-surface);
+            border-color: var(--color-accent);
+            transform: translateY(-4px);
+        }
+        
+        .card h3 {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--color-text);
+        }
+        
+        .card p {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+        
+        .timestamp {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            border-top: 1px solid var(--color-border);
+            padding-top: 10px;
+        }
+        
+        .meta {
+            display: flex;
+            gap: 10px;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+        
+        .badge {
+            background: var(--color-primary);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+        
+        .verification {
+            margin-top: 30px;
+            padding: 15px;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 SNS 날짜 검증 테스트</h1>
+    
+    <div>
+        <p>최신 SNS 기사를 로드하고 게시 날짜 검증을 확인합니다:</p>
+        <button onclick="loadArticles()" style="padding: 10px 20px; background: var(--color-primary); color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px;">기사 로드</button>
+    </div>
+
+    <div class="grid" id="articles"></div>
+    <div id="verification" class="verification"></div>
+
+    <script>
+        async function loadArticles() {
+            console.log('Loading SNS articles...');
+            const articlesDiv = document.getElementById('articles');
+            const verifyDiv = document.getElementById('verification');
+            
+            articlesDiv.innerHTML = '<p style="color: var(--color-text-secondary);">로딩 중...</p>';
+            verifyDiv.innerHTML = '';
+
+            try {
+                const data = await newsAPI.getSNSArticles(1, 6);
+                console.log('✅ Data received:', data);
+
+                if (!data.articles || data.articles.length === 0) {
+                    articlesDiv.innerHTML = '<p style="color: #ff6b6b;">기사가 없습니다.</p>';
+                    return;
+                }
+
+                // Render articles
+                articlesDiv.innerHTML = data.articles.map(article => {
+                    const date = new Date(article.timestamp);
+                    const now = new Date();
+                    const diffMs = now - date;
+                    const diffMins = Math.floor(diffMs / 60000);
+                    const diffHours = Math.floor(diffMs / 3600000);
+                    const diffDays = Math.floor(diffMs / 86400000);
+
+                    let relativeTime = '최근';
+                    if (diffMins < 1) relativeTime = '방금 전';
+                    else if (diffMins < 60) relativeTime = `${diffMins}분 전`;
+                    else if (diffHours < 24) relativeTime = `${diffHours}시간 전`;
+                    else if (diffDays === 1) relativeTime = '어제';
+                    else if (diffDays < 7) relativeTime = `${diffDays}일 전`;
+
+                    const fullDate = date.toLocaleString('ko-KR', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    return `
+                        <div class="card">
+                            <div style="font-size: 20px; margin-bottom: 8px;">${article.icon || '📱'}</div>
+                            <h3>${article.source}</h3>
+                            <p>${article.title}</p>
+                            <div class="meta">
+                                <span class="badge">${article.type}</span>
+                                <span class="badge" style="background: var(--color-accent);">${article.category}</span>
+                            </div>
+                            <div class="timestamp">
+                                <span>📅 ${relativeTime}</span>
+                                <span>${fullDate}</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                // Render verification info
+                const verifyInfo = data.verificationInfo || {};
+                verifyDiv.innerHTML = `
+                    <strong>✅ 검증 정보:</strong><br>
+                    - 검증 상태: ${verifyInfo.verified ? '완료' : '실패'}<br>
+                    - 검증 시간: ${new Date(verifyInfo.verifiedAt).toLocaleString('ko-KR')}<br>
+                    - 검증된 기사: ${verifyInfo.articlesVerifiedCount}개<br>
+                    - 기준 기간: 최근 ${verifyInfo.daysThreshold}일 이내<br>
+                    - 총 기사: ${data.total}개 (현재: ${data.articles.length}개)
+                `;
+            } catch (error) {
+                console.error('❌ Error:', error);
+                articlesDiv.innerHTML = `<p style="color: #ff6b6b;">오류: ${error.message}</p>`;
+            }
+        }
+
+        // Auto-load on page load
+        window.onload = loadArticles;
+    </script>
+</body>
+</html>

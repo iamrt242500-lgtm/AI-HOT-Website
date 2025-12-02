@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Saved News - AI/IT News</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#2547f4",
+            "background-light": "#f5f6f8",
+            "background-dark": "#101322",
+            "surface-dark": "#181b2c",
+            "border-dark": "#282b39",
+            "text-main-dark": "#eaeaea",
+            "text-secondary-dark": "#9ca1ba",
+            "accent-blue": "#00BFFF",
+            "accent-purple": "#9F70FD",
+          },
+          fontFamily: {
+            "display": ["Space Grotesk", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col">
+<header class="sticky top-0 z-10 flex items-center justify-between whitespace-nowrap border-b border-solid border-border-dark bg-background-dark/80 px-10 py-3 backdrop-blur-sm">
+<div class="flex items-center gap-4 text-text-main-dark">
+<div class="size-6 text-primary">
+<span class="material-symbols-outlined !text-3xl">data_object</span>
+</div>
+<h2 class="text-text-main-dark text-lg font-bold leading-tight tracking-[-0.015em]">AI/IT News</h2>
+</div>
+<div class="flex flex-1 items-center justify-center gap-8">
+<nav class="flex items-center gap-9">
+<a class="text-text-secondary-dark hover:text-text-main-dark text-sm font-medium leading-normal transition-colors" href="#">Home</a>
+<a class="text-text-secondary-dark hover:text-text-main-dark text-sm font-medium leading-normal transition-colors" href="#">Discover</a>
+<a class="text-text-main-dark text-sm font-bold leading-normal relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-full after:bg-primary" href="#">Saved</a>
+</nav>
+</div>
+<div class="flex items-center justify-end gap-4">
+<button class="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-surface-dark text-text-secondary-dark hover:text-text-main-dark transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAGfSNA0H8uIUPrb0Uqi3fZD8T8AiUDhioigaFSl-AbdvBgKxDMXAXRhrfPxa1caoia8w1rwx2Ji5PSTTW5SO5Wm3P5JsIzb2rBsKHZ-lPvN7I-6-4Mj8wSdX7UPQ09nf_m9DonM87-keoh2hvVmRHMPlMge6d4KCdWXEbarO7K1kVTjTzgrthChIWJUGLCKlFbbpXZM3hrU_BBa2akpFIdrJRE-fjQUE-9wrmUnyUpg23UXVh0Bx1ygtMK0G-K9vkWSrwvAwNh8cE");'></div>
+</div>
+</header>
+<div class="flex flex-1">
+<aside class="w-72 flex-shrink-0 border-r border-border-dark p-6">
+<div class="flex h-full flex-col gap-8">
+<div class="flex flex-col gap-6">
+<h3 class="text-sm font-semibold text-text-secondary-dark uppercase tracking-wider">Folders</h3>
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-3 rounded-lg bg-surface-dark px-3 py-2 transition-colors" href="#">
+<span class="material-symbols-outlined text-accent-purple">folder</span>
+<p class="text-text-main-dark text-sm font-medium leading-normal">Project Phoenix</p>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-surface-dark transition-colors" href="#">
+<span class="material-symbols-outlined text-text-secondary-dark">folder</span>
+<p class="text-text-secondary-dark hover:text-text-main-dark text-sm font-medium leading-normal transition-colors">Research Papers</p>
+</a>
+<a class="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-surface-dark transition-colors" href="#">
+<span class="material-symbols-outlined text-text-secondary-dark">folder</span>
+<p class="text-text-secondary-dark hover:text-text-main-dark text-sm font-medium leading-normal transition-colors">Must Read</p>
+</a>
+</div>
+</div>
+<div class="flex flex-col gap-6">
+<h3 class="text-sm font-semibold text-text-secondary-dark uppercase tracking-wider">Tags</h3>
+<div class="flex flex-wrap gap-2">
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full border border-primary bg-primary/20 px-3 transition-colors">
+<p class="text-accent-blue text-xs font-medium leading-normal">AI Models</p>
+</button>
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full border border-border-dark bg-surface-dark px-3 hover:border-text-secondary-dark transition-colors">
+<p class="text-text-secondary-dark text-xs font-medium leading-normal">Cybersecurity</p>
+</button>
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full border border-border-dark bg-surface-dark px-3 hover:border-text-secondary-dark transition-colors">
+<p class="text-text-secondary-dark text-xs font-medium leading-normal">Infrastructure</p>
+</button>
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full border border-border-dark bg-surface-dark px-3 hover:border-text-secondary-dark transition-colors">
+<p class="text-text-secondary-dark text-xs font-medium leading-normal">Policy</p>
+</button>
+</div>
+</div>
+<div class="mt-auto flex flex-col gap-4">
+<div class="w-full h-px bg-border-dark"></div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-text-secondary-dark">wifi_off</span>
+<p class="text-text-secondary-dark text-sm font-medium">Offline Mode</p>
+</div>
+<button class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-surface-dark transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background-dark">
+<span class="inline-block h-5 w-5 transform rounded-full bg-text-secondary-dark shadow ring-0 transition duration-200 ease-in-out translate-x-0"></span>
+</button>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 p-8">
+<div class="mx-auto max-w-4xl">
+<div class="flex flex-col gap-6">
+<div class="flex flex-wrap items-end justify-between gap-4">
+<div class="flex min-w-72 flex-col gap-2">
+<h1 class="text-text-main-dark text-4xl font-black leading-tight tracking-[-0.033em]">My Saved News</h1>
+<p class="text-text-secondary-dark text-base font-normal leading-normal">All your bookmarked articles in one place.</p>
+</div>
+<div class="w-full max-w-xs">
+<label class="flex flex-col h-12 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-text-secondary-dark flex items-center justify-center pl-4 rounded-l-lg border-y border-l border-border-dark bg-surface-dark">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg border-y border-r border-border-dark bg-surface-dark text-text-main-dark placeholder:text-text-secondary-dark px-4 text-sm font-normal leading-normal focus:border-primary focus:ring-0" placeholder="Search saved news..." value=""/>
+</div>
+</label>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-6 @lg:grid-cols-2">
+<div class="flex flex-col gap-4 rounded-xl border border-border-dark bg-surface-dark p-5 transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10">
+<div class="flex items-center gap-3">
+<div class="flex size-8 items-center justify-center rounded-full bg-white">
+<img class="h-4 w-4 object-contain" data-alt="TechCrunch logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBO0GJmXFmChEVeR9g8RAI8OM6IBKO8vegHMYGcst9NtBE4IZM3bL0RC4V2EkPkGmC6SQ2bb6vfVqMUiBjuDAxBpMVIKOMs89CtlhxojjMB7dpABMe1Gk3nPXV4MgDqv9prDagN8s3LW51owZFaOCiflhH7O4_vCgiZSg3Jb49gshRX9bVy6ZVpuYy2rlIQm0wmNptgHndcTyIuDVOE90rRFZnS03ToPd_pFf_PK3039ArxVwm4lbhEPw3nNPiXbbJ5-Zn5PyQv8QQ"/>
+</div>
+<p class="text-sm font-medium text-text-secondary-dark">TechCrunch</p>
+</div>
+<h3 class="text-lg font-bold text-text-main-dark leading-snug">OpenAI debuts GPT-4o, a faster model that will be free for all users</h3>
+<p class="text-sm text-text-secondary-dark">The new flagship model, called GPT-4o — the “o” is for “omni” — is a multi-modal model that can handle text, audio and video as input and output text, audio and video.</p>
+<div class="mt-2 flex items-center justify-between">
+<p class="text-xs text-text-secondary-dark">Saved 2 hours ago</p>
+<div class="flex items-center gap-2">
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-text-secondary-dark hover:bg-primary/20 hover:text-accent-blue transition-colors"><span class="material-symbols-outlined !text-xl">share</span></button>
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-text-secondary-dark hover:bg-primary/20 hover:text-accent-purple transition-colors"><span class="material-symbols-outlined !text-xl">create_new_folder</span></button>
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-text-secondary-dark hover:bg-primary/20 hover:text-red-400 transition-colors"><span class="material-symbols-outlined !text-xl">bookmark_remove</span></button>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-4 rounded-xl border border-border-dark bg-surface-dark p-5 transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10">
+<div class="flex items-center gap-3">
+<div class="flex size-8 items-center justify-center rounded-full bg-white p-1">
+<img class="h-full w-full object-contain" data-alt="Ars Technica logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNR66WPrUdzYf3UnUv69YDNNeF0KXTZ9O9ctFES783jmZFI06vyXaroO1-wYxZEz-Qn0OCqoPJX19yc3YGhfg7M2R6NzCQmQy5Q60D8_Q2cQ9dJIeT_pLjgKpswFe_fUq1cjjhgLlJJGZLdHYkQGWkao3rbG6YmJLdh3okZC0bdRmqY-3g8JXkoz8ZWC7v-Ekl1NXTLw_sNjtW34fjNzfl-HNXDnpcWtA7xCqsXs-avTX6jNKAH5a2neBp7Ky1u3uOdU-nJGVubCQ"/>
+</div>
+<p class="text-sm font-medium text-text-secondary-dark">Ars Technica</p>
+</div>
+<h3 class="text-lg font-bold text-text-main-dark leading-snug">Google’s AI-powered search results are stuffed with ads</h3>
+<p class="text-sm text-text-secondary-dark">The company’s main moneymaker won’t be left out of the AI revolution, but it makes the AI Overviews feel a lot less useful.</p>
+<div class="mt-2 flex items-center justify-between">
+<p class="text-xs text-text-secondary-dark">Saved 1 day ago</p>
+<div class="flex items-center gap-2">
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-text-secondary-dark hover:bg-primary/20 hover:text-accent-blue transition-colors"><span class="material-symbols-outlined !text-xl">share</span></button>
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-text-secondary-dark hover:bg-primary/20 hover:text-accent-purple transition-colors"><span class="material-symbols-outlined !text-xl">create_new_folder</span></button>
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-text-secondary-dark hover:bg-primary/20 hover:text-red-400 transition-colors"><span class="material-symbols-outlined !text-xl">bookmark_remove</span></button>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-4 rounded-xl border border-border-dark bg-surface-dark p-5 transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10">
+<div class="flex items-center gap-3">
+<div class="flex size-8 items-center justify-center rounded-full bg-black p-1">
+<img class="h-full w-full object-contain invert" data-alt="The Verge logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuuh6dclkxdgfl3gnQf-mqBdyo3hPPqLz9Y5VH2nnxuC-HnSDm2Ir7zlXrW6s4hbdE_6ytMYfcudq7fj7Us3zWXmph8V1HunY676zl5cVlZK23g1XEt7ao1ggtswyUoXpBDTuS-Hxu4UU_kAZm2Qcc_wMwU5SDTuf4mnLlXVUlw9z91BXPNNbJ4xsNSkfLB2smDqGqT8b_AeFybS2Ek4Krew4G31i9dFzC9656YceCFnw1KbBjFfn4a0hfORSHyNObJIGP6P8Y7vE"/>
+</div>
+<p class="text-sm font-medium text-text-secondary-dark">The Verge</p>
+</div>
+<h3 class="text-lg font-bold text-text-main-dark leading-snug">Microsoft announces new Surface Pro and Surface Laptop with Snapdragon X Elite chips</h3>
+<p class="text-sm text-text-secondary-dark">Microsoft is calling these new PCs ‘Copilot Plus PCs,’ and it’s promising they will be 58 percent faster than the M3-powered MacBook Air.</p>
+<div class="mt-2 flex items-center justify-between">
+<p class="text-xs text-text-secondary-dark">Saved 2 days ago</p>
+<div class="flex items-center gap-2">
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-text-secondary-dark hover:bg-primary/20 hover:text-accent-blue transition-colors"><span class="material-symbols-outlined !text-xl">share</span></button>
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-text-secondary-dark hover:bg-primary/20 hover:text-accent-purple transition-colors"><span class="material-symbols-outlined !text-xl">create_new_folder</span></button>
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-text-secondary-dark hover:bg-primary/20 hover:text-red-400 transition-colors"><span class="material-symbols-outlined !text-xl">bookmark_remove</span></button>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-4 rounded-xl border border-border-dark bg-surface-dark p-5 transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10">
+<div class="flex items-center gap-3">
+<div class="flex size-8 items-center justify-center rounded-full bg-gray-200">
+<img class="h-5 w-5 object-contain" data-alt="Wired logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3xIptvUNPVVujWQm0Bf_6cm5Sbpq8HNhZuHnAaNpcRt-7ym8EnDnYImQUQIihBAuiafw6YPp9APRbwJodd6OaAMczk8-RYV0EDjxWKA54zjSO7V9GKya8a4xb8VXJYe4IvmAYyhiT7LVpbISg55EKmax_CSGfbkKAMZLgabe3-uPT9gEmlyXGP-jHuZ1coxxLumnVbkxeM8fgpjWxorTd17mCWXmZr79kfkoMT-4GyjemCtgTlqw6d0VVXCnTc4ahcgvdGSTGpDI"/>
+</div>
+<p class="text-sm font-medium text-text-secondary-dark">Wired</p>
+</div>
+<h3 class="text-lg font-bold text-text-main-dark leading-snug">The AI-Powered World Is Running Out of Power</h3>
+<p class="text-sm text-text-secondary-dark">Generative AI models are incredibly power-hungry. The world doesn’t have enough electricity to keep them running—let alone to build even more of them.</p>
+<div class="mt-2 flex items-center justify-between">
+<p class="text-xs text-text-secondary-dark">Saved 5 days ago</p>
+<div class="flex items-center gap-2">
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-text-secondary-dark hover:bg-primary/20 hover:text-accent-blue transition-colors"><span class="material-symbols-outlined !text-xl">share</span></button>
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-text-secondary-dark hover:bg-primary/20 hover:text-accent-purple transition-colors"><span class="material-symbols-outlined !text-xl">create_new_folder</span></button>
+<button class="flex h-8 w-8 items-center justify-center rounded-lg text-text-secondary-dark hover:bg-primary/20 hover:text-red-400 transition-colors"><span class="material-symbols-outlined !text-xl">bookmark_remove</span></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

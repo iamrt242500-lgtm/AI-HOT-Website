@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    <style>
+        body { background: #000; color: #fff; font-family: Arial; }
+        #status { padding: 20px; }
+        .error { color: #f00; }
+        .success { color: #0f0; }
+    </style>
+</head>
+<body>
+    <div id="status">Initializing...</div>
+    
+    <script src="api-client.js"></script>
+    <script>
+        console.log('=== DIAGNOSTIC TEST START ===');
+        
+        document.getElementById('status').innerHTML = `
+            <h2>System Status</h2>
+            <p><strong>api-client.js loaded:</strong> <span class="success">${typeof NewsAPI !== 'undefined' ? '✓' : '✗'}</span></p>
+            <p id="statusLine"></p>
+        `;
+        
+        async function runTests() {
+            const statusLine = document.getElementById('statusLine');
+            try {
+                console.log('Creating NewsAPI instance...');
+                const api = new NewsAPI();
+                statusLine.innerHTML += '<p><span class="success">✓ NewsAPI created</span></p>';
+                
+                console.log('Calling getLatestNews...');
+                const data = await api.getLatestNews(1, 1);
+                statusLine.innerHTML += '<p><span class="success">✓ getLatestNews succeeded</span></p>';
+                console.log('Response:', data);
+                
+                console.log('Calling getSNSArticles...');
+                const snsData = await api.getSNSArticles(1, 1);
+                statusLine.innerHTML += '<p><span class="success">✓ getSNSArticles succeeded</span></p>';
+                console.log('SNS Response:', snsData);
+                
+                statusLine.innerHTML += '<p><span class="success">✅ ALL TESTS PASSED</span></p>';
+            } catch (error) {
+                console.error('Error:', error);
+                statusLine.innerHTML += `<p><span class="error">✗ Error: ${error.message}</span></p>`;
+            }
+        }
+        
+        setTimeout(runTests, 1000);
+    </script>
+</body>
+</html>

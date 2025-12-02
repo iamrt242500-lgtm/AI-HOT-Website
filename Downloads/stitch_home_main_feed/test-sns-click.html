@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SNS Article Click Test</title>
+    <script src="api-client.js"></script>
+    <style>
+        :root {
+            --color-primary: #2547f4;
+            --color-primary-light: #4a9fff;
+            --color-bg: #000000;
+            --color-surface: #1a1a1a;
+            --color-surface-light: #2a2a2a;
+            --color-text: #ffffff;
+            --color-text-secondary: #888888;
+            --color-border: #333333;
+            --color-accent: #4a9fff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: var(--color-bg);
+            color: var(--color-text);
+            font-family: 'Space Grotesk', monospace;
+            padding: 20px;
+        }
+        
+        h1 {
+            margin-bottom: 20px;
+            color: var(--color-accent);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .card {
+            background: var(--color-surface-light);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .card:hover {
+            background: var(--color-surface);
+            border-color: var(--color-accent);
+            transform: translateY(-4px);
+        }
+        
+        .card h3 {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0;
+            color: var(--color-text);
+        }
+        
+        .card p {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            line-height: 1.4;
+            margin: 0;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: var(--color-primary);
+            border-radius: 12px;
+            font-size: 11px;
+            color: var(--color-text);
+            width: fit-content;
+            margin-top: 8px;
+        }
+        
+        .timestamp {
+            font-size: 11px;
+            color: var(--color-text-secondary);
+            margin-top: 8px;
+        }
+        
+        .icon {
+            font-size: 24px;
+        }
+        
+        .info {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 SNS Article Click-to-Detail Test</h1>
+    
+    <div class="info">
+        <strong>📝 테스트 방법:</strong><br>
+        아래의 SNS 게시글을 클릭하면 상세 페이지로 이동해야 합니다.<br>
+        각 게시글의 URL은 원본 공식 페이지로 연결됩니다.
+    </div>
+
+    <div class="grid" id="articles"></div>
+
+    <script>
+        async function loadArticles() {
+            console.log('Loading SNS articles...');
+            const articlesDiv = document.getElementById('articles');
+            
+            articlesDiv.innerHTML = '<p style="color: var(--color-text-secondary);">로딩 중...</p>';
+
+            try {
+                const data = await newsAPI.getSNSArticles(1, 6);
+                console.log('✅ Data received:', data);
+
+                if (!data.articles || data.articles.length === 0) {
+                    articlesDiv.innerHTML = '<p style="color: #ff6b6b;">기사가 없습니다.</p>';
+                    return;
+                }
+
+                // Render articles
+                articlesDiv.innerHTML = data.articles.map(article => {
+                    const relativeTime = formatRelativeTime(article.timestamp);
+                    
+                    return `
+                        <div class="card" onclick="handleArticleClick(${JSON.stringify(article).replace(/"/g, '&quot;')})">
+                            <div>
+                                <span class="icon">${article.icon || '📱'}</span>
+                                <h3>${article.source}</h3>
+                            </div>
+                            <p>${article.title}</p>
+                            <div class="badge">${article.type}</div>
+                            <div class="timestamp">
+                                📅 ${relativeTime}<br>
+                                🔗 ${article.url ? '링크 있음' : '링크 없음'}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('❌ Error:', error);
+                articlesDiv.innerHTML = `<p style="color: #ff6b6b;">오류: ${error.message}</p>`;
+            }
+        }
+
+        function formatRelativeTime(timestamp) {
+            try {
+                const date = new Date(timestamp);
+                const now = new Date();
+                const diffMs = now - date;
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMs / 3600000);
+                const diffDays = Math.floor(diffMs / 86400000);
+
+                if (diffMins < 1) return '방금 전';
+                if (diffMins < 60) return `${diffMins}분 전`;
+                if (diffHours < 24) return `${diffHours}시간 전`;
+                if (diffDays === 1) return '어제';
+                if (diffDays < 7) return `${diffDays}일 전`;
+                
+                return date.toLocaleDateString('ko-KR');
+            } catch (error) {
+                return '최근';
+            }
+        }
+
+        function handleArticleClick(article) {
+            console.log('📄 Clicked article:', article);
+            console.log('🔗 URL:', article.url);
+            console.log('📱 Is SNS:', !!article.sourceId);
+            
+            if (article.url) {
+                // Open the URL directly
+                let url = article.url;
+                if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                    url = 'https://' + url;
+                }
+                console.log('🌐 Opening URL:', url);
+                window.open(url, '_blank');
+            } else {
+                alert(`원본 게시글 URL: ${article.source}`);
+            }
+        }
+
+        // Auto-load on page load
+        window.onload = loadArticles;
+    </script>
+</body>
+</html>

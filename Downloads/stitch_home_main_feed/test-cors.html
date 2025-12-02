@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CORS Test</title>
+</head>
+<body>
+    <h1>CORS 테스트</h1>
+    <button onclick="testAPI()">API 테스트</button>
+    <pre id="result"></pre>
+
+    <script>
+        async function testAPI() {
+            const result = document.getElementById('result');
+            try {
+                result.innerHTML = '로딩 중...';
+                const response = await fetch('http://localhost:3001/api/news/latest', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                result.innerHTML = JSON.stringify(data, null, 2);
+            } catch (error) {
+                result.innerHTML = `에러: ${error.message}\n\n${error.stack}`;
+            }
+        }
+    </script>
+</body>
+</html>

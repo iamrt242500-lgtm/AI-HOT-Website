@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Integration Example</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #000000;
+            color: #ffffff;
+        }
+
+        h1 {
+            color: #4a9fff;
+        }
+
+        h2 {
+            color: #ffffff;
+        }
+
+        .section {
+            background: #1a1a1a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+            border: 1px solid #333;
+        }
+
+        button {
+            background: #2547f4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #4a9fff;
+        }
+
+        .news-item {
+            border: 1px solid #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            background: #0a0a0a;
+            transition: all 0.3s ease;
+        }
+
+        .news-item:hover {
+            border-color: #2547f4;
+            box-shadow: 0 4px 12px rgba(37, 71, 244, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .news-item h3 {
+            margin: 0 0 10px 0;
+            color: #ffffff;
+        }
+
+        .news-item a {
+            color: #4a9fff;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .news-item a:hover {
+            color: #6eb5ff;
+            text-decoration: underline;
+        }
+
+        .news-item p {
+            color: #cccccc;
+        }
+
+        .news-meta {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #1a2b4f;
+            color: #4a9fff;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin: 2px;
+            border: 1px solid #2547f4;
+        }
+
+        #output {
+            background: #0a0a0a;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            color: #00ff00;
+            border: 1px solid #333;
+        }
+
+        input {
+            padding: 8px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            width: 200px;
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #2547f4;
+        }
+
+        .loading {
+            text-align: center;
+            color: #4a9fff;
+            padding: 20px;
+            font-size: 16px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #333;
+            border-top: 3px solid #4a9fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #333;
+        }
+
+        .tab-button {
+            background: transparent;
+            color: #888;
+            border: none;
+            padding: 10px 20px;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0;
+        }
+
+        .tab-button.active {
+            color: #4a9fff;
+            border-bottom-color: #4a9fff;
+        }
+
+        .tab-button:hover {
+            background: transparent;
+            color: #4a9fff;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .pagination button {
+            padding: 8px 12px;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .pagination button.active {
+            background: #4a9fff;
+            color: white;
+            font-weight: bold;
+        }
+
+        .pagination button:disabled {
+            background: #2a2a2a;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .pagination-info {
+            text-align: center;
+            color: #888;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .page-number-buttons {
+            display: flex;
+            gap: 3px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .page-number-buttons button {
+            padding: 4px 8px;
+            min-width: 32px;
+            font-size: 13px;
+            background: transparent;
+            border: 1px solid #444;
+            color: #888;
+        }
+
+        .page-number-buttons button:hover {
+            background: transparent;
+            color: #4a9fff;
+            border-color: #4a9fff;
+        }
+
+        .page-number-buttons button.active {
+            background: #2547f4;
+            border-color: #2547f4;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🚀 AI News Portal</h1>
+
+    <div class="section">
+        <h2>📰 Latest News</h2>
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('latest')">Latest</button>
+            <button class="tab-button" onclick="switchTab('trending')">Trending</button>
+        </div>
+        <div id="news-container"></div>
+        <div id="pagination-container"></div>
+    </div>
+
+    <div class="section">
+        <h2>🔍 Search</h2>
+        <div style="display: flex; gap: 10px;">
+            <input type="text" id="search-input" placeholder="Search keyword..." style="flex: 1;">
+            <button onclick="searchNews()">Search</button>
+        </div>
+        <div id="search-results"></div>
+    </div>
+
+    <div class="section">
+        <h2>🔥 Hot Topics</h2>
+        <div id="topics-container"></div>
+    </div>
+
+    <div class="section">
+        <h2>👤 User Authentication</h2>
+        <div>
+            <input type="email" id="login-email" placeholder="Email">
+            <input type="password" id="login-password" placeholder="Password">
+            <button onclick="login()">Login</button>
+            <button onclick="register()">Register</button>
+            <button onclick="logout()">Logout</button>
+        </div>
+        <div id="auth-status"></div>
+    </div>
+
+    <div class="section">
+        <h2>📊 Debug Output</h2>
+        <div id="output"></div>
+    </div>
+
+    <script src="api-client.js"></script>
+    <script>
+        let currentTab = 'latest';
+        let allNews = [];
+        let currentPage = 1;
+        const itemsPerPage = 10;
+
+        // Log function
+        function log(message) {
+            const output = document.getElementById('output');
+            const time = new Date().toLocaleTimeString();
+            output.innerHTML += `[${time}] ${message}\n`;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        // Switch between tabs
+        async function switchTab(tab) {
+            currentTab = tab;
+            
+            // Update button states
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Load data
+            if (tab === 'latest') {
+                await loadLatestNews();
+            } else if (tab === 'trending') {
+                await loadTrendingNews();
+            }
+        }
+
+        // Load latest news
+        async function loadLatestNews() {
+            try {
+                const container = document.getElementById('news-container');
+                container.innerHTML = '<div class="loading"><div class="spinner"></div>뉴스를 불러오는 중...</div>';
+                
+                log('Loading latest news...');
+                const data = await newsAPI.getLatestNews(1, 100);
+                allNews = data.news || [];
+                currentPage = 1;
+                displayPaginatedNews();
+                log(`✅ Loaded ${allNews.length} news items`);
+            } catch (error) {
+                log(`❌ Error: ${error.message}`);
+                document.getElementById('news-container').innerHTML = `<p style="color: #ff6b6b;">뉴스를 불러올 수 없습니다: ${error.message}</p>`;
+            }
+        }
+
+        // Load trending news
+        async function loadTrendingNews() {
+            try {
+                const container = document.getElementById('news-container');
+                container.innerHTML = '<div class="loading"><div class="spinner"></div>트렌딩 뉴스를 불러오는 중...</div>';
+                
+                log('Loading trending news...');
+                const data = await newsAPI.getTrendingNews(1, 100);
+                allNews = data.news || [];
+                currentPage = 1;
+                displayPaginatedNews();
+                log(`✅ Loaded ${allNews.length} trending items`);
+            } catch (error) {
+                log(`❌ Error: ${error.message}`);
+                document.getElementById('news-container').innerHTML = `<p style="color: #ff6b6b;">뉴스를 불러올 수 없습니다: ${error.message}</p>`;
+            }
+        }
+
+        // Search news
+        async function searchNews() {
+            const keyword = document.getElementById('search-input').value;
+            if (!keyword) return;
+
+            try {
+                const container = document.getElementById('search-results');
+                container.innerHTML = '<div class="loading"><div class="spinner"></div>검색 중...</div>';
+                
+                log(`Searching for "${keyword}"...`);
+                const data = await newsAPI.searchNews(keyword);
+                displayNews(data.news, 'search-results');
+                log(`✅ Found ${data.count} results`);
+            } catch (error) {
+                log(`❌ Error: ${error.message}`);
+                document.getElementById('search-results').innerHTML = `<p style="color: #ff6b6b;">검색 중 오류 발생: ${error.message}</p>`;
+            }
+        }
+
+        // Load hot topics
+        async function loadHotTopics() {
+            try {
+                log('Loading hot topics...');
+                const data = await newsAPI.getHotTopics();
+                const container = document.getElementById('topics-container');
+                container.innerHTML = data.topics.map(topic =>
+                    `<span class="tag">#${topic.name} (${topic.weight})</span>`
+                ).join('');
+                log(`✅ Loaded ${data.topics.length} topics`);
+            } catch (error) {
+                log(`❌ Error: ${error.message}`);
+            }
+        }
+
+        // Login
+        async function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                log('Logging in...');
+                const data = await newsAPI.login(email, password);
+                document.getElementById('auth-status').innerHTML =
+                    `✅ Logged in as ${data.user.email}`;
+                log('✅ Login successful');
+            } catch (error) {
+                log(`❌ Login error: ${error.message}`);
+            }
+        }
+
+        // Register
+        async function register() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                log('Registering...');
+                const data = await newsAPI.register(email, password, ['AI', 'Cloud']);
+                document.getElementById('auth-status').innerHTML =
+                    `✅ Registered as ${data.user.email}`;
+                log('✅ Registration successful');
+            } catch (error) {
+                log(`❌ Registration error: ${error.message}`);
+            }
+        }
+
+        // Logout
+        function logout() {
+            newsAPI.logout();
+            document.getElementById('auth-status').innerHTML = '❌ Logged out';
+            log('✅ Logged out');
+        }
+
+        // Display paginated news
+        function displayPaginatedNews() {
+            // Calculate pagination info
+            const totalPages = Math.ceil(allNews.length / itemsPerPage);
+            const startIdx = (currentPage - 1) * itemsPerPage;
+            const endIdx = startIdx + itemsPerPage;
+            const paginatedNews = allNews.slice(startIdx, endIdx);
+
+            // Display news items
+            displayNews(paginatedNews, 'news-container');
+
+            // Display pagination controls
+            displayPaginationControls(totalPages);
+        }
+
+        // Display pagination controls
+        function displayPaginationControls(totalPages) {
+            const container = document.getElementById('pagination-container');
+            
+            if (totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = '<div class="pagination">';
+
+            // Calculate current page group (10 pages per group)
+            const pagesPerGroup = 10;
+            const currentGroup = Math.floor((currentPage - 1) / pagesPerGroup);
+            const groupStartPage = currentGroup * pagesPerGroup + 1;
+            const groupEndPage = Math.min(groupStartPage + pagesPerGroup - 1, totalPages);
+            const totalGroups = Math.ceil(totalPages / pagesPerGroup);
+
+            // Previous group button (10 pages back)
+            const prevGroupStart = Math.max(1, groupStartPage - pagesPerGroup);
+            html += `<button onclick="goToPage(${prevGroupStart})" ${currentGroup === 0 ? 'disabled' : ''}>◀ Previous</button>`;
+
+            // Page numbers (10 pages in current group)
+            html += '<div class="page-number-buttons">';
+            
+            for (let i = groupStartPage; i <= groupEndPage; i++) {
+                html += `<button onclick="goToPage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
+            }
+
+            html += '</div>';
+
+            // Next group button (10 pages forward)
+            const nextGroupStart = groupStartPage + pagesPerGroup;
+            html += `<button onclick="goToPage(${nextGroupStart})" ${currentGroup === totalGroups - 1 ? 'disabled' : ''}>Next ▶</button>`;
+
+            html += '</div>';
+
+            // Info text
+            html += `<div class="pagination-info">Page ${currentPage} / ${totalPages} (Total ${allNews.length} items)</div>`;
+
+            container.innerHTML = html;
+        }
+
+        // Go to specific page
+        function goToPage(pageNum) {
+            const totalPages = Math.ceil(allNews.length / itemsPerPage);
+            
+            if (pageNum < 1 || pageNum > totalPages) {
+                return;
+            }
+
+            currentPage = pageNum;
+            displayPaginatedNews();
+            
+            // Scroll to top of news section
+            document.getElementById('news-container').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Display news items
+        function displayNews(newsItems, containerId) {
+            const container = document.getElementById(containerId);
+            if (!newsItems || newsItems.length === 0) {
+                container.innerHTML = '<p style="color: #888;">뉴스가 없습니다.</p>';
+                return;
+            }
+
+            container.innerHTML = newsItems.map(item => `
+                <div class="news-item" onclick="window.open('${item.url}', '_blank')" style="cursor: pointer;">
+                    <h3>
+                        <a href="${item.url}" target="_blank" onclick="event.stopPropagation();">
+                            ${item.title}
+                        </a>
+                    </h3>
+                    <p>${item.summary || '요약 정보가 없습니다.'}</p>
+                    <div class="news-meta">
+                        <strong>${item.source}</strong> · 
+                        ${newsAPI.formatTimestamp(item.timestamp)} ·
+                        👁 ${item.stats.views} views
+                    </div>
+                    <div>
+                        ${(item.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize on page load
+        async function init() {
+            log('🚀 AI News Portal Initialized');
+            log(`Backend URL: http://localhost:3001/api`);
+            log('Loading latest news...');
+            
+            // Auto-load latest news and hot topics
+            await loadLatestNews();
+            await loadHotTopics();
+            
+            log('✅ Ready!');
+        }
+
+        // Run initialization when page loads
+        window.addEventListener('load', init);
+    </script>
+</body>
+
+</html>
