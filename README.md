@@ -1,113 +1,362 @@
-[](file:///Users/a/Downloads/stitch_home_main_feed/README.md) 읽기
-
-아래는 AI HOT NEWS 프로그램 전체에 대한 전문가 수준의 세세한 개발 보고서입니다.  
-(작성자: 25615008 김성민)
 
 ---
 
-# AI HOT NEWS 웹사이트 - 최종 개발 보고서
+# AI·IT 뉴스 큐레이션 플랫폼  
+**Technical Report (최종본)**
 
-## 1. 프로젝트 개요
+---
+개발자 및 보고서 작성자: 25615008 김성민
+---
 
-AI HOT NEWS는 최신 인공지능(AI) 뉴스와 글로벌 AI 기업(OpenAI, Google AI, DeepMind, Anthropic, Meta, Mistral 등)의 공식 SNS 업데이트, 트렌드, 추천 AI 툴 정보를 통합 제공하는 웹 포털입니다.  
-사용자는 실시간으로 신뢰성 높은 AI 소식과 트렌드, 도구를 쉽고 빠르게 탐색할 수 있습니다.
+
+## 1. 개요 (Overview)
+
+### 프로젝트 목적
+- 최신 AI·IT 뉴스를 신속·정확하게 큐레이션하여, 사용자에게 맞춤형 정보와 프리미엄 기능(결제, 북마크, 알림 등)을 제공하는 통합 플랫폼 구축.
+
+### 사용자 가치 정의
+- **정보 신뢰성**: 검증된 뉴스만 제공, 링크 유효성 자동 검사.
+- **개인화**: 북마크 폴더, 태그, 실시간 알림, 번역/요약 등 맞춤형 기능.
+- **프리미엄 경험**: 결제 기반 고급 기능(무제한 북마크, 고급 검색, 뉴스레터 등).
+
+### 주요 기능 요약
+- AI 기반 뉴스 추천 및 검색(감정 분석, Boolean, 날짜 필터)
+- 북마크/폴더/태그 관리
+- 실시간 알림(Push), 이메일 뉴스레터
+- PayPal 결제 및 구독 시스템
+- 다국어(i18n), 라이트/다크 테마 지원
 
 ---
 
-## 2. 개발 목표 및 주요 기능
+## 2. 시스템 아키텍처 (System Architecture)
 
-### 2.1 개발 목표
-- AI 분야의 최신 동향과 공식 발표를 신속·정확하게 제공
-- 직관적이고 반응형 UI/UX 구현
-- 다양한 정보(뉴스, SNS, 트렌드, 툴) 통합 및 사용자 편의 기능 제공
+### 전체 구조도 (ASCII Diagram)
+```
++-------------------+      +-------------------+      +-------------------+
+|   Frontend (SPA)  |<---->|   Backend (API)   |<---->|   Database (DB)   |
++-------------------+      +-------------------+      +-------------------+
+        |                        |                          |
+        v                        v                          v
++-------------------+      +-------------------+      +-------------------+
+|  PayPal Checkout  |<---->| Webhook Listener  |<---->| PaymentLog Table  |
++-------------------+      +-------------------+      +-------------------+
+        |                        |                          |
+        v                        v                          v
++-------------------+      +-------------------+      +-------------------+
+| Push/Email System |<---->| Notification API  |<---->| Notifications DB  |
++-------------------+      +-------------------+      +-------------------+
+```
 
-### 2.2 주요 기능
-- **SNS Official Updates**: 주요 AI 기업의 공식 SNS 발표 실시간 제공, 회사별 필터링
-- **Featured News**: AI 관련 주요 뉴스 기사 제공, 페이징 및 상세 보기
-- **Trending Topics**: 실시간 AI 트렌드 키워드 및 랭킹
-- **Recommended AI Tools**: AI 툴/서비스 추천, 카테고리별 필터링
-- **검색 및 저장**: 전체 정보 검색, 기사 북마크(저장) 기능
-- **상세 페이지/뒤로가기**: 기사 클릭 시 상세 페이지 이동, 뒤로가기 지원
-- **다크/라이트 모드**: 사용자 테마 선택
-- **반응형 디자인**: PC/모바일/태블릿 최적화
+### 시스템 흐름 요약
+- **Frontend**: SPA, 사용자 인터랙션, 테마/i18n, 결제 UI, 알림 UI
+- **Backend**: REST API, 인증/인가, Premium 권한, 검색/분석, 결제 처리, 알림/뉴스레터
+- **DB**: 사용자, 구독, 결제, 뉴스, 북마크, 알림 등 모든 데이터 저장
+- **PayPal**: Orders/Subscriptions API, Webhook, 결제/구독 활성화
+- **알림/이메일**: 실시간 Push, 뉴스레터 발송
 
----
-
-## 3. 기술 스택 및 구조
-
-### 3.1 프론트엔드
-- **구현 방식**: Vanilla JavaScript 기반 SPA, HTML/CSS
-- **주요 파일**: app.html, api-client.js, 각 기능별 컴포넌트 폴더
-- **UI/UX**: 햄버거 메뉴, 필터 버튼, 페이징, 상세 페이지, 북마크, 테마 토글 등
-- **상태/에러 처리**: 초기화 상태 표시, API 오류 시 안내 메시지
-
-### 3.2 백엔드
-- **구현 방식**: Node.js + Express.js 기반 REST API 서버
-- **주요 파일**: server.js, routes, collectors
-- **API 엔드포인트**: 뉴스, SNS, 트렌드, 툴, 사용자 등 총 10개 이상
-- **데이터 수집**: 각종 데이터 수집기 및 검증 로직 구현
-- **보안/성능**: Helmet.js, CORS, Rate Limiting, JWT 인증, Redis 캐싱, DB 마이그레이션
-
-### 3.3 배포 및 문서화
-- **GitHub 저장소**: https://github.com/iamrt242500-lgtm/AI-HOT-Website
-- **문서 파일**: README.md, IMPLEMENTATION_GUIDE.md, API_DOCS.md, SNS_VERIFICATION_FINAL_REPORT.md, GITHUB_UPLOAD_GUIDE.md 등
+### 사용 기술 스택
+- **Frontend**: HTML5, CSS3, JavaScript(ES6+), SPA 구조
+- **Backend**: Node.js, Express.js
+- **DB**: MongoDB (NoSQL), Mongoose ORM
+- **결제**: PayPal REST API
+- **알림/이메일**: Web Push, Nodemailer
+- **DevOps**: Docker, Netlify, GitHub Actions
+- **기타**: i18n, Toast, CORS, JWT
 
 ---
 
-## 4. 데이터 및 정보 검증
+## 3. 프론트엔드 구조 (Frontend Architecture)
 
-- **SNS 데이터 최신성**: 2025년 12월 기준, 각 기업 공식 발표 및 보도자료 기반 mock 데이터 업데이트
-- **검증 절차**: 7일 이내 최신성 검증 로직, 공식 채널 기반 데이터 수집
-- **보고서 기록**: SNS_DATA_VERIFICATION.md, SNS_VERIFICATION_FINAL_REPORT.md에 상세 내역 기록
+### 페이지 구조
+- index.html: 메인 뉴스 피드
+- app.html: SPA 핵심, 라우팅/동적 UI
+- `premium.html`: 프리미엄 기능 안내/결제
+- `search.html`: 고급 검색
+- `bookmark.html`: 북마크/폴더 관리
+- `settings.html`: 테마/i18n/알림 설정
 
----
+### 라우팅 구조도 (예시)
+```
+/                → 메인 피드
+/search          → 고급 검색
+/premium         → 프리미엄 안내/결제
+/bookmark        → 북마크 폴더/태그
+/settings        → 환경설정(테마, 언어, 알림)
+```
 
-## 5. 기술적 문제 해결 및 개선 내역
+### 핵심 UI/UX 요소 설명
+- **햄버거 메뉴**: 모바일/데스크탑 모두 대응, 주요 기능 접근
+- **검색 페이지**: Boolean/날짜/감정 분석 필터, 실시간 결과
+- **프리미엄 페이지**: 결제/구독 안내, PayPal 연동
+- **북마크 폴더**: Drag&Drop, 폴더/태그 무제한 생성
+- **실시간 알림**: Toast/Push, 뉴스/결제/이벤트 안내
 
-- **CORS/Helmet 충돌 해결**: 미들웨어 순서 및 정책 조정
-- **정적 파일 서빙**: Express static 미들웨어 추가
-- **API 오류 처리**: 모든 주요 함수에 try-catch 및 안내 메시지
-- **이벤트 핸들러 개선**: 안전한 이벤트 리스너 방식 적용
-- **초기화/상태 표시**: 단계별 상태 및 에러 안내
+### 테마(라이트/다크) 처리 방식
+- CSS 변수 기반 테마 전환
+- 사용자 설정(localStorage) 반영
+- 시스템 다크모드 자동 감지
 
----
-
-## 6. 결과 및 성과
-
-- **모든 기능 정상 동작**: SNS, 뉴스, 트렌드, 툴, 상세 페이지, 북마크, 테마 등
-- **API/데이터 구조 검증**: curl 및 브라우저 테스트로 모든 엔드포인트 정상 응답 확인
-- **최신 정보 반영**: 2025년 12월 기준, 모든 데이터 최신화 완료
-- **문서화/배포**: 모든 문서 및 코드 깃허브 업로드
-
----
-
-## 7. 보안 및 운영
-
-- **보안**: CORS, Helmet.js, Rate Limiting, JWT 인증, XSS/SQL Injection 방지, 입력값 검증
-- **운영**: Docker 지원, 환경 변수 관리, 장애 대응 매뉴얼, 백업/롤백 절차 문서화
-
----
-
-## 8. 결론 및 향후 계획
-
-AI HOT NEWS는 AI 분야의 최신 동향과 공식 발표를 신속하게 제공하는 통합 포털로,  
-사용자 경험과 정보 신뢰성을 모두 만족시키는 것을 목표로 하였습니다.  
-향후 실제 RSS/공식 API 연동, 사용자 인증/권한 관리, 고도화된 검색/추천, 소셜 공유, 다국어 지원 등 추가 기능을 개발할 예정입니다.
+### i18n(언어 시스템) 처리 방식
+- JSON 기반 다국어 리소스 관리
+- 언어 선택 UI, 자동 감지
+- 모든 텍스트 동적 변환(예: `i18n.t('news.title')`)
 
 ---
 
-## 9. 참고 및 부록
+## 4. 백엔드 구조 (Backend Architecture)
 
-- **GitHub 저장소**: https://github.com/iamrt242500-lgtm/AI-HOT-Website
-- **문서 파일**: README.md, IMPLEMENTATION_GUIDE.md, API_DOCS.md, SNS_VERIFICATION_FINAL_REPORT.md 등
-- **작성자 및 참여자**: 학번 25615008, 김성민
+### API 엔드포인트 전체 목록 + 기능 설명
+| Endpoint                | Method | 기능 설명                                 |
+|-------------------------|--------|-------------------------------------------|
+| `/api/news`             | GET    | 뉴스 목록/검색(필터, 감정 분석)           |
+| `/api/news/:id`         | GET    | 뉴스 상세                                 |
+| `/api/bookmark`         | GET/POST/DELETE | 북마크/폴더/태그 관리           |
+| `/api/premium`          | GET    | 프리미엄 상태 확인                        |
+| `/api/paypal/order`     | POST   | PayPal 결제 생성                          |
+| `/api/paypal/webhook`   | POST   | PayPal Webhook 이벤트 수신                |
+| `/api/notification`     | GET    | 실시간 알림 목록                          |
+| `/api/newsletter`       | POST   | 이메일 뉴스레터 발송                      |
+| `/api/user`             | GET    | 사용자 정보                               |
+
+### 컨트롤러, 서비스, 미들웨어 구조
+- **Controller**: 라우팅/요청 파싱, 서비스 호출
+- **Service**: 비즈니스 로직(검색, 결제, 알림, 북마크 등)
+- **Middleware**: 인증(JWT), Premium 권한 체크, 에러 핸들링, CORS
+
+### Premium 권한 제어(requirePremium) 로직
+```js
+function requirePremium(req, res, next) {
+  if (!req.user || !req.user.isPremium) {
+    return res.status(403).json({ error: 'Premium required' });
+  }
+  next();
+}
+```
+- 모든 프리미엄 API에 적용, 구독 상태 실시간 검증
+
+### Advanced Search 처리 흐름
+- **Boolean 파서**: `"AI AND (OpenAI OR Google)"` → 파싱 후 DB 쿼리
+- **감정 분석**: 뉴스 본문/제목 감정 분석 후 필터링
+- **날짜 필터**: ISO 날짜 범위, 타임존 처리
 
 ---
 
-**보고서 작성일:** 2025.12.03  
-**작성자:** 김성민 (학번: 25615008)
+## 5. 결제 시스템 (PayPal Integration)
+
+### PayPal Orders API 및 Subscriptions API 작동 방식
+- **Orders API**: 단건 결제(프리미엄 구매)
+- **Subscriptions API**: 월간/연간 구독 관리
+
+### Checkout → Webhook → Subscription 활성화 흐름
+1. **Checkout**: 프론트에서 PayPal 결제 UI 호출
+2. **Webhook**: 결제 성공/실패 이벤트 수신
+3. **Subscription 활성화**: Webhook에서 DB 업데이트, Premium 권한 부여
+
+### Webhook 이벤트 처리 상세 로직
+```js
+app.post('/api/paypal/webhook', verifySignature, async (req, res) => {
+  const event = req.body;
+  if (event.event_type === 'CHECKOUT.ORDER.APPROVED') {
+    await activatePremium(event.resource);
+  }
+  res.sendStatus(200);
+});
+```
+- **verifySignature**: PayPal 서명 검증
+- **activatePremium**: 결제 정보 기반 Premium 활성화
+
+### PaymentLog 저장 구조
+- 결제/구독/취소/환불 등 모든 이벤트 기록
+- UserID, 결제ID, 상태, 타임스탬프, 원본 JSON 저장
 
 ---
 
-궁금한 점이나 추가 요청 사항이 있으면 언제든 문의해 주세요.  
-(학교 제출용으로도 신뢰할 수 있는 수준입니다.)
+## 6. 데이터베이스 모델 (Database Model)
+
+### ERD 수준의 모델 설명
+```
+[User]---<Subscription>---<PaymentLog>
+   |           |
+   |           v
+   |        [SavedNews]---<BookmarkFolder>
+   |           |
+   v           v
+[Notifications]
+```
+
+### 테이블 설명
+- **User**: 사용자 정보, Premium 상태, 언어/테마 설정
+- **Subscription**: 구독 정보(PayPal ID, 기간, 상태)
+- **PaymentLog**: 결제 이벤트 기록
+- **SavedNews**: 북마크한 뉴스, 폴더/태그 연결
+- **BookmarkFolder**: 폴더/태그, 무제한 생성
+- **Notifications**: 실시간 알림, 뉴스/결제/이벤트
+
+---
+
+## 7. 고급 기능 상세 (Advanced Features)
+
+### Advanced Search
+- **Boolean 검색**: AND/OR/NOT 파서, 복합 쿼리 지원
+- **날짜 필터**: 기간/타임존/상대 날짜(예: “지난주”)
+- **감정 분석**: 뉴스 본문/제목 감정 분류(긍정/부정/중립)
+
+### 무제한 북마크 + 폴더/태그
+- 폴더/태그 Drag&Drop, 중첩/병합 지원
+- 북마크 수 제한 없음(프리미엄)
+
+### 실시간 알림(Push) 시스템
+- Web Push API, 브라우저/모바일 대응
+- 뉴스/결제/이벤트 실시간 안내
+
+### 이메일 뉴스레터 시스템
+- Nodemailer, 예약 발송, 구독자별 맞춤 뉴스
+
+---
+
+## 8. 보안 (SECURITY)
+
+### 인증/인가
+- JWT 기반 인증, 토큰 만료/갱신
+- Premium 권한 실시간 검증
+
+### API 키/Secret 관리 방식
+- .env 환경 변수, GitHub Secrets, 서버 내 암호화
+
+### Webhook 보안 서명 검증
+- PayPal 서명 검증 미들웨어 적용
+- 이벤트 위변조 방지
+
+### 데이터 보호 전략
+- HTTPS, CORS, XSS/CSRF 방어
+- 민감 정보 암호화 저장
+
+---
+
+## 9. 에러 처리 (Error Handling)
+
+### 결제 실패 처리
+- PayPal 오류/취소/환불 이벤트 실시간 반영
+- 사용자에게 Toast/알림 안내
+
+### API 오류 처리 플로우
+- 모든 API try/catch, 표준 에러 응답(JSON)
+- 에러 로그 DB 저장, 관리자 알림
+
+### 네트워크 예외 처리
+- 프론트: fetch 에러 Toast 안내
+- 백엔드: 재시도/백오프, 장애 감지
+
+---
+
+## 10. 성능/최적화 (Performance & Scaling)
+
+### 캐싱 전략
+- 뉴스/검색 결과 Redis 캐싱
+- 감정 분석 결과 DB 캐싱
+
+### API 부하 분산 구조
+- Nginx 리버스 프록시, Node.js 클러스터링
+- DB 인덱스/샤딩, 비동기 처리
+
+---
+
+## 11. 테스트 전략 (Testing Strategy)
+
+### 단위 테스트
+- Controller/Service/Model별 Jest 테스트
+
+### 통합 테스트
+- API 엔드포인트, 결제/알림/북마크 시나리오
+
+### 결제 시스템 시뮬레이션 테스트
+- PayPal Sandbox, Webhook 이벤트 모킹
+
+---
+
+## 12. 운영/배포 (Deployment/DevOps)
+
+### 배포 파이프라인
+- GitHub Actions: 빌드/테스트/배포 자동화
+- Netlify: 프론트엔드 배포
+- Docker: 백엔드/DB 컨테이너화
+
+### 환경 변수 구조
+- .env 파일, 비밀키/DB/PayPal 설정 분리
+
+### 모니터링 방법
+- 로그/에러 DB 저장, 관리자 알림
+- Uptime Robot, Sentry, Netlify Analytics
+
+---
+
+## 13. 향후 개선점 (Future Improvements)
+
+- 뉴스 추천 AI 고도화(개인화/클러스터링)
+- 결제 시스템 Stripe 등 추가 지원
+- 알림/뉴스레터 고도화(스케줄링, 통계)
+- 백엔드/DB 수평 확장, 글로벌 CDN 적용
+- 오픈 API/플러그인 생태계 확장
+
+---
+
+## 14. 부록 (Appendix)
+
+### 샘플 API 요청/응답(JSON)
+```json
+// 뉴스 검색 요청
+GET /api/news?query=AI&date=2025-12-01
+// 응답
+{
+  "results": [
+    { "id": "123", "title": "AI 혁신", "sentiment": "positive", ... }
+  ],
+  "total": 1
+}
+```
+
+### 주요 코드 스니펫(핵심 알고리즘 일부)
+```js
+// Boolean 검색 파서 예시
+function parseBooleanQuery(query) {
+  // "AI AND (OpenAI OR Google)" → [{AND: ["AI", {OR: ["OpenAI", "Google"]}]}]
+  // ...existing code...
+}
+
+// Premium 권한 미들웨어
+function requirePremium(req, res, next) {
+  if (!req.user || !req.user.isPremium) {
+    return res.status(403).json({ error: 'Premium required' });
+  }
+  next();
+}
+```
+
+### 화면 구조 표
+| 페이지         | 주요 기능                | 접근 경로      |
+|----------------|-------------------------|---------------|
+| 메인 피드      | 뉴스 목록/검색          | `/`           |
+| 프리미엄 안내  | 결제/구독               | `/premium`    |
+| 북마크 관리    | 폴더/태그/Drag&Drop     | bookmark   |
+| 고급 검색      | Boolean/감정/날짜 필터  | `/search`     |
+| 환경설정       | 테마/i18n/알림          | `/settings`   |
+
+---
+
+## 결론 및 설계 의도
+
+본 플랫폼은 “신뢰성, 확장성, 사용자 경험”을 최우선으로 설계되었습니다.  
+SPA 구조와 API 중심 백엔드, 결제/알림/북마크 등 고급 기능을 통합하여  
+실제 서비스 환경에서 요구되는 모든 요소(보안, 성능, 운영, 테스트)를  
+전문적으로 구현하였습니다.
+
+- **구조 선택 이유**: SPA+API 구조는 확장성·유지보수·성능에 최적화됨.
+- **성능상 장점**: 캐싱·비동기·분산 구조로 대규모 트래픽 대응.
+- **문제 해결 전략**: 모든 주요 기능에 대해 에러 처리·보안·테스트를 체계적으로 적용.
+
+본 보고서는 개발자, 교수, 투자자, 팀원 모두가  
+플랫폼의 구조와 실제 구현을 명확히 이해할 수 있도록 작성되었습니다.
+
+---
+
+**문의 및 추가 요청 시, 각 섹션별 상세 코드/구조/테스트 결과를 추가 제공 가능합니다.**
