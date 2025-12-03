@@ -320,4 +320,76 @@ function formatNewsItem(news) {
     };
 }
 
+/**
+ * POST /api/user/google-auth
+ * Google OAuth authentication endpoint
+ * Handles both login and signup via Google
+ */
+router.post('/google-auth', async (req, res) => {
+    try {
+        const { email, name, picture, idToken } = req.body;
+
+        // Validation
+        if (!email || !idToken) {
+            return res.status(400).json({ error: 'Email and ID token are required' });
+        }
+
+        console.log(`🔐 Google OAuth request for email: ${email}`);
+
+        // Check if user already exists
+        let user = await db.getOne(
+            'SELECT id, email, nickname, profile_picture, created_at FROM users WHERE email = $1',
+            [email]
+        );
+
+        if (user) {
+            // Existing user - update profile picture if provided
+            if (picture) {
+                try {
+                    await db.query(
+                        'UPDATE users SET profile_picture = $1 WHERE id = $2',
+                        [picture, user.id]
+                    );
+                    user.profile_picture = picture;
+                } catch (updateError) {
+                    console.warn('Failed to update profile picture:', updateError);
+                }
+            }
+            console.log(`✅ Existing user logged in via Google: ${email}`);
+        } else {
+            // New user - create account
+            try {
+                user = await db.getOne(`
+                    INSERT INTO users (email, nickname, profile_picture, provider, interests, created_at)
+                    VALUES ($1, $2, $3, 'google', ARRAY['AI', 'Technology'], NOW())
+                    RETURNING id, email, nickname, profile_picture, created_at
+                `, [email, name || email.split('@')[0], picture]);
+                console.log(`✅ New user created via Google: ${email}`);
+            } catch (createError) {
+                console.error('Failed to create user:', createError);
+                // Fallback: Allow login without database storage
+                console.warn('⚠️ Using session-only authentication');
+            }
+        }
+
+        // Generate token
+        const token = generateToken(user?.id || 'google_' + email, email);
+
+        res.json({
+            user: {
+                id: user?.id || 'google_' + email,
+                email: email,
+                name: name || user?.nickname,
+                picture: picture,
+                provider: 'google',
+                createdAt: user?.created_at || new Date().toISOString()
+            },
+            token
+        });
+    } catch (error) {
+        console.error('Google OAuth error:', error);
+        res.status(500).json({ error: 'Google OAuth authentication failed' });
+    }
+});
+
 module.exports = router;
