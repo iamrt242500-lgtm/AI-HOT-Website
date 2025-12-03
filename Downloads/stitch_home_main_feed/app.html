@@ -1757,6 +1757,138 @@
             }
         };
 
+        // URL 검증 및 링크 생존성 확인 유틸리티
+        class LinkValidator {
+            // 유효한 URL 형식 확인
+            static isValidURL(urlString) {
+                try {
+                    const url = new URL(urlString);
+                    // http 또는 https만 허용
+                    return ['http:', 'https:'].includes(url.protocol);
+                } catch (error) {
+                    console.warn('❌ Invalid URL format:', urlString, error);
+                    return false;
+                }
+            }
+
+            // 링크 생존성 확인 (HEAD 요청)
+            static async checkLinkAlive(url, timeout = 5000) {
+                try {
+                    // CORS 문제를 피하기 위해 간단한 이미지 로드 테스트 사용
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        mode: 'no-cors',
+                        credentials: 'omit',
+                        signal: controller.signal
+                    });
+
+                    clearTimeout(timeoutId);
+                    
+                    // no-cors 모드에서는 status를 확인할 수 없으므로, 
+                    // 요청이 완료되었다는 것만으로 성공으로 간주
+                    console.log('✅ Link appears to be alive:', url);
+                    return true;
+                } catch (error) {
+                    console.warn('❌ Link verification failed:', url, error.message);
+                    return false;
+                }
+            }
+
+            // 리다이렉트 체인 따라가기
+            static async followRedirects(url, maxRedirects = 5) {
+                let currentUrl = url;
+                let redirectCount = 0;
+
+                try {
+                    while (redirectCount < maxRedirects) {
+                        const response = await fetch(currentUrl, {
+                            method: 'HEAD',
+                            redirect: 'manual',
+                            mode: 'no-cors'
+                        });
+
+                        // 리다이렉트 상태 코드 확인
+                        if ([301, 302, 303, 307, 308].includes(response.status)) {
+                            const location = response.headers.get('location');
+                            if (location) {
+                                currentUrl = new URL(location, currentUrl).toString();
+                                redirectCount++;
+                                continue;
+                            }
+                        }
+                        break;
+                    }
+                    return currentUrl;
+                } catch (error) {
+                    console.warn('⚠️ Could not follow redirects:', error);
+                    return url;
+                }
+            }
+
+            // 알려진 데드 도메인 목록 확인
+            static isKnownDeadDomain(url) {
+                const deadDomains = [
+                    'example.com',
+                    'example.org',
+                    'example.net',
+                    'placeholder.com',
+                    '127.0.0.1',
+                    'localhost',
+                    '0.0.0.0'
+                ];
+
+                try {
+                    const urlObj = new URL(url);
+                    return deadDomains.some(domain => 
+                        urlObj.hostname === domain || 
+                        urlObj.hostname.includes(domain)
+                    );
+                } catch {
+                    return false;
+                }
+            }
+
+            // 종합 URL 검증
+            static async validateURL(url) {
+                if (!url) {
+                    return {
+                        isValid: false,
+                        reason: 'URL이 없습니다',
+                        severity: 'error'
+                    };
+                }
+
+                // 기본 형식 검증
+                if (!this.isValidURL(url)) {
+                    return {
+                        isValid: false,
+                        reason: '유효하지 않은 URL 형식입니다',
+                        severity: 'error'
+                    };
+                }
+
+                // 알려진 데드 도메인 확인
+                if (this.isKnownDeadDomain(url)) {
+                    return {
+                        isValid: false,
+                        reason: 'Example/Placeholder 도메인입니다 (테스트용)',
+                        severity: 'warning'
+                    };
+                }
+
+                // 링크 생존성 확인
+                const isAlive = await this.checkLinkAlive(url);
+                return {
+                    isValid: isAlive,
+                    reason: isAlive ? '링크가 정상입니다' : '링크에 접근할 수 없습니다',
+                    severity: isAlive ? 'success' : 'error'
+                };
+            }
+        }
+
         // App State
         const app = {
             currentUser: null,
@@ -1767,6 +1899,7 @@
             savedNews: [],
             currentPage: 1,
             itemsPerPage: 10,
+            linkValidator: LinkValidator,
 
             // Initialize
             async init() {
@@ -2837,17 +2970,63 @@
                     </div>`
                 ).join('');
                 
-                // Add click handlers for "Try Now" buttons
+                // Add click handlers for "Try Now" buttons - with URL validation
                 document.querySelectorAll('.ai-tool-try-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
+                    btn.addEventListener('click', async (e) => {
                         e.stopPropagation();
                         const url = btn.getAttribute('data-url');
-                        if (url) {
-                            console.log('🔗 Opening AI Tool URL:', url);
-                            window.open(url, '_blank');
-                        } else {
+                        
+                        if (!url) {
                             console.warn('⚠️ No URL available for AI Tool');
-                            alert('Tool URL not available');
+                            this.showToast('❌ 도구 링크가 없습니다', 'error');
+                            return;
+                        }
+
+                        console.log('🔗 Validating AI Tool URL:', url);
+                        btn.disabled = true;
+                        const originalText = btn.textContent;
+                        btn.textContent = '⏳ 검증중...';
+
+                        try {
+                            // URL 형식 검증
+                            if (!LinkValidator.isValidURL(url)) {
+                                console.warn('❌ Invalid URL format:', url);
+                                this.showToast('❌ 유효하지 않은 링크 형식입니다', 'error');
+                                btn.disabled = false;
+                                btn.textContent = originalText;
+                                return;
+                            }
+
+                            // 알려진 데드 도메인 확인
+                            if (LinkValidator.isKnownDeadDomain(url)) {
+                                console.warn('⚠️ Known dead domain:', url);
+                                this.showToast('⚠️ 테스트용 링크입니다', 'warning');
+                                btn.disabled = false;
+                                btn.textContent = originalText;
+                                return;
+                            }
+
+                            // 링크 생존성 확인
+                            const isAlive = await LinkValidator.checkLinkAlive(url, 3000);
+                            
+                            if (!isAlive) {
+                                console.warn('❌ AI Tool link appears to be dead:', url);
+                                this.showToast('⚠️ 링크에 접근할 수 없습니다', 'warning');
+                                btn.disabled = false;
+                                btn.textContent = originalText;
+                                return;
+                            }
+
+                            console.log('✅ AI Tool URL validated:', url);
+                            this.showToast('✅ 도구를 열고 있습니다...', 'success');
+                            window.open(url, '_blank');
+                            
+                        } catch (error) {
+                            console.error('❌ Error validating AI Tool URL:', error);
+                            this.showToast('❌ 검증 중 오류: ' + error.message, 'error');
+                        } finally {
+                            btn.disabled = false;
+                            btn.textContent = originalText;
                         }
                     });
                 });
@@ -4626,21 +4805,17 @@
                         ).join('');
                     }
                     
-                    // Read more button
+                    // Read more button - with URL validation
                     const readMoreBtn = document.getElementById('detailReadMore');
                     if (readMoreBtn) {
                         readMoreBtn.innerHTML = `${this.t('readMore')}<span style="font-size: 18px;">→</span>`;
                         
-                        readMoreBtn.onclick = () => {
+                        readMoreBtn.onclick = async () => {
                             let url = article.url;
                             
                             if (!url) {
                                 console.warn('⚠️ No URL provided for article:', article.title);
-                                if (article.sourceId) {
-                                    alert(`No source URL available. Visit ${article.source}.`);
-                                } else {
-                                    alert('Article URL is not available');
-                                }
+                                this.showToast('❌ 기사 링크가 없습니다', 'error');
                                 return;
                             }
                             
@@ -4648,8 +4823,51 @@
                                 url = 'https://' + url;
                             }
                             
-                            console.log('🔗 Opening URL:', url);
-                            window.open(url, '_blank');
+                            console.log('🔗 Validating URL:', url);
+                            readMoreBtn.disabled = true;
+                            readMoreBtn.innerHTML = `${this.t('readMore')}<span style="font-size: 14px;">⏳</span>`;
+                            
+                            try {
+                                // URL 형식 기본 검증
+                                if (!LinkValidator.isValidURL(url)) {
+                                    console.warn('❌ Invalid URL format:', url);
+                                    this.showToast('❌ 유효하지 않은 링크 형식입니다', 'error');
+                                    readMoreBtn.disabled = false;
+                                    readMoreBtn.innerHTML = `${this.t('readMore')}<span style="font-size: 18px;">→</span>`;
+                                    return;
+                                }
+
+                                // 알려진 데드 도메인 확인
+                                if (LinkValidator.isKnownDeadDomain(url)) {
+                                    console.warn('⚠️ Known dead domain:', url);
+                                    this.showToast('⚠️ 이것은 테스트용 링크입니다 (Example Domain)', 'warning');
+                                    readMoreBtn.disabled = false;
+                                    readMoreBtn.innerHTML = `${this.t('readMore')}<span style="font-size: 18px;">→</span>`;
+                                    return;
+                                }
+
+                                // 링크 생존성 확인 (비동기)
+                                const isAlive = await LinkValidator.checkLinkAlive(url, 3000);
+                                
+                                if (!isAlive) {
+                                    console.warn('❌ Link appears to be dead:', url);
+                                    this.showToast('⚠️ 링크에 접근할 수 없습니다. 다시 시도하세요.', 'warning');
+                                    readMoreBtn.disabled = false;
+                                    readMoreBtn.innerHTML = `${this.t('readMore')}<span style="font-size: 18px;">→</span>`;
+                                    return;
+                                }
+                                
+                                console.log('✅ URL validated successfully:', url);
+                                this.showToast('✅ 링크를 열고 있습니다...', 'success');
+                                window.open(url, '_blank');
+                                
+                            } catch (error) {
+                                console.error('❌ Error validating URL:', error);
+                                this.showToast('❌ 링크 검증 중 오류 발생: ' + error.message, 'error');
+                            } finally {
+                                readMoreBtn.disabled = false;
+                                readMoreBtn.innerHTML = `${this.t('readMore')}<span style="font-size: 18px;">→</span>`;
+                            }
                         };
                     }
 
