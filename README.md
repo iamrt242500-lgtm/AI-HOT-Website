@@ -360,3 +360,344 @@ SPA 구조와 API 중심 백엔드, 결제/알림/북마크 등 고급 기능을
 ---
 
 **문의 및 추가 요청 시, 각 섹션별 상세 코드/구조/테스트 결과를 추가 제공 가능합니다.**
+
+# AI·IT News Curation Platform  
+**Technical Report (Final Version)**
+
+Developer & Report Author: **25615008 Kim Seongmin**  
+---
+
+## 1. Overview
+
+### Project Purpose
+Build an integrated platform that rapidly and accurately curates the latest AI and IT news while offering personalized features and premium subscription-based capabilities such as advanced search, unlimited bookmarks, notifications, and newsletters.
+
+### User Value
+- **Information Reliability:** Only validated news sources are presented; link integrity is automatically checked.
+- **Personalization:** Bookmark folders, tags, push alerts, translation, summarization, and other tailored features.
+- **Premium Experience:** Subscription-based advanced features such as unlimited bookmarks, advanced search, and exclusive newsletters.
+
+### Key Features
+- AI-powered news recommendation and search (sentiment analysis, Boolean queries, date filters)
+- Bookmark management with folders and tags
+- Real-time push notifications and email newsletters
+- PayPal-based payment and subscription system
+- Multi-language support (i18n), light/dark themes
+
+---
+
+## 2. System Architecture
+
+### Full Architecture (ASCII Diagram)
++-------------------+ +-------------------+ +-------------------+
+| Frontend (SPA) |<---->| Backend (API) |<---->| Database (DB) |
++-------------------+ +-------------------+ +-------------------+
+| | |
+v v v
++-------------------+ +-------------------+ +-------------------+
+| PayPal Checkout |<---->| Webhook Listener |<---->| PaymentLog Table |
++-------------------+ +-------------------+ +-------------------+
+| | |
+v v v
++-------------------+ +-------------------+ +-------------------+
+| Push/Email System |<---->| Notification API |<---->| Notifications DB |
++-------------------+ +-------------------+ +-------------------+
+
+markdown
+코드 복사
+
+### System Flow Summary
+- **Frontend:** SPA UI rendering, theme/i18n management, payment UI, notification interface  
+- **Backend:** REST API, authentication/authorization, premium control, search/analysis, payment handling  
+- **Database:** Stores all user, subscription, payment, news, bookmark, and notification data  
+- **PayPal:** Orders/Subscriptions API integration + webhook lifecycle events  
+- **Notifications/Email:** Real-time push alerts and newsletters  
+
+### Technology Stack
+- **Frontend:** HTML5, CSS3, JavaScript (ES6+), SPA  
+- **Backend:** Node.js, Express.js  
+- **Database:** MongoDB, Mongoose ORM  
+- **Payments:** PayPal REST API  
+- **Notifications:** Web Push API, Nodemailer  
+- **DevOps:** Docker, Netlify, GitHub Actions  
+- **Others:** i18n, Toast UI, CORS, JWT  
+
+---
+
+## 3. Frontend Architecture
+
+### Page Structure
+- `index.html`: Main news feed  
+- `app.html`: Core SPA logic and routing  
+- `premium.html`: Premium subscription flow  
+- `search.html`: Advanced search  
+- `bookmark.html`: Bookmark folders/tags  
+- `settings.html`: Theme/language/notification settings  
+
+### Routing
+/ → Main Feed
+/search → Advanced Search
+/premium → Premium Info & Payment
+/bookmark → Bookmark Manager
+/settings → User Settings
+
+markdown
+코드 복사
+
+### Core UI/UX Components
+- **Hamburger Menu:** Global mobile/desktop navigation  
+- **Advanced Search:** Boolean, sentiment, and date filters  
+- **Premium Page:** Subscription options + PayPal payment  
+- **Bookmark Folders:** Drag & Drop, unlimited folders/tags  
+- **Notifications:** Toast UI + Web Push  
+
+### Theme (Light/Dark)
+- CSS variables  
+- User preference stored locally  
+- Auto-detect system dark mode  
+
+### i18n
+- JSON-based language resources  
+- Language switcher + auto-detection  
+- Dynamic text rendering via `i18n.t()`  
+
+---
+
+## 4. Backend Architecture
+
+### API Endpoints
+| Endpoint                | Method | Description                                  |
+|-------------------------|--------|----------------------------------------------|
+| `/api/news`             | GET    | News list/search                             |
+| `/api/news/:id`         | GET    | News detail                                  |
+| `/api/bookmark`         | GET/POST/DELETE | Bookmark/folder/tag management  |
+| `/api/premium`          | GET    | Check premium status                         |
+| `/api/paypal/order`     | POST   | Create PayPal order                          |
+| `/api/paypal/webhook`   | POST   | Handle PayPal webhook events                 |
+| `/api/notification`     | GET    | Fetch notifications                          |
+| `/api/newsletter`       | POST   | Send newsletters                             |
+| `/api/user`             | GET    | Fetch user profile                           |
+
+### Architecture Layers
+- **Controllers:** Request handling and validation  
+- **Services:** Business logic (payment, search, notifications)  
+- **Middleware:** JWT authentication, premium guard, error handling  
+
+### Premium Guard
+```js
+function requirePremium(req, res, next) {
+  if (!req.user || !req.user.isPremium) {
+    return res.status(403).json({ error: 'Premium required' });
+  }
+  next();
+}
+```
+Advanced Search Flow
+Boolean query parsing
+
+Sentiment classification
+
+Date/period filtering
+
+5. PayPal Payment Integration
+Orders & Subscriptions API
+Orders API: One-time payments
+
+Subscriptions API: Recurring monthly/annual plans
+
+Checkout → Webhook → Activation
+User initiates PayPal checkout
+
+PayPal sends webhook event
+
+Backend activates subscription and updates user status
+
+Webhook Example
+js
+코드 복사
+app.post('/api/paypal/webhook', verifySignature, async (req, res) => {
+  const event = req.body;
+  if (event.event_type === 'CHECKOUT.ORDER.APPROVED') {
+    await activatePremium(event.resource);
+  }
+  res.sendStatus(200);
+});
+PaymentLog Model
+Includes PayPal IDs, payload, timestamps, status
+
+6. Database Model
+ERD
+php-template
+코드 복사
+[User]---<Subscription>---<PaymentLog>
+   |           |
+   |           v
+   |        [SavedNews]---<BookmarkFolder>
+   |           |
+   v           v
+[Notifications]
+Table Descriptions
+User: Profile, language/theme settings, premium state
+
+Subscription: PayPal subscription lifecycle
+
+PaymentLog: Full history of payment events
+
+SavedNews: Bookmarked items
+
+BookmarkFolder: Unlimited folders/tags
+
+Notifications: Push/email record storage
+
+7. Advanced Features
+Advanced Search
+Boolean query engine
+
+Sentiment filtering
+
+Date-range filtering
+
+Unlimited Bookmarks (Folders/Tags)
+Drag & Drop
+
+Unlimited folders/tags for premium users
+
+Real-Time Push Notifications
+Web Push API
+
+Alerts for news, updates, payments
+
+Email Newsletter
+Nodemailer
+
+Personalized content and scheduling
+
+8. Security
+Auth & Access Control
+JWT-based authentication
+
+Premium verification middleware
+
+API Key Management
+.env and GitHub Secrets
+
+Webhook Security
+PayPal signature verification
+
+Data Protection
+HTTPS, CORS, XSS/CSRF protection
+
+Encrypted sensitive data
+
+9. Error Handling
+Payment Errors
+Cancellation/refund detection via webhook
+
+Real-time push/email notification
+
+API Errors
+Unified JSON error responses
+
+Error logs stored for admin review
+
+Network Errors
+Frontend: Toast alerts
+
+Backend: Retry/backoff algorithm
+
+10. Performance & Scaling
+Caching
+Redis caching for heavy searches
+
+Database caching for sentiment results
+
+Load Distribution
+Nginx reverse proxy
+
+Node.js clustering
+
+DB indexing and sharding
+
+11. Testing Strategy
+Unit Testing
+Jest testing for controllers, services, models
+
+Integration Testing
+API-level tests: payment, search, notifications
+
+Payment Testing
+PayPal Sandbox
+
+Mock webhook simulations
+
+12. Deployment / DevOps
+CI/CD Pipeline
+GitHub Actions automation
+
+Frontend on Netlify
+
+Backend in Docker containers
+
+Environment Variables
+.env separation for secrets (PayPal, DB, JWT)
+
+Monitoring
+Sentry
+
+Uptime Robot
+
+Netlify Analytics
+
+13. Future Improvements
+More advanced AI-driven recommendation system
+
+Additional payment gateways (Stripe, Toss Payments)
+
+Enhanced scheduling/statistics for newsletters
+
+Horizontal backend scaling + global CDN
+
+Open API/plugin ecosystem expansion
+
+14. Appendix
+Sample API
+json
+코드 복사
+GET /api/news?query=AI&date=2025-12-01
+{
+  "results": [
+    { "id": "123", "title": "AI Innovation", "sentiment": "positive" }
+  ],
+  "total": 1
+}
+Key Code Snippets
+js
+코드 복사
+function parseBooleanQuery(query) {
+  // Boolean query parsing logic
+}
+
+function requirePremium(req, res, next) {
+  if (!req.user || !req.user.isPremium) {
+    return res.status(403).json({ error: 'Premium required' });
+  }
+  next();
+}
+Page Structure Table
+Page	Description	Path
+Main Feed	News listing/search	/
+Premium Page	Subscription & payment	/premium
+Bookmark Manager	Folder/Tag/Drag & Drop	/bookmark
+Advanced Search	Boolean/Sentiment/Date filters	/search
+Settings	Theme/i18n/Notifications	/settings
+
+Conclusion
+This platform emphasizes reliability, scalability, and user experience, integrating a SPA frontend with an API-driven backend, PayPal payments, advanced search, real-time notifications, and bookmark management.
+
+Architectural Rationale: SPA + API offers extensibility, maintainability, and performance.
+
+Performance Advantages: Caching, asynchronous pipelines, and distributed architecture handle high traffic efficiently.
+
+Stability: Robust error handling, layered security, and comprehensive testing ensure system reliability.
+
+This report enables developers, professors, investors, and collaborators to fully understand the platform’s structure and design decisions.
