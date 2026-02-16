@@ -1,0 +1,18 @@
+{
+  "default_template": "balanced",
+  "sites": {
+    "site_strict_demo": {
+      "template": "strict"
+    },
+    "site_marketing_demo": {
+      "template": "marketing",
+      "retention_days": 365
+    },
+    "site_balanced_minimal": {
+      "template": "balanced",
+      "denied_behavior": "minimal",
+      "retention_days": 180,
+      "ip_storage_mode": "mask24"
+    }
+  }
+}

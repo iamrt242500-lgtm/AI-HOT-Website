@@ -1,0 +1,28 @@
+{
+  "name": "Pulse - Revenue Dashboard",
+  "short_name": "Pulse",
+  "description": "Professional Revenue Dashboard for Ad-driven Sites",
+  "start_url": "/home",
+  "display": "standalone",
+  "background_color": "#101a22",
+  "theme_color": "#1392ec",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
