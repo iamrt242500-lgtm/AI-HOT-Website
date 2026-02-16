@@ -1,3 +1,0 @@
-"""
-Pulse Backend Application Package
-"""
